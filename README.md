@@ -1,5 +1,11 @@
 # <center>Finance Control</center>
 
+
+
+###:heavy_exclamation_mark: Projeto ainda em fase de desenvolvimento :exclamation:
+
+
+
 ![Badge](https://img.shields.io/static/v1?label=bootstrap&message=PHP8.2&color=white&style=for-the-badge&logo=bootstrap)
 
 
@@ -10,14 +16,14 @@ O Intuito do projeto é criar uma aplicação web para controle financeiro pesso
 ___
 
 # Mockup do projeto
-Agora será mostrado como está o projeto no momento.
-![Alt ou título da imagem](src/gif/react_sass_portfolio.gif)
+Agora será mostrado o Mockup inicial do projeto.
+![mockup projeto finance control](assets/control_finance_mockup.png)
 &nbsp;
 
 # Imagem da Aplicação
 Agora será mostrado como está o projeto no momento.
 
-![Alt ou título da imagem](src/gif/react_sass_portfolio.gif)
+![finance control](assets/finance-control.png)
 &nbsp;
 
 ### Instalação

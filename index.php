@@ -1,86 +1,77 @@
 <?php
-require_once("base/globals.php");
-require_once("dao/MenuDAO.php");
-require_once("dao/SubMenuDAO.php");
-require_once("connection/conn.php");
+require_once("globals.php");
+require_once("templates/header.php");
+require_once("models/Message.php");
 
-$menu_Dao = new MenuDAO($conn);
-$subMenu_Dao = new SubMenuDAO($conn);
+$message = new Message($BASE_URL);
 
-$menus = $menu_Dao->findAll();
+$flashMessage = $message->getMessage();
 
-require_once("templates/header.php"); ?>
+if(!empty($flashMessage)){
+    $message->clearMessage();
+}
 
-<!-- Navbar top -->
-<nav class="navbar sticky-top navbar-dark bg-secondary shadow">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="assets/home/logo.png" alt="" width="36" height="30" class="d-inline-block align-text-top">
-            <span class="">Finance Control </span>
-        </a>
-        <h5 class="text-white">Seu dinheiro seguro!</h5>
-        <ul class="navbar-nav px-3">
-            <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Sair</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-<!-- End Navbar top -->
+?>
 
-<div class="wrapper">
-    <!-- Sidebar  -->
-    <nav id="sidebar">
-        <div class="sidebar-header text-center">
-            <img src="<?= $BASE_URL ?>assets/home/2.png" class="rounded w-50 my-2" alt="Cinque Terre">
-            <h5>Bem vindo William</h5>
-        </div>
+<main>
 
-        <ul class="list-unstyled components">
-            <?php foreach ($menus as  $menu) : ?>
-                <?php if ($menu->getSubMenu() == "N") : ?>
-                    <li><a href="<?= $BASE_URL . $menu->getUrl(); ?>" target="myFrame"><i class="<?= $menu->getClassIcon() ?>"></i><?= $menu->getMenuName() ?></a></li>
-                <?php else : ?>
-                    <li>
-                        <a href="<?= $menu->getUrl(); ?>" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                            <i class="<?= $menu->getClassIcon() ?>"></i><?= $menu->getMenuName() ?>
-                        </a>
-                        <ul class="collapse list-unstyled" id="<?= substr($menu->getUrl(), 1); ?>">
-
-                            <?php $subMenus = $subMenu_Dao->findSubMenus($menu->getIdMenu());
-                            foreach ($subMenus as $subMenu) : ?>
-                                <li>
-                                    <a href="<?= $subMenu->getUrlSubMenu(); ?>"><i class="<?=$subMenu->getClassIconSubMenu()?>"></i><?= $subMenu->getIdSubMenuName(); ?></a>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </li>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </ul>
-    </nav>
-
-    <!-- Page Content  -->
-    <div id="content">
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-
-                <button type="button" id="sidebarCollapse" class="btn btn-info" onclick="mudaIconeToogle()">
-                    <i class="fa-solid fa-arrow-left left" title="fechar menu"></i>
-                    <i id="right" class="fa-solid fa-arrow-right" title="abrir menu"></i>
-                </button>
-
+    <div class="container login-container">
+        <?php if (!empty($flashMessage["msg"])) : ?>
+            <div class="container text-center <?=($flashMessage["type"])?> mb-5 p-2">
+                <span id="msg-status"><?=$flashMessage["msg"]?></span>
             </div>
-        </nav>
-
+        <?php endif; ?>
         <div class="row">
-            <div class="container-fluid">
-                <iframe src="dashboard-main.php" name="myFrame" fullscreen="allow" frameborder="0" width="100%"></iframe>
+
+            <!-- Login Form -->
+            <div class="col-md-6 login-form-1">
+                <h3>Login</h3>
+                <form action="<?=$BASE_URL?>auth_process.php" method="post">
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="email" placeholder="Your Email *" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password" placeholder="Your Password *" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="login" class="btnSubmit" value="Login" />
+                    </div>
+                </form>
+                <div class="form-group">
+                    <a href="#" class="btnForgetPwd">Esqueci o Password?</a>
+                </div>
+
             </div>
+            <!-- End Login Form -->
+
+            <!-- Register Form -->
+            <div class="col-md-6 login-form-2">
+                <div class="login-logo">
+                    <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
+                </div>
+                <h3>Criar Conta</h3>
+                <form action="<?= $BASE_URL ?>auth_process.php" method="post">
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="email" placeholder="Seu Email *" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="name" id="" placeholder="Nome *" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="lastname" id="" placeholder="Sobrenome *" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password" placeholder="Digite sua senha *" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="confirmPassword" placeholder="Confirme sua senha *" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="register" class="btnSubmit" value="Registrar" />
+                    </div>
+                </form>
+            </div>
+            <!-- End Register Form -->
         </div>
     </div>
-    <!-- End Page Content  -->
-</div>
-
-<?php require_once("templates/footer.php"); ?>
+</main>

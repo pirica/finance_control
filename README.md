@@ -2,7 +2,7 @@
 
 
 
-###:heavy_exclamation_mark: Projeto ainda em fase de desenvolvimento :exclamation:
+:heavy_exclamation_mark: Projeto ainda em fase de desenvolvimento :exclamation:
 
 
 
@@ -20,9 +20,14 @@ Agora será mostrado o Mockup inicial do projeto.
 ![mockup projeto finance control](assets/control_finance_mockup.png)
 &nbsp;
 
-# Imagem da Aplicação
+# Imagens da Aplicação
 Agora será mostrado como está o projeto no momento.
 
+### Login e Registro
+
+![finance control](assets/login.png)
+&nbsp;
+### Dashboard
 ![finance control](assets/finance-control.png)
 &nbsp;
 

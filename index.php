@@ -26,7 +26,8 @@ if(!empty($flashMessage)){
             <!-- Login Form -->
             <div class="col-md-6 login-form-1">
                 <h3>Login</h3>
-                <form action="<?=$BASE_URL?>auth_process.php" method="post">
+                <form action="<?=$BASE_URL?>auth_process.php" method="POST">
+                <input type="hidden" name="type" value="login">
                     <div class="form-group">
                         <input type="email" class="form-control" name="email" placeholder="Your Email *" value="" />
                     </div>
@@ -34,7 +35,7 @@ if(!empty($flashMessage)){
                         <input type="password" class="form-control" name="password" placeholder="Your Password *" value="" />
                     </div>
                     <div class="form-group">
-                        <input type="submit" name="login" class="btnSubmit" value="Login" />
+                        <input type="submit" class="btnSubmit" value="Login" />
                     </div>
                 </form>
                 <div class="form-group">
@@ -50,7 +51,8 @@ if(!empty($flashMessage)){
                     <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
                 </div>
                 <h3>Criar Conta</h3>
-                <form action="<?= $BASE_URL ?>auth_process.php" method="post">
+                <form action="<?= $BASE_URL ?>auth_process.php" method="POST">
+                <input type="hidden" name="type" value="register">
                     <div class="form-group">
                         <input type="email" class="form-control" name="email" placeholder="Seu Email *" value="" />
                     </div>
@@ -67,7 +69,7 @@ if(!empty($flashMessage)){
                         <input type="password" class="form-control" name="confirmPassword" placeholder="Confirme sua senha *" value="" />
                     </div>
                     <div class="form-group">
-                        <input type="submit" name="register" class="btnSubmit" value="Registrar" />
+                        <input type="submit" class="btnSubmit" value="Registrar" />
                     </div>
                 </form>
             </div>

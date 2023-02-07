@@ -1,14 +1,14 @@
 <?php
 
 Class User {
-    private $id;
-    private $email;
-    private $name;
-    private $lastname;
-    private $image;
-    private $password;
-    private $token;
-    private $bio;
+    public $id;
+    public $email;
+    public $name;
+    public $lastname;
+    public $image;
+    public $password;
+    public $token;
+    public $bio;
 
 }
 

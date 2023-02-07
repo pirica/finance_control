@@ -2,7 +2,10 @@
 require_once("globals.php");
 require_once("connection/conn.php");
 require_once("utils/check_password.php");
+require_once("dao/UserDAO.php");
 require_once("models/Message.php");
+
+$userDao = new UserDAO($conn, $BASE_URL);
 
 $message = new Message($BASE_URL);
 
@@ -24,8 +27,14 @@ if ($type === "register") {
 
             if (password_strength($password)) {
 
-                
-                echo "ok password forte <br>";
+                // checa se o e-mail já existe
+                if ($userDao->findByEmail($email) === false) {
+                    
+                }else {
+                    // envia mensagem de erro, usuário já existe
+                    $message->setMessage("O e-mail: $email já existe em nosso sistema, tente outro e-mail.", "error", "back");
+                }
+               
             } else {
                 $message->setMessage("A senha deve possuir ao menos 8 caracteres, sendo pelo menos 1 letra maiúscula, 1 minúscula, 1 número e 1 simbolo.", "error", "back");
             }

@@ -62,10 +62,20 @@ if (!empty($flashMessage)) {
                         <input type="text" class="form-control" name="lastname" id="" placeholder="Sobrenome *" value="">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" name="password" placeholder="Digite sua senha *" value="" />
+                        <div class="pwd" style="position: relative">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Digite sua senha *" value="" />
+                            <div class="p-viewer" onclick="show_password()">
+                                <i class="fa-solid fa-eye"></i>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" name="confirmPassword" placeholder="Confirme sua senha *" value="" />
+                        <div class="pwd" style="position: relative">
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirme sua senha *" value="" />
+                            <div class="p-viewer" onclick="show_password()">
+                                <i class="fa-solid fa-eye"></i>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <input type="submit" class="btnSubmit" value="Registrar" />
@@ -76,3 +86,13 @@ if (!empty($flashMessage)) {
         </div>
     </div>
 </main>
+<script>
+        function show_password() {
+            var password = document.getElementById('password');
+            var confirmPassword = document.getElementById('confirmPassword');
+            
+            (password.type == "password") ? password.type = "text" : password.type = "password";
+
+            (confirmPassword.type == "password") ? confirmPassword.type = "text" : confirmPassword.type = "password";
+        }
+</script>

@@ -145,7 +145,19 @@ main {
 }
 
 
+/* Look Password register form */
+.p-viewer {
+    z-index: 9999;
+    position: absolute;
+    top: 19.5%;
+    right: 7px;
+    cursor: pointer;
+}
 
+.fa-eye{
+    color: #000;
+}
+/* end Look Password register form */
 
 /* ---------------------------------------------------
     SIDEBAR STYLE

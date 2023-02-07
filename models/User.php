@@ -22,5 +22,6 @@ interface UserDAOInterface {
     public function findByEmail($email); #irá encontrar usuário por email
     public function findById($id); #irá encontrar usuário pelo ID
     public function findByToken($token); #irá encontrar usuário no sistema pelo token
+    public function destroyToken(); // destroy a sessão através do token
     public function changePassword(User $user); #irá mudar o password
 }

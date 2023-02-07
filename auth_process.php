@@ -23,6 +23,8 @@ if ($type === "register") {
         if ($password == $confirmPassword) {
 
             if (password_strength($password)) {
+
+                
                 echo "ok password forte <br>";
             } else {
                 $message->setMessage("A senha deve possuir ao menos 8 caracteres, sendo pelo menos 1 letra maiúscula, 1 minúscula, 1 número e 1 simbolo.", "error", "back");

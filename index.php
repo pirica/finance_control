@@ -7,7 +7,7 @@ $message = new Message($BASE_URL);
 
 $flashMessage = $message->getMessage();
 
-if(!empty($flashMessage)){
+if (!empty($flashMessage)) {
     $message->clearMessage();
 }
 
@@ -17,8 +17,8 @@ if(!empty($flashMessage)){
 
     <div class="container login-container">
         <?php if (!empty($flashMessage["msg"])) : ?>
-            <div class="container text-center <?=($flashMessage["type"])?> mb-5 p-2">
-                <span id="msg-status"><?=$flashMessage["msg"]?></span>
+            <div class="container text-center <?= ($flashMessage["type"]) ?> mb-5 p-2">
+                <span id="msg-status"><?= $flashMessage["msg"] ?></span>
             </div>
         <?php endif; ?>
         <div class="row">
@@ -26,8 +26,8 @@ if(!empty($flashMessage)){
             <!-- Login Form -->
             <div class="col-md-6 login-form-1">
                 <h3>Login</h3>
-                <form action="<?=$BASE_URL?>auth_process.php" method="POST">
-                <input type="hidden" name="type" value="login">
+                <form action="<?= $BASE_URL ?>auth_process.php" method="POST">
+                    <input type="hidden" name="type" value="login">
                     <div class="form-group">
                         <input type="email" class="form-control" name="email" placeholder="Your Email *" value="" />
                     </div>
@@ -41,7 +41,6 @@ if(!empty($flashMessage)){
                 <div class="form-group">
                     <a href="#" class="btnForgetPwd">Esqueci o Password?</a>
                 </div>
-
             </div>
             <!-- End Login Form -->
 
@@ -52,7 +51,7 @@ if(!empty($flashMessage)){
                 </div>
                 <h3>Criar Conta</h3>
                 <form action="<?= $BASE_URL ?>auth_process.php" method="POST">
-                <input type="hidden" name="type" value="register">
+                    <input type="hidden" name="type" value="register">
                     <div class="form-group">
                         <input type="email" class="form-control" name="email" placeholder="Seu Email *" value="" />
                     </div>

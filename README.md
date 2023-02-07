@@ -25,7 +25,9 @@ Agora será mostrado como está o projeto no momento.
 
 ### Login e Registro
 
-![finance control](assets/login.png)
+
+###### Validação de Registro
+![finance control](assets/validate_register_form.gif)
 &nbsp;
 ### Dashboard
 ![finance control](assets/finance-control.png)

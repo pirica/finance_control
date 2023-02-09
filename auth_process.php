@@ -29,7 +29,25 @@ if ($type === "register") {
 
                 // checa se o e-mail já existe
                 if ($userDao->findByEmail($email) === false) {
-                    
+
+                    //TODO: criar objeto do usuário e inserir no sistema
+                    $user = new User();
+
+                    // Criação de token e senha
+                    $userToken = bin2hex(random_bytes(50)); // random cria a string, bin2hex modifica a String deixando mais complexa
+                    $final_password = password_hash($password, PASSWORD_DEFAULT);
+
+                    $user->name = $name;
+                    $user->lastname = $lastname;
+                    $user->email = $email;
+                    $user->password = $final_password;
+                    $user->token = $userToken;
+
+                    $auth = true;
+
+                    // criação e login automático
+                    $userDao->create($user, $auth);                     
+
                 }else {
                     // envia mensagem de erro, usuário já existe
                     $message->setMessage("O e-mail: $email já existe em nosso sistema, tente outro e-mail.", "error", "back");

@@ -35,6 +35,24 @@ Class UserDAO implements UserDAOInterface{
 
     public function create(User $user, $authUser = false){
 
+        $stmt = $this->conn->prepare("INSERT INTO users (
+            name, lastname, email, password, token
+        ) VALUES (
+            :name, :lastname, :email, :password, :token
+        )");
+
+        $stmt->bindParam(":name", $user->name);
+        $stmt->bindParam(":lastname", $user->lastname);
+        $stmt->bindParam(":email", $user->email);
+        $stmt->bindParam(":password", $user->password);
+        $stmt->bindParam(":token", $user->token);
+
+        $stmt->execute();
+
+        if ($authUser) {
+            $this->setTokenSession($user->token);
+        }
+
     }
     public function update(User $user){
 
@@ -44,7 +62,16 @@ Class UserDAO implements UserDAOInterface{
     } 
     public function setTokenSession($token, $redirect = true){
 
+        // salva token na Session
+        $_SESSION["token"] = $token;
+
+        // Rediciona o novo usuário para a dashboard
+        if ($redirect) {
+            $this->message->setMessage("Seja bem vindo!", "success", "dashboard.php");
+        }
+
     } 
+    
     public function authenticatorUser($email, $password){
 
     } 

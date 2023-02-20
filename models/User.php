@@ -10,12 +10,20 @@ Class User {
     public $token;
     public $bio;
 
+    public function getFullName($user){
+        return $user->name . " " . $user->lastname;
+    }
+
+    public function generateToken(){
+        return bin2hex(random_bytes(50)); // random cria a string, bin2hex modifica a String deixando mais complexa
+    }
+
 }
 
 interface UserDAOInterface {
     public function buildUser($data); #irá construir o objeto
     public function create(User $user, $authUser = false); #irá criar o usuario e já fazer login
-    public function update(User $user); #irá atualizar usuário no sistema
+    public function update(User $user, $redirect = true); #irá atualizar usuário no sistema
     public function verifyToken($protected = false); # irá verificar usuário
     public function setTokenSession($token, $redirect = true); # irá fazer o login
     public function authenticatorUser($email, $password); #junto com setTokenSession irá efetuar autenticação

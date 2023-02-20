@@ -32,8 +32,8 @@ if ($type === "register") {
 
                     $user = new User();
 
-                    // Criação de token e senha
-                    $userToken = bin2hex(random_bytes(50)); // random cria a string, bin2hex modifica a String deixando mais complexa
+                    // Criação de token e senha final
+                    $userToken = $user->generateToken(); // random cria a string, bin2hex modifica a String deixando mais complexa
                     $final_password = password_hash($password, PASSWORD_DEFAULT);
 
                     $user->name = $name;
@@ -65,5 +65,23 @@ if ($type === "register") {
     }
 
 } else if ($type === "login") {
-    echo "login";
+   
+    $email = filter_input(INPUT_POST, "email");
+    $password = filter_input(INPUT_POST, "password");
+
+    // Tenta atenticas usuário
+    if ($userDao->authenticatorUser($email, $password)) {
+
+        // Dá as boas vindas para o usuário que efetuou o login
+        $message->setMessage("Seja bem-vindo!", "success", "dashboard.php");
+    }else {
+
+         // envia msg de erro, usuário ou senha não encontrados
+         $message->setMessage("E-mail e/ou senha inválidos.", "error", "back");
+    }
+
+}else {
+
+     // se tentar algo estranho expulsa para a index
+     $message->setMessage("Informações inválidas.", "error", "index.php");
 }

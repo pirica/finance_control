@@ -1,15 +1,29 @@
 <?php
-require_once("base/globals.php");
+require_once("globals.php");
+require_once("connection/conn.php");
+require_once("models/User.php");
+require_once("dao/UserDAO.php");
 require_once("dao/MenuDAO.php");
 
-require_once("connection/conn.php");
+$user = new User();
+$userDao = new UserDao($conn, $BASE_URL);
 
+// pega o menu dinamico para o sidebar
 $menu_Dao = new MenuDAO($conn);
-
 $menus = $menu_Dao->findMenu();
 
-require_once("templates/header.php"); ?>
+// Pega todos os dados do usuário
+$userData = $userDao->verifyToken(true);
 
+$fullName = $user->getFullName($userData);
+
+if ($userData->image == "") {
+    $userData->image = "user.png";
+}
+
+?>
+
+<?php require_once("templates/header.php"); ?>
 <!-- Navbar top -->
 <nav class="navbar sticky-top navbar-dark bg-secondary shadow">
     <div class="container-fluid">
@@ -20,7 +34,7 @@ require_once("templates/header.php"); ?>
         <h5 class="text-white">Seu dinheiro seguro!</h5>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Sair</a>
+                <a class="nav-link" href="<?=$BASE_URL?>logout.php"> <i class="fa-solid fa-right-from-bracket"></i> Sair</a>
             </li>
         </ul>
     </div>
@@ -31,8 +45,8 @@ require_once("templates/header.php"); ?>
     <!-- Sidebar  -->
     <nav id="sidebar">
         <div class="sidebar-header text-center">
-            <img src="<?= $BASE_URL ?>assets/home/2.png" class="rounded w-50 my-2" alt="Cinque Terre">
-            <h5>Bem vindo William</h5>
+            <img src="<?= $BASE_URL ?>assets/home/<?=$userData->image?>" class="rounded w-50 my-2" alt="Cinque Terre">
+            <h5><?= $fullName ?></h5>
         </div>
 
         <ul class="list-unstyled components">
@@ -48,7 +62,7 @@ require_once("templates/header.php"); ?>
                             <?php $subMenus = $menu_Dao->findSubMenu($menu->getIdMenu());
                             foreach ($subMenus as $subMenu) : ?>
                                 <li>
-                                    <a href="<?= $subMenu->getUrlSubMenu(); ?>"><i class="<?=$subMenu->getClassIconSubMenu()?>"></i><?= $subMenu->getSubMenuName(); ?></a>
+                                    <a href="<?=$BASE_URL?><?= $subMenu->getUrlSubMenu(); ?>"><i class="<?=$subMenu->getClassIconSubMenu()?>"></i><?= $subMenu->getSubMenuName(); ?></a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>

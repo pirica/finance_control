@@ -29,10 +29,10 @@ if (!empty($flashMessage)) {
                 <form action="<?= $BASE_URL ?>auth_process.php" method="POST">
                     <input type="hidden" name="type" value="login">
                     <div class="form-group">
-                        <input type="email" class="form-control" name="email" placeholder="Your Email *" value="" />
+                        <input type="email" class="form-control" name="email" placeholder="Digite seu e-mail *" value="" />
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" name="password" placeholder="Your Password *" value="" />
+                        <input type="password" class="form-control" name="password" placeholder="Digite sua senha *" value="" />
                     </div>
                     <div class="form-group">
                         <input type="submit" class="btnSubmit" value="Login" />

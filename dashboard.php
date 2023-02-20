@@ -1,13 +1,12 @@
 <?php
 require_once("base/globals.php");
 require_once("dao/MenuDAO.php");
-require_once("dao/SubMenuDAO.php");
+
 require_once("connection/conn.php");
 
 $menu_Dao = new MenuDAO($conn);
-$subMenu_Dao = new SubMenuDAO($conn);
 
-$menus = $menu_Dao->findAll();
+$menus = $menu_Dao->findMenu();
 
 require_once("templates/header.php"); ?>
 
@@ -16,7 +15,7 @@ require_once("templates/header.php"); ?>
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <img src="assets/home/logo.png" alt="" width="36" height="30" class="d-inline-block align-text-top">
-            <span class="">Finance Control </span>
+            <span class="">Finance Control</span>
         </a>
         <h5 class="text-white">Seu dinheiro seguro!</h5>
         <ul class="navbar-nav px-3">
@@ -38,18 +37,18 @@ require_once("templates/header.php"); ?>
 
         <ul class="list-unstyled components">
             <?php foreach ($menus as  $menu) : ?>
-                <?php if ($menu->getSubMenu() == "N") : ?>
+                <?php if ($menu->getSubMenu() == "") : ?>
                     <li><a href="<?= $BASE_URL . $menu->getUrl(); ?>" target="myFrame"><i class="<?= $menu->getClassIcon() ?>"></i><?= $menu->getMenuName() ?></a></li>
-                <?php else : ?>
+                <?php else: ?>
                     <li>
                         <a href="<?= $menu->getUrl(); ?>" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <i class="<?= $menu->getClassIcon() ?>"></i><?= $menu->getMenuName() ?>
                         </a>
                         <ul class="collapse list-unstyled" id="<?= substr($menu->getUrl(), 1); ?>">
-                            <?php $subMenus = $subMenu_Dao->findSubMenus($menu->getIdMenu());
+                            <?php $subMenus = $menu_Dao->findSubMenu($menu->getIdMenu());
                             foreach ($subMenus as $subMenu) : ?>
                                 <li>
-                                    <a href="<?= $subMenu->getUrlSubMenu(); ?>"><i class="<?=$subMenu->getClassIconSubMenu()?>"></i><?= $subMenu->getIdSubMenuName(); ?></a>
+                                    <a href="<?= $subMenu->getUrlSubMenu(); ?>"><i class="<?=$subMenu->getClassIconSubMenu()?>"></i><?= $subMenu->getSubMenuName(); ?></a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>

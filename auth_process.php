@@ -30,7 +30,6 @@ if ($type === "register") {
                 // checa se o e-mail já existe
                 if ($userDao->findByEmail($email) === false) {
 
-                    //TODO: criar objeto do usuário e inserir no sistema
                     $user = new User();
 
                     // Criação de token e senha

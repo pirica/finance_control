@@ -1,9 +1,17 @@
-<?php require_once("templates/header_iframe.php"); ?>
+<?php
+ require_once("templates/header_iframe.php");
+
+if ($userData->image == "") {
+    $userData->image = "user.png";
+}
+
+?>
 
 <div class="container-fluid">
 
     <div class="col-md-12">
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="<?= $BASE_URL ?>user_process.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="type" value="update">
             <div class="row">
                 <div class="col-md-4">
                     <h1><?= $user->getFullName($userData); ?></h1>
@@ -20,10 +28,10 @@
                         <label for="email">E-mail:</label>
                         <input type="text" name="email" id="email" readonly class="form-control" placeholder="Digite seu e-mail" value="<?= $userData->email ?>">
                     </div>
-                    <input type="submit" value="Alterar" class="btn btn-success">
+                    <input type="submit" class="btn btn-success" value="Alterar">
                 </div>
                 <div class="col-md-4">
-                    <div id="profile-image-container" style="background: url('<?= $BASE_URL ?>/assets/home/<?= $userData->image ?>')">
+                    <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/<?= $userData->image ?>')">
                     </div>
                     <div class="form-group">
                         <label for="Foto:">Foto:</label>
@@ -53,7 +61,7 @@
                         <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"
                             placeholder="Confirme sua nova senha">
                     </div>
-                    <input type="submit" class="btn btn-warning" value="Alterar Senha">
+                    <input type="submit" class="btn btn-success" value="Alterar Senha">
                 </form>
             </div>
         </div>

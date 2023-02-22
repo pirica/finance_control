@@ -34,7 +34,7 @@ if ($userData->image == "") {
         <h5 class="text-white">Seu dinheiro seguro!</h5>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="<?=$BASE_URL?>logout.php"> <i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+                <a class="nav-link" href="<?= $BASE_URL ?>logout.php"> <i class="fa-solid fa-right-from-bracket"></i> Sair</a>
             </li>
         </ul>
     </div>
@@ -45,15 +45,20 @@ if ($userData->image == "") {
     <!-- Sidebar  -->
     <nav id="sidebar">
         <div class="sidebar-header text-center">
-            <img src="<?= $BASE_URL ?>assets/home/<?=$userData->image?>" class="rounded w-50 my-2" alt="Cinque Terre">
+            <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/<?= $userData->image ?>')">
+            </div>
             <h5><?= $fullName ?></h5>
+
+            <span id="DisplayClock" onload="showTime()"></span>
+            <?= $msg_saudacao; ?>
+
         </div>
 
         <ul class="list-unstyled components">
             <?php foreach ($menus as  $menu) : ?>
                 <?php if ($menu->getSubMenu() == "") : ?>
                     <li><a href="<?= $BASE_URL . $menu->getUrl(); ?>" target="myFrame"><i class="<?= $menu->getClassIcon() ?>"></i><?= $menu->getMenuName() ?></a></li>
-                <?php else: ?>
+                <?php else : ?>
                     <li>
                         <a href="<?= $menu->getUrl(); ?>" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <i class="<?= $menu->getClassIcon() ?>"></i><?= $menu->getMenuName() ?>
@@ -62,7 +67,7 @@ if ($userData->image == "") {
                             <?php $subMenus = $menu_Dao->findSubMenu($menu->getIdMenu());
                             foreach ($subMenus as $subMenu) : ?>
                                 <li>
-                                    <a href="<?=$BASE_URL?><?= $subMenu->getUrlSubMenu(); ?>"><i class="<?=$subMenu->getClassIconSubMenu()?>"></i><?= $subMenu->getSubMenuName(); ?></a>
+                                    <a href="<?= $BASE_URL ?><?= $subMenu->getUrlSubMenu(); ?>"><i class="<?= $subMenu->getClassIconSubMenu() ?>"></i><?= $subMenu->getSubMenuName(); ?></a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>

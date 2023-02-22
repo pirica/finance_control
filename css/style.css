@@ -163,6 +163,16 @@ main {
     SIDEBAR STYLE
 ----------------------------------------------------- */
 
+#profile-image-container {
+    width: 150px;
+    height: 150px;
+    border: 6px solid #B7C202;
+    border-radius: 100%;
+    background-size: cover;
+    background-position: center;
+    margin: 15px auto;
+}
+
 .wrapper {
     display: flex;
     width: 100%;

@@ -14,7 +14,59 @@ $message = new Message($BASE_URL);
 $type = filter_input(INPUT_POST, "type");
 
 if ($type == "update") {
-    echo "update";
+
+    $name = filter_input(INPUT_POST, "name");
+    $lastname = filter_input(INPUT_POST, "lastname");
+    $email = filter_input(INPUT_POST, "email");
+    $bio = filter_input(INPUT_POST, "bio");
+
+    $user = new  User();
+    $userData = $userDao->verifyToken();
+
+    // Preencher os dados do usuário
+    $userData->name = $name;
+    $userData->lastname = $lastname;
+    $userData->email = $email;
+    $userData->bio = $bio;
+
+    // Upload da imagem
+    if (isset($_FILES["image"]) && !empty($_FILES["image"]["tmp_name"])) {
+
+        $image = $_FILES["image"];
+
+        //tipos permitidos 
+        $imagesType = ["image/jpg", "image/jpeg", "image/png"];
+        $jpgArray = ["image/jpg", "image/jpeg"];
+
+        // Checa tipo da imagem
+        if (in_array($image["type"], $imagesType)) {
+            
+            if (in_array($image["type"], $jpgArray)) {
+                $imageFile = imagecreatefromjpeg($image["tmp_name"]);
+            }else {
+                // caso for PNG
+                $imageFile = imagecreatefrompng($image["tmp_name"]);
+            }
+
+        }else {
+            $message->setMessage("Tipo inválido de imagem, insira imagens do tipo png ou jpg.", "error", "back");
+        }
+
+
+        //Gera nome para a imagem
+        $imageName = $user->imageGenerateName();
+
+        // Cria a imageem no diretório
+        imagejpeg($imageFile, "./assets/home/avatar/" . $imageName, 100);
+
+        $userData->image = $imageName;
+        
+    }
+
+    // por fim faz o update dos dados
+    $userDao->update($userData);
+
+
 }else if($type == "changePassword"){
     
     $password = filter_input(INPUT_POST, "password");

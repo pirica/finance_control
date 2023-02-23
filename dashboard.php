@@ -45,7 +45,7 @@ if ($userData->image == "") {
     <!-- Sidebar  -->
     <nav id="sidebar">
         <div class="sidebar-header text-center">
-            <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/<?= $userData->image ?>')">
+            <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/avatar/<?= $userData->image ?>')">
             </div>
             <h5><?= $fullName ?></h5>
 

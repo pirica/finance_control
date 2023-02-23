@@ -31,11 +31,11 @@ if ($userData->image == "") {
                     <input type="submit" class="btn btn-success" value="Alterar">
                 </div>
                 <div class="col-md-4">
-                    <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/<?= $userData->image ?>')">
+                    <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/avatar/<?= $userData->image ?>')">
                     </div>
                     <div class="form-group">
                         <label for="Foto:">Foto:</label>
-                        <input type="file" name="file" id="file" class="form-control-file">
+                        <input type="file" name="image" id="file" class="form-control-file">
                     </div>
                     <div class="form-group">
                         <label for="bio">Sobre: </label>

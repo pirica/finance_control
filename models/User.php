@@ -18,6 +18,10 @@ Class User {
         return bin2hex(random_bytes(50)); // random cria a string, bin2hex modifica a String deixando mais complexa
     }
 
+    public function imageGenerateName (){
+        return bin2hex(random_bytes(60)) . ".jpg";
+    }
+
 }
 
 interface UserDAOInterface {

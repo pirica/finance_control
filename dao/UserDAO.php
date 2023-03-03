@@ -182,7 +182,29 @@ Class UserDAO implements UserDAOInterface{
     
     public function findById($id){
 
+         // Checa se existe valor na variável
+         if ($id != "") {
+            
+            $stmt = $this->conn->prepare("SELECT * FROM users WHERE id = :id");
+            $stmt->bindParam(":id", $id);
+            $stmt->execute();
+
+            // verifica se a query retornou algo
+            if ($stmt->rowCount() > 0) {
+                $data = $stmt->fetch();
+                $user = $this->buildUser($data);
+
+                return $user;
+            }else {
+                return false;
+            }
+
+        }else {
+            return false;
+        }
+
     } 
+
     public function findByToken($token){
 
          // Checa se existe valor na variável
@@ -216,6 +238,7 @@ Class UserDAO implements UserDAOInterface{
         $this->message->setMessage("Loggout efetuado com sucesso.", "success", "index.php");
 
     } 
+    
     public function changePassword(User $user){
 
         $stmt = $this->conn->prepare("UPDATE users set

@@ -280,13 +280,33 @@ a.article:hover {
 ----------------------------------------------------- */
 
 .form-check-label{
-    font-size: 25px;
+    font-size: 22px;
 }
 
 hr.dashed {
     border-top: 2px dashed #999;
 }
 
+.entrada {
+    color: #539165;
+    font-size: 25px;
+}
+
+#latest_moviments .fa-trash-can{
+    font-size: 25px;
+    color: #DF2E38;
+}
+
+
+#latest_moviments .fa-file-pen{
+    font-size: 25px;
+    color: #DC8449;
+}
+
+
+/* ---------------------------------------------------
+   END DASHBOARD MAIN
+----------------------------------------------------- */
 
 /* ---------------------------------------------------
     MEDIAQUERIES

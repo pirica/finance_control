@@ -34,7 +34,7 @@ if ($userData->image == "") {
         <h5 class="text-white">Seu dinheiro seguro!</h5>
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="<?= $BASE_URL ?>logout.php"> <i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+                <a class="nav-link text-white" href="<?= $BASE_URL ?>logout.php"> <i class="fa-solid fa-right-from-bracket"></i> Sair</a>
             </li>
         </ul>
     </div>

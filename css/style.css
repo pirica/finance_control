@@ -1,3 +1,5 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
 body {
     margin: 0;
     padding: 0;
@@ -10,11 +12,13 @@ iframe {
     max-height: 100vh;
 }
 
+#iframe-body {
+    overflow: hidden;
+}
+
 i {
     padding: 0 10px;
 }
-
-@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
 p {
     font-family: 'Poppins', sans-serif;
@@ -53,6 +57,14 @@ a:focus {
     margin: 40px 0;
 }
 
+.nav-item a {
+    font-size: 1.25rem;
+}
+
+.nav-item a:hover {
+    color: #FDD36A !important;
+}
+
 /*----------------------------------------*/
 
 /* ---------------------------------------------------
@@ -70,6 +82,8 @@ main {
 #msg-status {
     font-size: 20px;
     color: #fff;
+    position: sticky;
+    top: 0;
 }
 
 .error {
@@ -279,8 +293,28 @@ a.article:hover {
     DASHBOARD MAIN
 ----------------------------------------------------- */
 
+.card-div .card{
+    min-height: 272.8px;
+}
+
+#latest_moviments span {
+    color: #999;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+}
+
 .form-check-label{
     font-size: 22px;
+}
+
+input::placeholder {
+    opacity: 0.2;
+    color: #ccc !important;
+}
+
+#expense {
+    display: none;
 }
 
 hr.dashed {
@@ -289,6 +323,11 @@ hr.dashed {
 
 .entrada {
     color: #539165;
+    font-size: 25px;
+}
+
+.saida {
+    color: #DF2E38;
     font-size: 25px;
 }
 
@@ -301,6 +340,44 @@ hr.dashed {
 #latest_moviments .fa-file-pen{
     font-size: 25px;
     color: #DC8449;
+}
+
+table {
+    text-align: center;
+}
+
+.table_description {
+    color: #6C757D !important;
+}
+
+
+@media (max-width: 575px) {
+
+    table thead {
+        display: none;
+    }
+
+    table tr {
+        display: flex;
+        flex-direction: column;
+        border: 3px solid white;
+        padding: 1px;
+    }
+
+
+    table td[data-label] {
+        display: flex;
+        font-weight: bold;
+    }
+
+    table td[data-label]::before {
+        content: attr(data-label);
+        color: lightgrey;
+        font-weight: 100;
+        width: 50%;
+    }
+
+
 }
 
 
@@ -324,4 +401,16 @@ hr.dashed {
     #sidebarCollapse span {
         display: none;
     }
+
+    #iframe-body {
+        overflow: auto;
+    }
+}
+
+@media (max-width: 575px) { 
+
+    #iframe-body {
+        overflow: auto;
+    }
+
 }

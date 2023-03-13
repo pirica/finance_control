@@ -23,7 +23,7 @@ if (!empty($flashMessage)) {
 ?>
 
 <?php if (!empty($flashMessage["msg"])) : ?>
-    <div class="container text-center <?= ($flashMessage["type"]) ?> mb-5 p-2">
+    <div class="container sticky-top text-center <?= ($flashMessage["type"]) ?> mb-3 p-2">
         <span id="msg-status"><?= $flashMessage["msg"] ?></span>
     </div>
 <?php endif; ?>

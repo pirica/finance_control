@@ -20,6 +20,7 @@ if ($_POST) {
     $value = filter_input(INPUT_POST, "value");
     $type_action = filter_input(INPUT_POST, "type_action");
     $expense_type = filter_input(INPUT_POST, "expense_type");
+    $value = str_replace(',','',$value); 
 
     $financialMoviment = new FinancialMoviment();
 
@@ -30,8 +31,8 @@ if ($_POST) {
             if (empty($expense_type)) {
                  // Informa que o campo Despesa precisa ser preenchido
                  $message->setMessage("Para o tipo Saída, preencha também o campo despesa!", "error", "back");
+                 exit;
             }
-            exit;       
         }
 
         $financialMoviment->description = $description;
@@ -46,5 +47,12 @@ if ($_POST) {
         $message->setMessage("Preencha os campos descrição, valor e tipo!", "error", "back");
     }
 
+}
 
+// Pega id de resgitro para deleção
+$id = $_GET["id"];
+
+// Deleta Registro
+if ($_GET["delete"] == "s") {
+    $financialMovimentDao->destroy($id);
 }

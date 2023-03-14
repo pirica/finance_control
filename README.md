@@ -23,12 +23,10 @@ Agora será mostrado o Mockup inicial do projeto.
 # Imagens da Aplicação
 Agora será mostrado como está o projeto no momento.
 
-###### Validação de Registro
+### Validação de Registro e Login
 ![finance control](assets/validate_register_form.gif)
 &nbsp;
 
-### Login Redirecionamento
-![finance control](assets/finance_login.gif)
 ### Dashboard
 ![finance control](assets/finance-control.jpg)
 &nbsp;

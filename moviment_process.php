@@ -20,7 +20,8 @@ if ($_POST) {
     $value = filter_input(INPUT_POST, "value");
     $type_action = filter_input(INPUT_POST, "type_action");
     $expense_type = filter_input(INPUT_POST, "expense_type");
-    $value = str_replace(',','',$value); 
+    $value = str_replace(',','',$value);
+    $category = filter_input(INPUT_POST, "category");
 
     $financialMoviment = new FinancialMoviment();
 
@@ -28,9 +29,9 @@ if ($_POST) {
 
         if ($type_action == 2) {
                
-            if (empty($expense_type)) {
+            if (empty($expense_type) || empty($category)) {
                  // Informa que o campo Despesa precisa ser preenchido
-                 $message->setMessage("Para o tipo Saída, preencha também o campo despesa!", "error", "back");
+                 $message->setMessage("Para o tipo Saída, preencha também o campo despesa e categoria!", "error", "back");
                  exit;
             }
         }
@@ -39,6 +40,7 @@ if ($_POST) {
         $financialMoviment->value = $value;
         $financialMoviment->type = $type_action;
         $financialMoviment->expense = $expense_type;
+        $financialMoviment->category = $category;
         $financialMoviment->users_id = $userData->id;
 
         $financialMovimentDao->create($financialMoviment);

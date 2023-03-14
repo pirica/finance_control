@@ -7,6 +7,7 @@ Class FinancialMoviment {
     public $value;
     public $type;
     public $expense;
+    public $category;
     public $create_at;
     public $update_at;
     public $users_id;
@@ -20,6 +21,7 @@ interface FinancialMovimentDAOInterface {
     public function getAllCashInflow($id); // traz a soma de todas as entradas
     public function getAllCashOutflow($id); // traz a soma de todas as saídas 
     public function getTotalBalance($id); // traz balanço total entre entradas e saídas
+    public function getAllCategorys(); // Traz todas as categorias para despesas
     public function getCashInflowReport($monthy); // traz todas as entradas do mês
     public function getOutReport($monthy); // traz todas as saídas do mês
     public function findById($id); // traz uma movimentação especifica através do ID

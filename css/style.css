@@ -127,7 +127,7 @@ main {
 
 .login-form-2 {
     padding: 9%;
-    background: #f05837;
+    background: #033e16;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -317,6 +317,10 @@ input::placeholder {
     display: none;
 }
 
+#category_div {
+    display: none;
+}
+
 hr.dashed {
     border-top: 2px dashed #999;
 }
@@ -350,6 +354,9 @@ table {
     color: #6C757D !important;
 }
 
+.actions .btn {
+    margin-top: 2rem;
+}
 
 @media (max-width: 575px) {
 

@@ -25,6 +25,10 @@ if (!empty($flashMessage)) {
 
             <!-- Login Form -->
             <div class="col-md-6 login-form-1">
+                <div class="text-center mb-2">
+                <img src="<?= $BASE_URL ?>assets/finance_logo.png" width="50%" alt="">
+                </div>
+               
                 <h3>Login</h3>
                 <form action="<?= $BASE_URL ?>auth_process.php" method="POST">
                     <input type="hidden" name="type" value="login">

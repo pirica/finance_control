@@ -28,7 +28,7 @@ if ($userData->image == "") {
 <nav class="navbar sticky-top navbar-dark bg-secondary shadow">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="assets/home/logo.png" alt="" width="36" height="30" class="d-inline-block align-text-top">
+            <img src="<?= $BASE_URL ?>assets/finance_small_logo.png" alt="" width="36" height="36" class="d-inline-block align-text-top">
             <span class="">Finance Control</span>
         </a>
         <h5 class="text-white">Seu dinheiro seguro!</h5>

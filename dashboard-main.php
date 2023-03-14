@@ -5,6 +5,8 @@ require_once("dao/FinancialMovimentDAO.php");
 
 $financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
 
+$categorys = $financialMovimentDao->getAllCategorys();
+
 // Traz as última movimentações do usuário
 $latestFinancialMoviments = $financialMovimentDao->getLatestFinancialMoviment($userData->id);
 
@@ -110,7 +112,7 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                         <input type="text" name="description" id="description" class="form-control"
                             placeholder="Ex: Conta de luz">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <h4 class="font-weight-normal">Valor</h4>
                         <input type="text" name="value" id="value" class="form-control number-separator"
                             placeholder="Ex: 80,00:">
@@ -141,7 +143,16 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                             <label class="form-check-label" for="inlineRadio2">Variada</label>
                         </div>
                     </div>
-                    <div class="col-md-2 py-4">
+                    <div class="col-md-2" id="category_div">
+                        <h4 class="font-weight-normal">Categoria</h4>
+                        <select class="form-control" name="category" id="">
+                            <option value="">Selecione</option>
+                            <?php foreach($categorys as $category): ?>
+                            <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
                         <input type="submit" class="btn btn-lg btn-success" value="Adicionar"></input>
                     </div>
                 </div>
@@ -160,6 +171,7 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                         <th>Valor</th>
                         <th>Data</th>
                         <th>Tipo</th>
+                        <th>Categoria</th>
                         <th>Ação</th>
                     </thead>
                     <tbody>
@@ -181,6 +193,9 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                                 <?php else: ?>
                                 <i class="fa-solid fa-circle-down saida"></i>
                                 <?php endif; ?>
+                            </td>
+                            <td>
+                                <span> <?= $financialMoviment->category ?> </span>
                             </td>
                             <td><a href="moviment_process.php?id=<?=$financialMoviment->id?>" title="Editar"><i
                                         class="fa-solid fa-file-pen"></i></a>

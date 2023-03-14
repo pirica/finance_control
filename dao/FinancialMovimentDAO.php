@@ -24,6 +24,7 @@
 
             $financialMoviment->id = $data['id'];
             $financialMoviment->description = $data['description'];
+            $financialMoviment->expense = $data['expense'];
             $financialMoviment->value = number_format($data['value'], 2, ',', '.');
             $financialMoviment->type = $data['type'];
 
@@ -63,16 +64,6 @@
             return $financialMoviment;
         }
 
-        public function buildCategorys($data) {
-
-            $categorys = new Categorys();
-
-            $categorys->id = $data['id'];
-            $categorys->category_name = $data['category_name'];
-
-            return $categorys;
-        }
-
         public function findAll() {
 
         }
@@ -96,27 +87,6 @@
                 }
             }
             return $financialMoviments;
-        }
-
-        public function getAllCategorys() {
-            
-            $categorys = [];
-
-            $stmt = $this->conn->query("SELECT * FROM finance_categorys");
-
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                
-                $cateogrysArray = $stmt->fetchAll();
-
-                foreach ($cateogrysArray as $category){
-
-                    $categorys[] = $this->buildCategorys($category);
-                
-                }
-            }
-            return $categorys;
         }
 
         public function getAllCashInflow($id) {
@@ -168,7 +138,7 @@
 
         }
 
-        public function getOutReport($monthy) {
+        public function getCashOutFlowReport($monthy) {
 
         }
 
@@ -192,25 +162,30 @@
             $stmt->bindParam(':category', $financialMoviment->category);
             $stmt->bindParam(':users_id', $financialMoviment->users_id);
             
-            $stmt->execute();
+            if($stmt->execute()):
+                // Salva também na tabela de históricos 
+                $stmt = $this->conn->prepare("INSERT INTO tb_finances_historic (
+                    id, description, value, type, expense, category, create_at, users_id
+                ) VALUES(
+                    :id, :description, :value, :type, :expense, :category, now(), :users_id
+                )");
+    
+                $stmt->bindParam(':id', $financialMoviment->id);
+                $stmt->bindParam(':description', $financialMoviment->description);
+                $stmt->bindParam(':value', $financialMoviment->value);
+                $stmt->bindParam(':type', $financialMoviment->type);
+                $stmt->bindParam(':expense', $financialMoviment->expense);
+                $stmt->bindParam(':category', $financialMoviment->category);
+                $stmt->bindParam(':users_id', $financialMoviment->users_id);
+                $stmt->execute();
+
+            endif;
             
             $type_moviment = "";
 
-            switch($financialMoviment->type):
-                case 1:
-                    $type_moviment = "Entrada";
-                    break; 
-                case 2:
-                    $type_moviment = "Saída";
-            endswitch;
+            $financialMoviment->type = 1 ? $type_moviment = "Entrada" : $type_moviment = "Saída";
 
             $this->message->setMessage("$type_moviment registrada com sucesso!", "success", "back");
-
-            echo"<script>
-                function topo(){
-                    parent.scroll(0,0);
-                }
-            </script>";
 
         }
 

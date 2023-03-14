@@ -308,6 +308,11 @@ a.article:hover {
     font-size: 22px;
 }
 
+.edit_moviment_label {
+    margin-top: 9px;
+    font-size: 16px;
+}
+
 input::placeholder {
     opacity: 0.2;
     color: #ccc !important;

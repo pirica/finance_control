@@ -6,3 +6,10 @@
         public $category_name;
 
     }
+
+    interface CategorysDAOInterface {
+
+        public function getAllCategorys();
+        public function buildCategorys($data);
+
+    }

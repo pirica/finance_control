@@ -1,5 +1,5 @@
 
-// Função que mostra div de qual tipo de despesa
+// Função que mostra div de qual tipo de despesa e categoria
 function show_expense() {
   var div_expense = document.getElementById("expense"); // Pega id da div que está oculta
   var div_category = document.getElementById("category_div");

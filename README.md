@@ -10,7 +10,7 @@
 
 
 Projeto feito com:
- - HTML, CSS, Bootstrap + PHP + MySQL 
+ - HTML, CSS, Bootstrap, JS + PHP + MySQL 
 
 O Intuito do projeto é criar uma aplicação web para controle financeiro pessoal e para amigos.
 ___

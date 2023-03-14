@@ -14,7 +14,9 @@ $message = new Message($BASE_URL);
 $userDao = new UserDAO($conn, $BASE_URL);
 $userData = $userDao->verifyToken();
 
-if ($_POST) {
+$type = filter_input(INPUT_POST, "type");
+
+if ($type == "create_finance_moviment") {
     
     $description = filter_input(INPUT_POST, "description");
     $value = filter_input(INPUT_POST, "value");
@@ -48,6 +50,11 @@ if ($_POST) {
     }else {
         $message->setMessage("Preencha os campos descrição, valor e tipo!", "error", "back");
     }
+
+}else if($type == "edit_finance_moviment"){
+    
+    print_r($_POST);
+    exit;
 
 }
 

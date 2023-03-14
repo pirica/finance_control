@@ -7,7 +7,6 @@
 <script src="js/easy-number-separator.js"></script>
 <script src="js/functions.js"></script>
 
-
 <script>
     // Abrir submenu
     $(document).ready(function() {

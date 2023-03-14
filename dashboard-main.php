@@ -2,10 +2,13 @@
 
 require_once("templates/header_iframe.php"); 
 require_once("dao/FinancialMovimentDAO.php");
+require_once("dao/CategorysDAO.php");
 
 $financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
+$categorysDao = new CategorysDAO($conn);
 
-$categorys = $financialMovimentDao->getAllCategorys();
+// Traz todas as categorias disponiceis para despesas
+$categorys = $categorysDao->getAllCategorys();
 
 // Traz as última movimentações do usuário
 $latestFinancialMoviments = $financialMovimentDao->getLatestFinancialMoviment($userData->id);
@@ -20,8 +23,7 @@ $totalCashOutflow = $financialMovimentDao->getAllCashOutflow($userData->id);
 $total_balance = $financialMovimentDao->getTotalBalance($userData->id);
 
 $totalEntry <= "0,00" ? $total_balance = -(float)$totalCashOutflow : $totalEntry;
-
-//$total_balance = number_format((float)$total_balance, 2, ',', '.');
+$totalCashOutflow <= "0,00" ? $total_balance = $totalEntry : $totalCashOutflow;
 
 $balance_color_text = "";
 $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text = "text-danger"; 
@@ -30,7 +32,6 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
 ?>
 
 <body id="iframe-body">
-
 
     <div class="container-fluid">
 
@@ -106,6 +107,7 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
 
         <div class="actions p-5 mb-4 bg-light rounded-3 shadow-sm">
             <form action="<?= $BASE_URL ?>moviment_process.php" method="post">
+                <input type="hidden" name="type" value="create_finance_moviment">
                 <div class="row">
                     <div class="col-md-3">
                         <h4 class="font-weight-normal">Descriçao</h4>
@@ -159,7 +161,7 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
             </form>
         </div>
 
-        <div class="actions mb-5 pb-2 px-3 bg-light rounded-3 shadow-sm">
+        <div class="actions mb-5 py-2 px-3 bg-light rounded-3 shadow-sm">
             <h3 class="font-weight-normal text-center">Últimas 5 movimentações</h3>
             <!-- <hr class="dashed"> -->
             <div class="row" id="latest_moviments">
@@ -179,7 +181,8 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                         <tr class="pb-2">
                             <!-- <th scope="row"><?= $financialMoviment->id ?></th> -->
                             <td>
-                                <span class="table_description"> <strong> <?= $financialMoviment->description ?> </strong></span>
+                                <span class="table_description"> <strong> <?= $financialMoviment->description ?>
+                                    </strong></span>
                             </td>
                             <td>
                                 <span> <?= $financialMoviment->value ?></span>
@@ -197,10 +200,11 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                             <td>
                                 <span> <?= $financialMoviment->category ?> </span>
                             </td>
-                            <td><a href="moviment_process.php?id=<?=$financialMoviment->id?>" title="Editar"><i
-                                        class="fa-solid fa-file-pen"></i></a>
+                            <td><a href="#" data-toggle="modal"
+                                    data-target="#exampleModalCenter<?=$financialMoviment->id?>" title="Editar">
+                                    <i class="fa-solid fa-file-pen"></i></a>
                                 <a href="moviment_process.php?delete=s&id=<?=$financialMoviment->id?>"
-                                    title="Deletar"><i class="fa-solid fa-trash-can"></i></a>
+                                     title="Deletar"><i class="fa-solid fa-trash-can"></i></a>
                             </td>
                         </tr>
 
@@ -210,8 +214,87 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
 
             </div>
         </div>
+
+        <!-- Finance moviment modal -->
+        <?php foreach ($latestFinancialMoviments as $financialMoviment): ?>
+        <div class="modal fade" id="exampleModalCenter<?=$financialMoviment->id?>" tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Movimentação</h5>
+                        <button type="button" class="close" data-dismiss="modal" arial-label="fechar">
+                            <span arial-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="<?= $BASE_URL ?>moviment_process.php?id=<?=$financialMoviment->id?>" method="post">
+                            <input type="hidden" name="type" value="edit_finance_moviment">
+                            <div class="form-group">
+                                <label for="description">Descriçao:</label>
+                                <input type="text" name="description_edit" id="" class="form-control"
+                                    placeholder="Insira uma nova descrição"
+                                    value="<?= $financialMoviment->description ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="value">Valor:</label>
+                                <input type="text" name="value_edit" id="" class="form-control"
+                                    placeholder="Insira um novo valor" value="<?= $financialMoviment->value ?>">
+                            </div>
+                            <?php if($financialMoviment->type == 2): ?>
+                            <div class="form-group">
+                                <label for="expense_type">Despesa:</label>
+                                <?php if($financialMoviment->expense == "F"): ?>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="expense_type_edit"
+                                        id="inlineRadio1" value="F" checked>
+                                    <label class="edit_moviment_label" for="inlineRadio1">Fixa</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="expense_type_edit"
+                                        id="inlineRadio2" value="V">
+                                    <label class="edit_moviment_label" for="inlineRadio2">Váriavel</label>
+                                </div>
+                                <?php else: ?>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="expense_type_edit"
+                                        id="inlineRadio1" value="F">
+                                    <label class="edit_moviment_label" for="inlineRadio1">Fixa</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="expense_type_edit"
+                                        id="inlineRadio2" value="V" checked>
+                                    <label class="edit_moviment_label" for="inlineRadio2">Váriavel</label>
+                                </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Categoria:</label>
+                                <select name="category_edit" id="" class="form-control">
+                                    <?php foreach($categorys as $category): ?>
+                                        <?php if($category->category_name == $financialMoviment->category): ?>
+                                            <option value="<?= $category->id ?>" selected> <?= $category->category_name ?></option>
+                                        <?php else: ?>
+                                            <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php endif; ?>
+                            <input type="submit" value="Enviar" class="btn btn-lg btn-success">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+        <!-- End Finance moviment modal -->
 </body>
 <script src="js/Chart.js"></script>
+
 <script>
 // Mychart graficos dos projetos em forma de pizza 
 var xValues = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];

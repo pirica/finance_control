@@ -191,6 +191,25 @@
 
         public function update(FinancialMoviment $financialMoviment) {
 
+            $stmt = $this->conn->prepare("UPDATE tb_finances SET
+                description = :description,
+                value = :value,
+                expense = :expense,
+                category = :category,
+                update_at = now() 
+                WHERE id = :id
+             ");
+
+             $stmt->bindParam(":description", $financialMoviment->description);
+             $stmt->bindParam(":value", $financialMoviment->value);
+             $stmt->bindParam(":expense", $financialMoviment->expense);
+             $stmt->bindParam(":category", $financialMoviment->category);
+             $stmt->bindParam(":id", $financialMoviment->id);
+
+             if($stmt->execute()) {
+                $this->message->setMessage("Registro alterado com sucesso!", "success", "back");
+             }
+
         }
 
         public function destroy($id) {

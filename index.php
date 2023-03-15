@@ -39,7 +39,7 @@ if (!empty($flashMessage)) {
                         <input type="password" class="form-control" name="password" placeholder="Digite sua senha *" value="" />
                     </div>
                     <div class="form-group">
-                        <input type="submit" class="btnSubmit" value="Login" />
+                        <input type="submit" class="btnSubmit" value="Entrar" />
                     </div>
                 </form>
                 <div class="form-group">

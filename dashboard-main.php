@@ -145,6 +145,13 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                             <label class="form-check-label" for="inlineRadio2">Variada</label>
                         </div>
                     </div>
+                    <div class="col-md-2" id="category_div_entry">
+                        <h4 class="font-weight-normal">Categoria</h4>
+                        <select class="form-control" name="category" id="">
+                            <option value="">Selecione</option>
+                            <option value=""> Salário </option>
+                        </select>
+                    </div>
                     <div class="col-md-2" id="category_div">
                         <h4 class="font-weight-normal">Categoria</h4>
                         <select class="form-control" name="category" id="">
@@ -155,9 +162,14 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                         </select>
                     </div>
                     <div class="col-md-1">
+                        <!-- <h4 class="font-weight-normal">Agendar (opcional)</h4>
+                        <input class="form-control" type="date" name="dateofbirth" id="dateofbirth"> -->
                         <input type="submit" class="btn btn-lg btn-success" value="Adicionar"></input>
                     </div>
                 </div>
+                <div class="row">
+                        
+                    </div>
             </form>
         </div>
 

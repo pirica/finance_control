@@ -6,6 +6,7 @@ function show_expense() {
   var entry = document.getElementById("entry");
   var fixa = document.getElementById("fixa");
   var variavel = document.getElementById("variavel");
+  var category_entry = document.getElementById("category_div_entry");
   var category = document.getElementById("category");
 
 
@@ -13,6 +14,7 @@ function show_expense() {
     div_expense.style.display = "none";
     div_category.style.display = "none";
 
+    category_entry.style.display = "block";
     fixa.disabled = true;
     fixa.checked = false;
     variavel.disabled = true;
@@ -22,6 +24,7 @@ function show_expense() {
   } else if (out.checked) {
     div_expense.style.display = "block";
     div_category.style.display = "block";
+    category_entry.style.display = "none";
     fixa.disabled = false;
     variavel.disabled = false;
     category.disabled = false;

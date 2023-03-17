@@ -8,7 +8,22 @@ $financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
 $categorysDao = new CategorysDAO($conn);
 
 // Traz todas as categorias disponiceis para despesas
-$categorys = $categorysDao->getAllCategorys();
+$entry_categorys = $categorysDao->getAllEntryCategorys();
+
+// Traz todas as categorias disponiceis para despesas
+$exit_categorys = $categorysDao->getAllExitCategorys();
+
+// Maior receita
+$highValueIncome = $financialMovimentDao->getHighValueIncome($userData->id);
+
+// Menor receita
+$lowerValueIncome = $financialMovimentDao->getLowerValueIncome($userData->id);
+
+// Maior despese
+$biggetsExpense = $financialMovimentDao->getBiggestExpense($userData->id);
+
+// Menor desepsa
+$lowerExpense = $financialMovimentDao->getLowerExpense($userData->id);
 
 // Traz as última movimentações do usuário
 $latestFinancialMoviments = $financialMovimentDao->getLatestFinancialMoviment($userData->id);
@@ -44,8 +59,8 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                         </div>
                         <div class="card-body">
                             <h1 class="card-title pricing-card-title text-success">+ R$ <?= $totalEntry ?> </h1>
-                            <small class="text-muted"><strong>Menor receita</strong> <br> Venda de placa: R$ 50,00 <br>
-                                <strong>Maior receita</strong> <br> Salario: R$ 1.200,00
+                            <small class="text-muted"><strong>Menor receita</strong> <br> <?= $lowerValueIncome ?> <br>
+                                <strong>Maior receita</strong> <br> <?= $highValueIncome ?>
                             </small>
 
 
@@ -60,8 +75,8 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                         </div>
                         <div class="card-body">
                             <h1 class="card-title pricing-card-title text-danger">- R$ <?= $totalCashOutflow ?></h1>
-                            <small class="text-muted"><strong>Menor despesa</strong> <br> Conta de agua: R$ 62,00 <br>
-                                <strong>Maior despesa</strong> <br> Calça: R$ 100,00
+                            <small class="text-muted"><strong>Menor despesa</strong> <br> <?= $lowerExpense ?> <br>
+                                <strong>Maior despesa</strong> <br> <?= $biggetsExpense ?>
                             </small>
 
                             <!-- <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button> -->
@@ -147,21 +162,24 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                     </div>
                     <div class="col-md-2" id="category_div_entry">
                         <h4 class="font-weight-normal">Categoria</h4>
-                        <select class="form-control" name="category" id="">
+                        <select class="form-control" name="category" id="category_entry">
                             <option value="">Selecione</option>
-                            <option value=""> Salário </option>
+                            <?php foreach($entry_categorys as $category): ?>
+                            <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-2" id="category_div">
                         <h4 class="font-weight-normal">Categoria</h4>
-                        <select class="form-control" name="category" id="">
+                        <select class="form-control" name="category" id="category_exit">
                             <option value="">Selecione</option>
-                            <?php foreach($categorys as $category): ?>
+                            <?php foreach($exit_categorys as $category): ?>
                             <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-1">
+                        <!-- TODO: futuramente colocar agendamento futuro de entrada e saída -->
                         <!-- <h4 class="font-weight-normal">Agendar (opcional)</h4>
                         <input class="form-control" type="date" name="dateofbirth" id="dateofbirth"> -->
                         <input type="submit" class="btn btn-lg btn-success" value="Adicionar"></input>
@@ -213,9 +231,9 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                                 <span> <?= $financialMoviment->category ?> </span>
                             </td>
                             <td><a href="#" data-toggle="modal"
-                                    data-target="#exampleModalCenter<?=$financialMoviment->id?>" title="Editar">
+                                    data-target="#exampleModalCenter<?= $financialMoviment->id ?>" title="Editar">
                                     <i class="fa-solid fa-file-pen"></i></a>
-                                <a href="moviment_process.php?delete=s&id=<?=$financialMoviment->id?>"
+                                <a href="moviment_process.php?delete=s&id=<?= $financialMoviment->id ?>"
                                      title="Deletar"><i class="fa-solid fa-trash-can"></i></a>
                             </td>
                         </tr>
@@ -283,7 +301,20 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                             <div class="form-group">
                                 <label for="category">Categoria:</label>
                                 <select name="category_edit" id="" class="form-control">
-                                    <?php foreach($categorys as $category): ?>
+                                    <?php foreach($exit_categorys as $category): ?>
+                                        <?php if($category->category_name == $financialMoviment->category): ?>
+                                            <option value="<?= $category->id ?>" selected> <?= $category->category_name ?></option>
+                                        <?php else: ?>
+                                            <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php else: ?>
+                                <div class="form-group">
+                                <label for="category">Categoria:</label>
+                                <select name="category_edit" id="" class="form-control">
+                                    <?php foreach($entry_categorys as $category): ?>
                                         <?php if($category->category_name == $financialMoviment->category): ?>
                                             <option value="<?= $category->id ?>" selected> <?= $category->category_name ?></option>
                                         <?php else: ?>

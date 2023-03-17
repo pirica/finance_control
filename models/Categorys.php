@@ -9,7 +9,8 @@
 
     interface CategorysDAOInterface {
 
-        public function getAllCategorys();
+        public function getAllEntryCategorys();
+        public function getAllExitCategorys();
         public function buildCategorys($data);
 
     }

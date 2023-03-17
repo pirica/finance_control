@@ -13,7 +13,7 @@ if ($userData->image == "") {
         <form action="<?= $BASE_URL ?>user_process.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="type" value="update">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 mt-2">
                     <h1><?= $user->getFullName($userData); ?></h1>
                     <p class="page-description">Altere os dados no formulário abaixo:</p>
                     <div class="form-group">

@@ -18,3 +18,44 @@ if($hora_atual > 0 && $hora_atual <= 12){
 }else{
     $msg_saudacao = "Boa noite!";
 }
+
+$mes = date('m');
+$nome_mes_atual = "";
+switch($mes):
+    case "01":
+        $nome_mes_atual = "Janeiro";
+        break;
+    case "02":
+        $nome_mes_atual = "Fevereiro";
+        break;
+    case "03":
+        $nome_mes_atual = "Março";
+        break;
+    case "04":
+        $nome_mes_atual = "Abril";
+        break;
+    case "05":
+        $nome_mes_atual = "Maio";
+        break;
+    case "06":
+        $nome_mes_atual = "Junho";
+        break;
+    case "07":
+        $nome_mes_atual = "Julho";
+        break;
+    case "08":
+        $nome_mes_atual = "Agosto";
+        break;
+    case "09":
+        $nome_mes_atual = "Setembro";
+        break;
+    case "10":
+        $nome_mes_atual = "Outubro";
+        break;
+    case "11":
+        $nome_mes_atual = "Novembro";
+        break;
+    case "12":
+        $nome_mes_atual = "Dezembro";
+        break;
+endswitch;

@@ -55,16 +55,124 @@
                 case 8:
                     $financialMoviment->category = "Outros";
                     break;
+                case 9:
+                    $financialMoviment->category = "Venda Produto|Serviço";
+                    break;
+                case 10:
+                    $financialMoviment->category = "Salário";
+                    break;
+                case 11:
+                    $financialMoviment->category = "Aluguel";
+                    break;
+                case 12:
+                    $financialMoviment->category = "Devolução de Empréstimo";
+                    break;
+                case 13:
+                    $financialMoviment->category = "Outros";
+                    break;
             endswitch;
 
             $financialMoviment->users_id = $data["users_id"];
             $financialMoviment->create_at = $data['create_at'];
+            // Alteração de formato de data para padrão Brasileiro
+            $timestamp = strtotime($financialMoviment->create_at); 
+            $newDate = date("d/m/Y H:i:s", $timestamp );
+            $financialMoviment->create_at = $newDate;
+            
             $financialMoviment->update_at = $data["update_at"];
 
             return $financialMoviment;
         }
 
         public function findAll() {
+
+        }
+
+        public function getHighValueIncome($id) {
+
+            $highValueData = [];
+
+            $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances WHERE TYPE= 1 AND users_id = $id GROUP BY value DESC LIMIT 1");
+            $stmt->execute();
+           
+            $data = $stmt->fetchAll();
+
+            foreach ($data as $row){
+                $highValueData = $row["description"] . ": R$ " . number_format($row['maior_valor'], 2, ',', '.');
+            }
+
+             // Se não dados no BD recebe uma string padrão 
+             if (empty($highValueData)) {
+                $highValueData = "Não há dados registrados";
+            }
+
+            return $highValueData;
+
+        }
+
+        public function getLowerValueIncome($id) {
+
+            $lowerValueData = [];
+
+            $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances WHERE TYPE = 1 AND users_id = $id GROUP BY value ASC LIMIT 1");
+            $stmt->execute();
+           
+            $data = $stmt->fetchAll();
+
+            foreach ($data as $row){
+                $lowerValueData = $row["description"] . ": R$ " . number_format($row['menor_valor'], 2, ',', '.');
+            }
+            
+             // Se não dados no BD recebe uma string padrão 
+             if (empty($lowerValueData)) {
+                $lowerValueData = "Não há dados registrados";
+            }
+
+            return $lowerValueData;
+
+        }
+
+        public function getBiggestExpense($id) {
+
+            $biggestValueData = [];
+
+            $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances WHERE TYPE = 2 AND users_id = $id GROUP BY value DESC LIMIT 1");
+            $stmt->execute();
+           
+            $data = $stmt->fetchAll();
+
+            foreach ($data as $row){
+                $biggestValueData = $row["description"] . ": R$ " . number_format($row['maior_valor'], 2, ',', '.');
+            }
+            
+            // Se não dados no BD recebe uma string padrão 
+            if (empty($biggestValueData)) {
+                $biggestValueData = "Não há dados registrados";
+            }
+
+            return $biggestValueData;
+
+        }
+
+        public function getLowerExpense($id) {
+
+            $lowerValueData = [];
+
+            $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances WHERE TYPE = 2 AND users_id = $id GROUP BY value ASC LIMIT 1");
+            $stmt->execute();
+           
+            $data = $stmt->fetchAll();
+
+            foreach ($data as $row){
+                $lowerValueData = $row["description"] . ": R$ " . number_format($row['menor_valor'], 2, ',', '.');
+            }
+
+             // Se não dados no BD recebe uma string padrão 
+            if (empty($lowerValueData)) {
+                $lowerValueData = "Não há dados registrados";
+            }
+
+            return $lowerValueData;
 
         }
 
@@ -88,6 +196,7 @@
             }
             return $financialMoviments;
         }
+
 
         public function getAllCashInflow($id) {
 

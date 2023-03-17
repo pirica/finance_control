@@ -7,11 +7,31 @@ require_once("models/Categorys.php");
         public function __construct(PDO $conn){
             $this->conn = $conn;
         }
-        
-        public function getAllCategorys() {
+
+        public function getAllEntryCategorys() {
             $categorys = [];
 
-            $stmt = $this->conn->query("SELECT * FROM finance_categorys");
+            $stmt = $this->conn->query("SELECT * FROM finance_categorys WHERE category_type = 1");
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                
+                $cateogrysArray = $stmt->fetchAll();
+
+                foreach ($cateogrysArray as $category){
+
+                    $categorys[] = $this->buildCategorys($category);
+                
+                }
+            }
+            return $categorys;
+        }
+        
+        public function getAllExitCategorys() {
+            $categorys = [];
+
+            $stmt = $this->conn->query("SELECT * FROM finance_categorys WHERE category_type = 2");
 
             $stmt->execute();
 

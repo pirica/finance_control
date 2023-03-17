@@ -255,27 +255,13 @@ ul ul a {
     /* background: #567189; */
 }
 
-ul.CTAs {
-    padding: 20px;
-}
-
-ul.CTAs a {
-    text-align: center;
-    font-size: 0.9em !important;
-    display: block;
-    border-radius: 5px;
-    margin-bottom: 5px;
-}
-
 a.download {
     background: #fff;
     color: #7386D5;
 }
 
-a.article,
-a.article:hover {
-    background: #6d7fcc !important;
-    color: #fff !important;
+.active {
+    background: #B7C202;
 }
 
 /* ---------------------------------------------------

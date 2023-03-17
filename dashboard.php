@@ -57,17 +57,17 @@ if ($userData->image == "") {
         <ul class="list-unstyled components">
             <?php foreach ($menus as  $menu) : ?>
                 <?php if ($menu->getSubMenu() == "") : ?>
-                    <li><a href="<?= $BASE_URL . $menu->getUrl(); ?>" target="myFrame"><i class="<?= $menu->getClassIcon() ?>"></i><?= $menu->getMenuName() ?></a></li>
+                    <li><a href="<?= $BASE_URL . $menu->getUrl(); ?>" target="myFrame" onclick="addClass(<?= $menu->getIdMenu() ?>)"><i class="<?= $menu->getClassIcon() ?>"></i><?= $menu->getMenuName() ?></a></li>
                 <?php else : ?>
                     <li>
-                        <a href="<?= $menu->getUrl(); ?>" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <a href="<?= $menu->getUrl(); ?>" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onclick="addClass(<?= $menu->getIdMenu() ?>)">
                             <i class="<?= $menu->getClassIcon() ?>"></i><?= $menu->getMenuName() ?>
                         </a>
                         <ul class="collapse list-unstyled" id="<?= substr($menu->getUrl(), 1); ?>">
                             <?php $subMenus = $menu_Dao->findSubMenu($menu->getIdMenu());
                             foreach ($subMenus as $subMenu) : ?>
                                 <li>
-                                    <a href="<?= $BASE_URL ?><?= $subMenu->getUrlSubMenu(); ?>"><i class="<?= $subMenu->getClassIconSubMenu() ?>"></i><?= $subMenu->getSubMenuName(); ?></a>
+                                    <a href="<?= $BASE_URL ?><?= $subMenu->getUrlSubMenu(); ?>"  onclick="addClass(<?= $menu->getIdMenu() ?>)" target="myFrame"><i class="<?= $subMenu->getClassIconSubMenu() ?>"></i><?= $subMenu->getSubMenuName(); ?></a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
@@ -84,20 +84,31 @@ if ($userData->image == "") {
             <div class="container-fluid">
 
                 <button type="button" id="sidebarCollapse" class="btn btn-info" onclick="mudaIconeToogle()">
-                    <i class="fa-solid fa-arrow-left left" title="fechar menu"></i>
-                    <i id="right" class="fa-solid fa-arrow-right" title="abrir menu"></i>
+                    <i class="fa-solid fa-arrows-left-right fa-2x"></i>
                 </button>
-
+                <h5 class="text-center text-info">Mês de Referência atual: <?= $nome_mes_atual ?></h5>
             </div>
         </nav>
 
         <div class="row">
             <div class="container-fluid">
-                <iframe src="dashboard-main.php" name="myFrame" fullscreen="allow" frameborder="0" width="100%"></iframe>
+                <iframe src="dashboard-main.php" name="myFrame" id="myFrame" fullscreen="allow" frameborder="0" width="100%"></iframe>
             </div>
         </div>
     </div>
     <!-- End Page Content  -->
 </div>
+
+<script>
+    function addClass() {
+        $(document).ready(function(){
+        $('ul li a').click(function(){
+            $('li a').removeClass("active");
+            $(this).addClass("active");
+        });
+        });
+    }
+    
+</script>
 
 <?php require_once("templates/footer.php"); ?>

@@ -29,15 +29,42 @@ $lowerExpense = $financialMovimentDao->getLowerExpense($userData->id);
 $latestFinancialMoviments = $financialMovimentDao->getLatestFinancialMoviment($userData->id);
 
 // Traz total de entradas do usuário
-$totalEntry = $financialMovimentDao->getAllCashInflow($userData->id);
+$totalCashInflow = $financialMovimentDao->getAllCashInflow($userData->id);
 
 // Traz total de saídas do usuário
 $totalCashOutflow = $financialMovimentDao->getAllCashOutflow($userData->id);
 
+// Calculo de quantos % as despesas representando com relação as receitas
+// calculo -> despesas * 100 / receitas
+$expensePercent = (float)$totalCashOutflow * 100 / (float)$totalCashInflow;
+$resultExpensePercent = (int)number_format($expensePercent, 2);
+
 // Traz o balanço entre entradas e saídas do usuário
 $total_balance = $financialMovimentDao->getTotalBalance($userData->id);
 
-$totalEntry <= "0,00" ? $total_balance = -(float)$totalCashOutflow : $totalEntry;
+// Traz as entradas de cada mês até o mês atual para alimentar o gráfico
+$cashInflowMonthsArray = $financialMovimentDao->getCashInflowByMonths($userData->id);
+
+// Traz as saídas de cada mês até o mês atual para alimentar o gráfico
+$cashOutflowMonthsArray = $financialMovimentDao->getCashOutflowByMonths($userData->id);
+
+
+$meses = date("m");
+$meses = substr($meses, 1);
+
+
+// for($i = $meses - 1; $i >= 0; $i--):
+//     //echo $i . "<br>";
+//     if (empty($cashInflowMonthsArray[$i])) {
+//         echo "$i está vazio <br>";
+//     }else {
+//         echo "retornou <br>";
+//     }
+//     // print_r($cashInflowMonthsArray[$i][0]);
+// endfor;
+
+
+$totalCashInflow <= "0,00" ? $total_balance = -(float)$totalCashOutflow : $totalCashInflow;
 $totalCashOutflow <= "0,00" ? $total_balance = $totalEntry : $totalCashOutflow;
 
 $balance_color_text = "";
@@ -58,7 +85,7 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                             <h4 class="my-0 font-weight-normal">Receita Mensal</h4>
                         </div>
                         <div class="card-body">
-                            <h1 class="card-title pricing-card-title text-success">+ R$ <?= $totalEntry ?> </h1>
+                            <h1 class="card-title pricing-card-title text-success">+ R$ <?= $totalCashInflow ?> </h1>
                             <small class="text-muted"><strong>Menor receita</strong> <br> <?= $lowerValueIncome ?> <br>
                                 <strong>Maior receita</strong> <br> <?= $highValueIncome ?>
                             </small>
@@ -93,8 +120,17 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                                 <?= $total_balance ?>
                                 <small class="text-muted"></small>
                             </h1>
-                            <i class="fa-solid fa-sack-dollar fa-5x <?= $balance_color_text ?>"></i>
-                            <!-- <img src="<?= $BASE_URL ?>assets/home/dashboard-main/money_bag.png" alt=""> -->
+                            <i class="fa-solid fa-sack-dollar fa-4x <?= $balance_color_text ?>"></i> <br>
+                            <?php if($resultExpensePercent > 50): ?>
+
+                            <div class="mt-2" style="display: inline-flex">
+                                <i class="fa-solid fa-triangle-exclamation fa-2x text-warning"></i>
+                                <small class="warning-text-expense text-danger">
+                                <strong>Cuidado despesas já são <?= $resultExpensePercent ?>% da sua renda! <br>
+                                        Até 50% é o indicado para a saúde financeira.
+                                </strong></small>
+                            </div>
+                            <?php endif; ?>
                             <!-- <button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button> -->
                         </div>
                     </div>
@@ -102,7 +138,7 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                 <div class="col-md-3">
                     <div class="card mb-3 shadow-sm">
                         <div class="card-header">
-                            <h4 class="my-0 font-weight-normal">Receita vs. Despesas</h4>
+                            <h4 class="my-0 font-weight-normal">Receita vs. Despesas /Ano</h4>
                         </div>
                         <div class="card-body">
                             <h1 class="card-title pricing-card-title text-success"> <small class="text-muted"></small>
@@ -339,6 +375,29 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
 <script src="js/Chart.js"></script>
 
 <script>
+// Converte o array php em json 
+var phpArrayCashInflow = <?php echo json_encode($cashInflowMonthsArray); ?>;
+var phpArrayCashOutflow = <?php echo json_encode($cashOutflowMonthsArray); ?>;
+
+// const d = new Date();
+// let month = d.getMonth();
+// console.log(month + 1);
+// console.log(phpArrayCashInflow.length);
+
+var dataCashInflow = new Array();
+var dataCashOutflow = new Array();
+
+// itera o Json colocando cada valor de entrada em um array JS
+for (var i = 0; i < phpArrayCashInflow.length; i++) {
+  dataCashInflow.push(phpArrayCashInflow[i][0]);
+}
+
+// itera o Json colocando cada valor de Saída em um array JS
+for (var i = 0; i < phpArrayCashOutflow.length; i++) {
+  dataCashOutflow.push(phpArrayCashOutflow[i][0]);
+}
+
+
 // Mychart graficos dos projetos em forma de pizza 
 var xValues = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 
@@ -347,11 +406,11 @@ new Chart("myChart2", {
     data: {
         labels: xValues,
         datasets: [{
-            data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 7830, 2478],
+            data: dataCashOutflow,
             borderColor: "red",
             fill: false
         }, {
-            data: [1600, 1700, 1700, 1900, 2000, 2700, 4000, 5000, 6000, 9000],
+            data: dataCashInflow,
             borderColor: "green",
             fill: false
         }]

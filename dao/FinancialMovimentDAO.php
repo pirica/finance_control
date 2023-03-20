@@ -91,8 +91,9 @@
         public function getHighValueIncome($id) {
 
             $highValueData = [];
+            $mes = date('m');
 
-            $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances WHERE TYPE= 1 AND users_id = $id GROUP BY value DESC LIMIT 1");
+            $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances WHERE MONTH(create_at) = '$mes' AND TYPE= 1 AND users_id = $id GROUP BY value DESC LIMIT 1");
             $stmt->execute();
            
             $data = $stmt->fetchAll();
@@ -113,8 +114,9 @@
         public function getLowerValueIncome($id) {
 
             $lowerValueData = [];
+            $mes = date('m');
 
-            $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances WHERE TYPE = 1 AND users_id = $id GROUP BY value ASC LIMIT 1");
+            $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances WHERE MONTH(create_at) = '$mes' AND TYPE = 1 AND users_id = $id GROUP BY value ASC LIMIT 1");
             $stmt->execute();
            
             $data = $stmt->fetchAll();
@@ -135,8 +137,9 @@
         public function getBiggestExpense($id) {
 
             $biggestValueData = [];
+            $mes = date('m');
 
-            $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances WHERE TYPE = 2 AND users_id = $id GROUP BY value DESC LIMIT 1");
+            $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances WHERE MONTH(create_at) = '$mes' AND TYPE = 2 AND users_id = $id GROUP BY value DESC LIMIT 1");
             $stmt->execute();
            
             $data = $stmt->fetchAll();
@@ -157,8 +160,9 @@
         public function getLowerExpense($id) {
 
             $lowerValueData = [];
+            $mes = date('m');
 
-            $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances WHERE TYPE = 2 AND users_id = $id GROUP BY value ASC LIMIT 1");
+            $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances WHERE MONTH(create_at) = '$mes' AND TYPE = 2 AND users_id = $id GROUP BY value ASC LIMIT 1");
             $stmt->execute();
            
             $data = $stmt->fetchAll();
@@ -179,8 +183,9 @@
         public function getLatestFinancialMoviment($id) {
             
             $financialMoviments = [];
+            $mes = date('m');
 
-            $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE users_id = $id ORDER BY id DESC LIMIT 5");
+            $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE MONTH(create_at) = '$mes' AND users_id = $id ORDER BY id DESC LIMIT 5");
 
             $stmt->execute();
 
@@ -248,6 +253,48 @@
         }
 
         public function getCashOutFlowReport($monthy) {
+
+        }
+
+        public function getCashInflowByMonths ($id) {
+
+            $cashInflowMonthsArray = [];
+
+            $stmt = $this->conn->query(
+            "SELECT SUM(value)
+            from tb_finances WHERE type = 1
+            AND users_id = $id
+            group by YEAR(create_at),MONTH(create_at)
+            order by YEAR(create_at),MONTH(create_at)");
+            $stmt->execute();
+            $data = $stmt->fetchAll();
+            
+            foreach($data as $cashInflowMonth) {
+                $cashInflowMonthsArray[] = $cashInflowMonth; 
+            }
+
+            return $cashInflowMonthsArray;
+
+        }
+
+        public function getCashOutflowByMonths ($id) {
+
+            $cashOutflowMonthsArray = [];
+
+            $stmt = $this->conn->query(
+            "SELECT SUM(value)
+            from tb_finances WHERE type = 2
+            AND users_id = $id
+            group by YEAR(create_at),MONTH(create_at)
+            order by YEAR(create_at),MONTH(create_at)");
+            $stmt->execute();
+            $data = $stmt->fetchAll();
+            
+            foreach($data as $cashOutflowMonth) {
+                $cashOutflowMonthsArray[] = $cashOutflowMonth; 
+            }
+
+            return $cashOutflowMonthsArray;
 
         }
 

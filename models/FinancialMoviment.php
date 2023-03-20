@@ -27,6 +27,8 @@ interface FinancialMovimentDAOInterface {
     public function getTotalBalance($id); // traz balanço total entre entradas e saídas
     public function getCashInflowReport($monthy); // traz todas as entradas por mês relatório
     public function getCashOutflowReport($monthy); // traz todas as saídas por mês relatório
+    public function getCashInflowbyMonths ($id); // traz todas as entradas de cada mês até o mes vigente alimentando o gráfico
+    public function getCashOutflowbyMonths ($id); // traz todas as entradas de cada mês até o mes vigente alimentando o gráfico
     public function findById($id); // traz uma movimentação especifica através do ID
     public function create(FinancialMoviment $financialMoviment); // Insere a movimentação financeira no BD
     public function update(FinancialMoviment $financialMoviment); // Atualiza a movimentação financeira no BD

@@ -36,8 +36,15 @@ $totalCashOutflow = $financialMovimentDao->getAllCashOutflow($userData->id);
 
 // Calculo de quantos % as despesas representando com relação as receitas
 // calculo -> despesas * 100 / receitas
-$expensePercent = (float)$totalCashOutflow * 100 / (float)$totalCashInflow;
-$resultExpensePercent = (int)number_format($expensePercent, 2);
+if($totalCashInflow != "0,00" && $totalCashOutflow != "0,00") {
+   
+    $expensePercent = (float)$totalCashOutflow * 100 / (float)$totalCashInflow;
+    $resultExpensePercent = (int)number_format($expensePercent, 2);
+}else {
+    $resultExpensePercent = 0;
+}
+
+
 
 // Traz o balanço entre entradas e saídas do usuário
 $total_balance = $financialMovimentDao->getTotalBalance($userData->id);
@@ -48,29 +55,28 @@ $cashInflowMonthsArray = $financialMovimentDao->getCashInflowByMonths($userData-
 // Traz as saídas de cada mês até o mês atual para alimentar o gráfico
 $cashOutflowMonthsArray = $financialMovimentDao->getCashOutflowByMonths($userData->id);
 
-
-$meses = date("m");
-$meses = substr($meses, 1);
-
-
-// for($i = $meses - 1; $i >= 0; $i--):
-//     //echo $i . "<br>";
-//     if (empty($cashInflowMonthsArray[$i])) {
-//         echo "$i está vazio <br>";
-//     }else {
-//         echo "retornou <br>";
-//     }
-//     // print_r($cashInflowMonthsArray[$i][0]);
-// endfor;
-
-
+/*
+Os operadores ternários para caso Receita estiver vazia e Despesa com valor ou vice versa 
+Saldo recebera o valor de algum deles, já que a operação da linha 39 não terá um resultado
+*/
 $totalCashInflow <= "0,00" ? $total_balance = -(float)$totalCashOutflow : $totalCashInflow;
-$totalCashOutflow <= "0,00" ? $total_balance = $totalEntry : $totalCashOutflow;
+$totalCashOutflow <= "0,00" ? $total_balance = $totalCashInflow : $totalCashOutflow;
 
 $balance_color_text = "";
 $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text = "text-danger"; 
 
+/*
+O bloco de códigos abaixo confere se todos os meses anteriores ao atual possuem dados de entradas e saídas
+para alimentação do gráfico, caso não tiver é feito um único registro com valor simbólico para entrar no gráffico 
+ */
+$current_month = date("m");
+$countDataRevenueByMonths = count($cashInflowMonthsArray);
+$countDataEpensesByMonths = count($cashOutflowMonthsArray);
 
+if ($current_month != $countDataRevenueByMonths || $current_month != $countDataEpensesByMonths) {
+
+    $financialMovimentDao->checkGraphicDataMonths($userData->id);
+}
 ?>
 
 <body id="iframe-body">
@@ -90,8 +96,6 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                                 <strong>Maior receita</strong> <br> <?= $highValueIncome ?>
                             </small>
 
-
-                            <!-- <button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button> -->
                         </div>
                     </div>
                 </div>
@@ -106,7 +110,6 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                                 <strong>Maior despesa</strong> <br> <?= $biggetsExpense ?>
                             </small>
 
-                            <!-- <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button> -->
                         </div>
                     </div>
                 </div>
@@ -131,7 +134,7 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                                 </strong></small>
                             </div>
                             <?php endif; ?>
-                            <!-- <button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button> -->
+
                         </div>
                     </div>
                 </div>
@@ -144,7 +147,6 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
                             <h1 class="card-title pricing-card-title text-success"> <small class="text-muted"></small>
                             </h1>
                             <canvas id="myChart2"></canvas>
-                            <!-- <button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button> -->
                         </div>
                     </div>
                 </div>
@@ -228,7 +230,7 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
         </div>
 
         <div class="actions mb-5 py-2 px-3 bg-light rounded-3 shadow-sm">
-            <h3 class="font-weight-normal text-center">Últimas 5 movimentações</h3>
+            <h3 class="font-weight-normal text-center">Últimas 10 movimentações</h3>
             <!-- <hr class="dashed"> -->
             <div class="row" id="latest_moviments">
 
@@ -389,12 +391,21 @@ var dataCashOutflow = new Array();
 
 // itera o Json colocando cada valor de entrada em um array JS
 for (var i = 0; i < phpArrayCashInflow.length; i++) {
-  dataCashInflow.push(phpArrayCashInflow[i][0]);
+  if(phpArrayCashInflow[i][0] == 1) {
+    dataCashInflow.push(phpArrayCashInflow[i][0] == 0);
+  }else {
+    dataCashInflow.push(phpArrayCashInflow[i][0]);
+  } 
+  
 }
 
 // itera o Json colocando cada valor de Saída em um array JS
 for (var i = 0; i < phpArrayCashOutflow.length; i++) {
-  dataCashOutflow.push(phpArrayCashOutflow[i][0]);
+    if(phpArrayCashOutflow[i][0] == 1) {
+        dataCashOutflow.push(phpArrayCashOutflow[i][0] = 0);
+    }else {
+        dataCashOutflow.push(phpArrayCashOutflow[i][0]);
+    }
 }
 
 

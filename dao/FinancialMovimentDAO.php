@@ -185,7 +185,7 @@
             $financialMoviments = [];
             $mes = date('m');
 
-            $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE MONTH(create_at) = '$mes' AND users_id = $id ORDER BY id DESC LIMIT 5");
+            $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE MONTH(create_at) = '$mes' AND users_id = $id ORDER BY id DESC LIMIT 10");
 
             $stmt->execute();
 
@@ -210,11 +210,15 @@
 
             $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = '$mes' AND users_id = $id AND type = 1");
             $stmt->execute();
-            $row = $stmt->fetch();
 
-            $sum = number_format($row['sum'], 2, ',', '.');
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch();
 
-            return $sum;
+                $sum = number_format($row['sum'], 2, ',', '.');
+    
+                return $sum;
+            }
+           
 
         }
 
@@ -318,24 +322,7 @@
             $stmt->bindParam(':category', $financialMoviment->category);
             $stmt->bindParam(':users_id', $financialMoviment->users_id);
             
-            if($stmt->execute()):
-                // Salva também na tabela de históricos 
-                $stmt = $this->conn->prepare("INSERT INTO tb_finances_historic (
-                    id, description, value, type, expense, category, create_at, users_id
-                ) VALUES(
-                    :id, :description, :value, :type, :expense, :category, now(), :users_id
-                )");
-    
-                $stmt->bindParam(':id', $financialMoviment->id);
-                $stmt->bindParam(':description', $financialMoviment->description);
-                $stmt->bindParam(':value', $financialMoviment->value);
-                $stmt->bindParam(':type', $financialMoviment->type);
-                $stmt->bindParam(':expense', $financialMoviment->expense);
-                $stmt->bindParam(':category', $financialMoviment->category);
-                $stmt->bindParam(':users_id', $financialMoviment->users_id);
-                $stmt->execute();
-
-            endif;
+            $stmt->execute();
             
             $type_moviment = "";
 
@@ -384,4 +371,91 @@
 
         }
 
+    public function checkGraphicDataMonths($id) {
+
+        /* 
+        Script para caso o usuário tenha se cadastrado após janeiro
+        As entradas e saídas que antecedem o mês atual do sistema seja
+        Sejam preenchidos com 0 para o perfeito funcionamento do gráfico anual 
+        */
+
+        $ano = date("Y");
+        $m = date("m");
+        $m = intval($m);
+
+        for($mes = $m - 1; $mes > 0; $mes--):
+
+            # -------------- Entradas ------------------------- #
+            // Query a partir do mês atual em forma descrente ex: 03, 02, 01
+            $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = $mes AND users_id = $id AND TYPE = 1");
+            $stmt->execute();
+            $entradas = $stmt->fetchAll();
+
+            // Itera o array que vem do BD checando a soma de entradas em cada mês
+            foreach ($entradas as $row){
+                $value_entradas = $row["sum"];
+            
+                // Se o array retornar vazio (null) neste Mês não há registros
+                // Então insere um registro padrão com valor 0
+                if (!$value_entradas == null || !empty($value_entradas)) {
+                    //echo "mes $mes possui valor <br>";
+                }else {
+                    // echo "mes $mes não possui valor <br>";
+                    $stmt = $this->conn->prepare("INSERT INTO tb_finances (
+                        description, value, type, create_at, users_id
+                    ) VALUES(
+                        :description, :value, :type, :create_at, :users_id
+                    )");
+                    $description = "Não houve registros nesse mês";
+                    $value = 1;
+                    $type = 1;
+                    $create_at = "$ano-$mes-10 10:00:10";
+
+                    $stmt->bindParam(':description', $description);
+                    $stmt->bindParam(':value', $value);
+                    $stmt->bindParam(':type', $type);
+                    $stmt->bindParam(':create_at', $create_at);
+                    $stmt->bindParam(':users_id', $id);
+                    $stmt->execute();
+
+                }
+            }
+
+            #-------------------- Saídas ------------------------------------#
+            $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = $mes AND users_id = $id AND TYPE = 2");
+            $stmt->execute();
+            $saidas = $stmt->fetchAll();
+            
+            foreach ($saidas as $row){
+                $value_saidas = $row["sum"];
+        
+                // Se o array retornar vazio (null) neste Mês não há registros
+                // Então insere um registro padrão com valor 0
+                if (!$value_saidas == null || !empty($value_saidas)) {
+                    //echo "mes $mes possui valor <br>";
+                }else {
+                    //echo "mes $mes não possui valor <br>";
+                    $stmt = $this->conn->prepare("INSERT INTO tb_finances (
+                        description, value, type, create_at, users_id
+                    ) VALUES(
+                        :description, :value, :type, :create_at, :users_id
+                    )");
+                    $description = "Não houve registros nesse mês";
+                    $value = 1;
+                    $type = 2;
+                    $create_at = "$ano-$mes-10 10:00:10";
+        
+                    $stmt->bindParam(':description', $description);
+                    $stmt->bindParam(':value', $value);
+                    $stmt->bindParam(':type', $type);
+                    $stmt->bindParam(':create_at', $create_at);
+                    $stmt->bindParam(':users_id', $id);
+                    $stmt->execute();
+                }
+            }
+    
+        endfor;
+
     }
+
+}

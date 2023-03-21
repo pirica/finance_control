@@ -45,7 +45,6 @@ if($totalCashInflow != "0,00" && $totalCashOutflow != "0,00") {
 }
 
 
-
 // Traz o balanço entre entradas e saídas do usuário
 $total_balance = $financialMovimentDao->getTotalBalance($userData->id);
 
@@ -56,8 +55,8 @@ $cashInflowMonthsArray = $financialMovimentDao->getCashInflowByMonths($userData-
 $cashOutflowMonthsArray = $financialMovimentDao->getCashOutflowByMonths($userData->id);
 
 /*
-Os operadores ternários para caso Receita estiver vazia e Despesa com valor ou vice versa 
-Saldo recebera o valor de algum deles, já que a operação da linha 39 não terá um resultado
+Os operadores ternários para caso a Receita estiver vazia e Despesa com valor ou vice versa 
+Saldo recebera o valor de algum deles, já que a operação da linha 41 não terá um resultado
 */
 $totalCashInflow <= "0,00" ? $total_balance = -(float)$totalCashOutflow : $totalCashInflow;
 $totalCashOutflow <= "0,00" ? $total_balance = $totalCashInflow : $totalCashOutflow;
@@ -271,7 +270,7 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                             <td><a href="#" data-toggle="modal"
                                     data-target="#exampleModalCenter<?= $financialMoviment->id ?>" title="Editar">
                                     <i class="fa-solid fa-file-pen"></i></a>
-                                <a href="moviment_process.php?delete=s&id=<?= $financialMoviment->id ?>"
+                                <a href="#" data-toggle="modal" data-target="#modal_del_finance_moviment<?= $financialMoviment->id ?>"
                                      title="Deletar"><i class="fa-solid fa-trash-can"></i></a>
                             </td>
                         </tr>
@@ -373,6 +372,26 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
         </div>
         <?php endforeach; ?>
         <!-- End Finance moviment modal -->
+
+        <!-- Modal para cofnirmação de exclusão de registro financeiro -->
+        <?php foreach ($latestFinancialMoviments as $financialMoviment): ?>
+        <div class="modal" tabindex="-1" id="modal_del_finance_moviment<?= $financialMoviment->id ?>">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <p>Tem certeza que deseja excluir o registro?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                        <form action="<?= $BASE_URL?>moviment_process.php?delete=s&id=<?= $financialMoviment->id ?>" method="POST">
+                            <button type="submit" class="btn btn-primary">Sim</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+        <!-- FIm Modal para cofnirmação de exclusão de registro financeiro -->
 </body>
 <script src="js/Chart.js"></script>
 
@@ -380,11 +399,6 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
 // Converte o array php em json 
 var phpArrayCashInflow = <?php echo json_encode($cashInflowMonthsArray); ?>;
 var phpArrayCashOutflow = <?php echo json_encode($cashOutflowMonthsArray); ?>;
-
-// const d = new Date();
-// let month = d.getMonth();
-// console.log(month + 1);
-// console.log(phpArrayCashInflow.length);
 
 var dataCashInflow = new Array();
 var dataCashOutflow = new Array();
@@ -409,7 +423,7 @@ for (var i = 0; i < phpArrayCashOutflow.length; i++) {
 }
 
 
-// Mychart graficos dos projetos em forma de pizza 
+// Mychart graficos dos projetos em forma de linhas 
 var xValues = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 
 new Chart("myChart2", {

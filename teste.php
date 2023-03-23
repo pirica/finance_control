@@ -1,95 +1,68 @@
-<?php
-
-$localhost = 'localhost';
-$user = 'root';
-$db = "finance_db";
-$psw = "";
-$conn = new PDO("mysql:host=$localhost;dbname=$db", $user, $psw);
-
-/* 
-Script para caso o usuário tenha se cadastrado após janeiro
-As entradas e saídas que antecedem o mês atual do sistema seja
-Sejam preenchidos com 0 para o perfeito funcionamento do gráfico anual 
-*/
-
-$ano = date("Y");
-$m = date("m");
-$m = intval($m);
-
-for($mes = $m; $mes > 0; $mes--):
-
-    # -------------- Entradas ------------------------- #
-    // Query a partir do mês atual em forma descrente ex: 03, 02, 01
-    $stmt = $conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = $mes AND users_id = 15 AND TYPE = 1");
-    $stmt->execute();
-    $entradas = $stmt->fetchAll();
-
-    // Itera o array que vem do BD checando a soma de entradas em cada mês
-    foreach ($entradas as $row){
-        $value_entradas = $row["sum"];
-       echo "entrada ";
-        // Se o array retornar vazio (null) neste Mês não há registros
-        // Então insere um registro padrão com valor 0
-        if (!$value_entradas == null || !empty($value_entradas)) {
-            echo "mes $mes possui valor <br>";
-        }else {
-             echo "mes $mes não possui valor <br>";
-            $stmt = $conn->prepare("INSERT INTO tb_finances (
-                description, value, type, create_at, users_id
-            ) VALUES(
-                :description, :value, :type, :create_at, :users_id
-            )");
-            $description = "Não houve registros nesse mês";
-            $value = 1;
-            $users_id = 15;
-            $type = 1;
-            $create_at = "$ano-$mes-10 10:00:10";
-
-            $stmt->bindParam(':description', $description);
-            $stmt->bindParam(':value', $value);
-            $stmt->bindParam(':type', $type);
-            $stmt->bindParam(':create_at', $create_at);
-            $stmt->bindParam(':users_id', $users_id);
-
-            $stmt->execute();
-
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>How To Create Dark And Light Mode Website Using jQuery - Techsolutionstuff</title>        
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style> 
+        body{         
+        text-align:center; 
+        } 
+        img{ 
+            height:140px; 
+            width:140px;  
+        } 
+        h1{ 
+        color: #000; 
+        margin-top: 50px;
+        } 
+        .mode { 
+            float:right; 
+            margin-top: 20px;
+            margin-right: 20px;
+        } 
+        .change { 
+            cursor: pointer; 
+            border: 1px solid #555; 
+            border-radius: 10%; 
+            width: 20px; 
+            text-align: center; 
+            padding: 8px; 
+            margin-left: 8px; 
+        } 
+        .dark{ 
+            background-color: #222; 
+            color: #e6e6e6; 
         }
-    }
-
-     #-------------------- Saídas ------------------------------------#
-     $stmt = $conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = $mes AND users_id = 15 AND TYPE = 2");
-     $stmt->execute();
-     $saidas = $stmt->fetchAll();
-     
-     foreach ($saidas as $row){
-         $value_saidas = $row["sum"];
-        echo "Saida ";
-         // Se o array retornar vazio (null) neste Mês não há registros
-         // Então insere um registro padrão com valor 0
-         if (!$value_saidas == null || !empty($value_saidas)) {
-             echo "mes $mes possui valor <br>";
-         }else {
-             echo "mes $mes não possui valor <br>";
-             $stmt = $conn->prepare("INSERT INTO tb_finances (
-                 description, value, type, create_at, users_id
-             ) VALUES(
-                 :description, :value, :type, :create_at, :users_id
-             )");
-             $description = "Não houve registros nesse mês";
-             $value = 1;
-             $users_id = 15;
-             $type = 2;
-             $create_at = "$ano-$mes-10 10:00:10";
- 
-             $stmt->bindParam(':description', $description);
-             $stmt->bindParam(':value', $value);
-             $stmt->bindParam(':type', $type);
-             $stmt->bindParam(':create_at', $create_at);
-             $stmt->bindParam(':users_id', $users_id);
- 
-             $stmt->execute();
-         }
-     }
-     echo "<br>";
-endfor;
-
+      .dark h1{ 
+        color: #fff;         
+        } 
+    </style> 
+</head>   
+<body> 
+    <div class="mode"> 
+        <b>Select Mode:</b><span class="change">OFF</span> 
+    </div><br>     
+    <div> 
+      <h1><i>Techsolutionstuff</i></h1> 
+        <p><i>We Give Best Tech Stuff for You</i></p> 
+        <h3>Light Mode and Dark Mode</h3>                    
+        <p> 
+            Click on the switch on <b>Top Right Corner</b>
+            to move to <b>Dark Mode</b> and <b>Light Mode.</b>
+        </p> 
+    </div>       
+    <script> 
+        $( ".change" ).on("click", function() { 
+            if( $( "body" ).hasClass( "dark" )) { 
+                $( "body" ).removeClass( "dark" ); 
+                $( ".change" ).text( "OFF" ); 
+            } else { 
+                $( "body" ).addClass( "dark" ); 
+                $( ".change" ).text( "ON" ); 
+            } 
+        }); 
+    </script> 
+</body>   
+</html>

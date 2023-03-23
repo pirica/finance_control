@@ -38,12 +38,12 @@ if (!empty($flashMessage)) {
                     <div class="form-group">
                         <input type="password" class="form-control" name="password" placeholder="Digite sua senha *" value="" />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group text-center">
                         <input type="submit" class="btnSubmit" value="Entrar" />
                     </div>
                 </form>
-                <div class="form-group">
-                    <a href="#" class="btnForgetPwd">Esqueci o Password?</a>
+                <div class="form-group text-center">
+                    <a href="#" class="btnForgetPwd">Esqueci a senha?</a>
                 </div>
             </div>
             <!-- End Login Form -->
@@ -81,7 +81,7 @@ if (!empty($flashMessage)) {
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group text-center">
                         <input type="submit" class="btnSubmit" value="Registrar" />
                     </div>
                 </form>

@@ -1,17 +1,4 @@
-<?php
-require_once("templates/header_iframe.php");
-
-// // 1. Create CSRF Token
-// $token = md5(uniqid(mt_rand(), true));
-// $_SESSION["csrf_token"] = $token;
-
-// print_r($_SESSION);
-
-// // 2. Adding CSRF Token to Form
-
-// // Validating CSRF Token
-
-?>
+<?php require_once("templates/header_iframe.php");?>
 
 <div class="container-fluid">
     <h1 class="text-center my-5 text-secondary">Adicionar Cartão de Crédito</h1>
@@ -34,7 +21,7 @@ require_once("templates/header_iframe.php");
                 <div class="col-md-3">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Validade:</h4>
-                        <input type="date" name="expired_card" id="expired_card" class="form-control">
+                        <input type="month" name="expired_card" id="expired_card" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -59,11 +46,15 @@ require_once("templates/header_iframe.php");
                 </div>
                 <div class="visa_info">
                     <img src="<?= $BASE_URL ?>assets/home/dashboard-main/chip.png" alt="">
-                    <p id="card_number">4586 7985 9271 6388</p>
+                    <p class="mt-3" id="card_number">4586 7985 9271 6388</p>
                 </div>
                 
                 <div class="visa_crinfo">
-                    <p id="card_name">João Silva Costa</p>                  
+               
+                    <p id="card_name">
+                    <!-- <small>Titular da conta:</small> <br> -->
+                        João Silva Costa
+                    </p>                  
                     
                     <div class="form-group">
                         <small class="text-light">Expira</small>

@@ -28,8 +28,8 @@ if ($userData->image == "") {
 <nav class="navbar sticky-top navbar-dark bg-secondary shadow">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="<?= $BASE_URL ?>assets/finance_small_logo.png" alt="" width="36" height="36" class="d-inline-block align-text-top">
-            <span class="">Finance Control</span>
+            <img src="<?= $BASE_URL ?>assets/finance_small_logo.png" alt="logo_finance_control" width="36" height="36" class="d-inline-block">
+            <span>Finance Control</span>
         </a>
         <h5 class="text-white">Seu dinheiro seguro!</h5>
         <ul class="navbar-nav px-3">
@@ -47,8 +47,8 @@ if ($userData->image == "") {
         <div class="sidebar-header text-center">
             <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/avatar/<?= $userData->image ?>')">
             </div>
-            <h5><?= $fullName ?></h5>
-
+            <h5 class="user_name"><?= $fullName ?></h5>
+            
             <span id="DisplayClock" onload="showTime()"></span>
             <?= $msg_saudacao; ?>
 

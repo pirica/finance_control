@@ -1,9 +1,11 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 
 body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Raleway', sans-serif !important;
 }
 
 iframe {
@@ -196,7 +198,6 @@ main {
     min-width: 250px;
     max-width: 250px;
     background: #ccc;
-    /* color: #fff; */
     transition: all 0.3s;
 }
 
@@ -206,8 +207,13 @@ main {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    /* background: #567189; */
+    background: #d9d9d9;
 }
+
+.sidebar-header .user_name{
+    font-family: 'Poppins', sans-serif;
+}
+
 
 #sidebar ul.components {
     padding: 20px 0;
@@ -405,6 +411,77 @@ table {
 
 /* ---------------------------------------------------
    END DASHBOARD MAIN
+----------------------------------------------------- */
+
+
+/* ---------------------------------------------------
+   CARDS CREDIT PAGE
+----------------------------------------------------- */
+
+/* Card Credit*/
+.card-credit {
+    width: 100%;
+    height: 270px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    z-index: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.visa {
+    background: rgb(199,12,17);
+    background: linear-gradient(180deg, rgba(199,12,17,1) 0%, rgba(111,6,6,1) 100%);    
+}
+
+.master-card {
+    background: rgb(55,55,60);
+    background: linear-gradient(180deg, rgba(55,55,60,1) 0%, rgba(0,0,0,1) 100%);
+}
+
+.visa_logo {
+    text-align: end;
+    padding: 10px;
+}
+.visa_info {
+    padding: 10px;
+}
+.visa_info img {
+    width: 45px;
+    height: 35px;
+}
+
+.visa_info p {
+    font-size: 22px;
+    padding: 10px 0;
+    letter-spacing: 2px;
+    color: #ffffff;
+}
+
+.visa_crinfo {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.visa_crinfo p {
+    color: #ffffff;
+}
+
+#cards-page .fa-trash-can{
+    font-size: 25px;
+    color: #DF2E38;
+}
+
+
+#cards-page .fa-file-pen{
+    font-size: 25px;
+    color: #DC8449;
+}
+
+
+/* ---------------------------------------------------
+   END CARDS CREDIT PAGE
 ----------------------------------------------------- */
 
 /* ---------------------------------------------------

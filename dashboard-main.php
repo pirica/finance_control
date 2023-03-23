@@ -34,7 +34,7 @@ $totalCashInflow = $financialMovimentDao->getAllCashInflow($userData->id);
 // Traz total de saídas do usuário
 $totalCashOutflow = $financialMovimentDao->getAllCashOutflow($userData->id);
 
-// Calculo de quantos % as despesas representando com relação as receitas
+// Calculo de quantos % as despesas representa com relação as receitas
 // calculo -> despesas * 100 / receitas
 if($totalCashInflow != "0,00" && $totalCashOutflow != "0,00") {
    

@@ -188,6 +188,8 @@ main {
     margin: 15px auto;
 }
 
+#user_award {margin-top: 7rem; margin-left: 4rem;}
+
 .wrapper {
     display: flex;
     width: 100%;
@@ -375,37 +377,37 @@ table {
     margin-top: 2rem;
 }
 
-@media (max-width: 575px) {
+@media not print {
+    @media (max-width: 575px) {
 
-    table thead {
-        display: none;
+        table thead {
+            display: none;
+        }
+
+        table tr {
+            display: flex;
+            flex-direction: column;
+            border: 3px solid white;
+            padding: 1px;
+        }
+
+
+        table td[data-label] {
+            display: flex;
+            font-weight: bold;
+        }
+
+        table td[data-label]::before {
+            content: attr(data-label);
+            color: lightgrey;
+            font-weight: 100;
+            width: 50%;
+        }
+
+        .warning-text-expense{
+            font-size: 76%;
+        }
     }
-
-    table tr {
-        display: flex;
-        flex-direction: column;
-        border: 3px solid white;
-        padding: 1px;
-    }
-
-
-    table td[data-label] {
-        display: flex;
-        font-weight: bold;
-    }
-
-    table td[data-label]::before {
-        content: attr(data-label);
-        color: lightgrey;
-        font-weight: 100;
-        width: 50%;
-    }
-
-    .warning-text-expense{
-        font-size: 76%;
-    }
-
-
 }
 
 
@@ -483,6 +485,14 @@ table {
 /* ---------------------------------------------------
    END CARDS CREDIT PAGE
 ----------------------------------------------------- */
+
+/* ---------------------------------------------------
+   REPORTS
+----------------------------------------------------- */
+
+.entrys-search .btn {
+    margin-top: 2rem;
+}
 
 /* ---------------------------------------------------
     MEDIAQUERIES

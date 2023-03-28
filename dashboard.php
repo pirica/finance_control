@@ -46,6 +46,10 @@ if ($userData->image == "") {
     <nav id="sidebar">
         <div class="sidebar-header text-center">
             <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/avatar/<?= $userData->image ?>')">
+                <div id="user_award">
+                    <i class="fa-solid fa-award fa-3x text-danger"></i>
+                </div>
+                
             </div>
             <h5 class="user_name"><?= $fullName ?></h5>
             

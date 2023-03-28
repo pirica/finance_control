@@ -14,8 +14,8 @@
 
     <!-- CSS Local  -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/print.css" media="print" />
 
-   
 
     <title>Finance Control</title>
 </head>

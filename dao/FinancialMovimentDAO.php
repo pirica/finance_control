@@ -83,6 +83,7 @@
 
             return $financialMoviment;
         }
+        
 
         public function findAll() {
 
@@ -202,6 +203,27 @@
             return $financialMoviments;
         }
 
+        public function getAllOutFinancialMoviment($id) {
+            
+            $outFinancialMoviments = [];
+
+            $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE type = 2 AND category IS NOT NULL AND users_id = $id ORDER BY value DESC");
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                
+                $financialMovimentsArray = $stmt->fetchAll();
+
+                foreach ($financialMovimentsArray as $financialMoviment){
+
+                    $outFinancialMoviments[] = $this->buildFinancialMoviment($financialMoviment);
+                
+                }
+            }
+            return $outFinancialMoviments;
+        }
+
 
         public function getAllCashInflow($id) {
 
@@ -252,7 +274,24 @@
 
         }
 
-        public function getCashInflowReport($monthy) {
+        public function getReports($sql, $type, $id) {
+
+            $reportEntryData = [];
+
+            $stmt = $this->conn->query("SELECT id, description, value, expense, type, category, create_at, update_at, users_id FROM tb_finances WHERE users_id = $id AND type = $type AND category IS NOT NULL $sql");
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+
+                $data = $stmt->fetchAll();
+
+                foreach($data as $reportItem) {
+                    $reportEntryData[] = $this->buildFinancialMoviment($reportItem);
+                }
+
+            }
+
+            return $reportEntryData;
 
         }
 
@@ -326,7 +365,7 @@
             
             $type_moviment = "";
 
-            $financialMoviment->type = 1 ? $type_moviment = "Entrada" : $type_moviment = "Saída";
+            $financialMoviment->type == 1 ? $type_moviment = "Entrada" : $type_moviment = "Saída";
 
             $this->message->setMessage("$type_moviment registrada com sucesso!", "success", "back");
 

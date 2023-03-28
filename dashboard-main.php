@@ -1,5 +1,4 @@
 <?php 
-
 require_once("templates/header_iframe.php"); 
 require_once("dao/FinancialMovimentDAO.php");
 require_once("dao/CategorysDAO.php");

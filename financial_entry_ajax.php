@@ -6,33 +6,38 @@ $financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
 $sql = "";
 $output = "";
 $total = 0;
-$user_id = $_POST['user_id'];
 
-if (isset($_POST['name_search']) && $_POST['name_search'] != '') {
-    $name_search = $_POST['name_search'];
-    $sql .= " AND description LIKE '%$name_search%'";
+if (isset($_POST['name_search_entry']) && $_POST['name_search_entry'] != '') {
+    $name_search_entry = $_POST['name_search_entry'];
+    $sql .= " AND description LIKE '%$name_search_entry%'";
 }
 
-if (isset($_POST['values']) && $_POST['values'] != '') {
-    $values = $_POST['values'];
-    $sql .= " AND value <= $values";
+if (isset($_POST['values_entry']) && $_POST['values_entry'] != '') {
+    $values_entry = $_POST['values_entry'];
+    $sql .= " AND value <= $values_entry";
 }
 
-if (isset($_POST['from_date']) && $_POST['from_date'] != '' && isset($_POST['to_date']) && $_POST['to_date'] != '') {
-    $from_date = $_POST['from_date'];
-    $to_date = $_POST['to_date'];
-    $sql .= " AND create_at BETWEEN '$from_date' AND '$to_date'";
+if (isset($_POST['from_date_entry']) && $_POST['from_date_entry'] != '' && isset($_POST['to_date_entry']) && $_POST['to_date_entry'] != '') {
+    $from_date_entry = $_POST['from_date_entry'];
+    $to_date_entry = $_POST['to_date_entry'];
+    $sql .= " AND create_at BETWEEN '$from_date_entry' AND '$to_date_entry 23:59:00'";
 }
 
-if (isset($_POST['category']) && $_POST['category'] != '') {
-    $category = $_POST['category'];
-    $sql .= " AND category = $category";
+if (isset($_POST['category_entry']) && $_POST['category_entry'] != '') {
+    $category_entry = $_POST['category_entry'];
+    if($category_entry == 0){
+        $sql .= " AND category > $category_entry";
+    }else {
+        $sql .= " AND category = $category_entry";
+    }
 }
+
+// Traz o array com os dados da query personalizada 
+$getEntryReports = $financialMovimentDao->getReports($sql, 1, $userData->id);
 
 if (!empty($sql)) {
-    $stmt = $conn->query("SELECT id, description, value, category, create_at, users_id FROM tb_finances WHERE users_id = $user_id AND type = 1 AND category IS NOT NULL $sql");
-    $stmt->execute();
-    if ($stmt->rowCount() > 0) {
+   
+    if ($getEntryReports != null) {
         $output .= '<table class="table">
         <thead class="thead-dark">
             <tr>
@@ -47,26 +52,31 @@ if (!empty($sql)) {
         </thead>
         <tbody>';
     
-        $data = $stmt->fetchAll();
-    
-        foreach($data as $item) {
-            $total += $item["value"];
+        foreach($getEntryReports as $item) {
+           
+            $value = str_replace('.', '', $item->value);
+            $total += (float) $value;
             $output .= '
             <tr>
-                <th scope="row">'.$item["id"].'</th>
-                <td>'.$item["description"].'</td>
-                <td>'.$item["value"].'</td>
-                <td>'.$item["create_at"].'</td>
-                <td>'.$item["category"] . '</td>
+                <th scope="row">'.$item->id.'</th>
+                <td>'.$item->description.'</td>
+                <td>'.$item->value.'</td>
+                <td>'.$item->create_at.'</td>
+                <td>'.$item->category.'</td>
                 <td>obs</td>
-                <td>Editar | Excluir</td>
+                <td id="latest_moviments"><a href="#" data-toggle="modal"
+                    data-target="#exampleModalCenter'.$item->id.'" title="Editar">
+                    <i class="fa-solid fa-file-pen"></i></a>
+                <a href="#" data-toggle="modal" data-target="#modal_del_finance_moviment'.$item->id.'"
+                        title="Deletar"><i class="fa-solid fa-trash-can"></i></a>
+                </td>
             </tr>
             ';
         }
         echo $output . '
         <tfoot>
         <tr>
-            <td colspan="7"> <strong> Total: </strong> '.$total.'</td>
+            <td colspan="8"> <strong> Total: R$</strong> '.number_format($total, 2, ',', '.').'</td>
         </tr>
         </tfoot>
     </table>';

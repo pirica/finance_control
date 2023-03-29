@@ -7,28 +7,28 @@ $sql = "";
 $output = "";
 $total = 0;
 
-if (isset($_POST['name_search']) && $_POST['name_search'] != '') {
-    $name_search = $_POST['name_search'];
-    $sql .= " AND description LIKE '%$name_search%'";
+if (isset($_POST['name_search_exit']) && $_POST['name_search_exit'] != '') {
+    $name_search_exit = $_POST['name_search_exit'];
+    $sql .= " AND description LIKE '%$name_search_exit%'";
 }
 
-if (isset($_POST['values']) && $_POST['values'] != '') {
-    $values = $_POST['values'];
-    $sql .= " AND value <= $values";
+if (isset($_POST['values_exit']) && $_POST['values_exit'] != '') {
+    $values_exit = $_POST['values_exit'];
+    $sql .= " AND value <= $values_exit";
 }
 
-if (isset($_POST['from_date']) && $_POST['from_date'] != '' && isset($_POST['to_date']) && $_POST['to_date'] != '') {
-    $from_date = $_POST['from_date'];
-    $to_date = $_POST['to_date'];
-    $sql .= " AND create_at BETWEEN '$from_date' AND '$to_date'";
+if (isset($_POST['from_date_exit']) && $_POST['from_date_exit'] != '' && isset($_POST['to_date_exit']) && $_POST['to_date_exit'] != '') {
+    $from_date_exit = $_POST['from_date_exit'];
+    $to_date_exit = $_POST['to_date_exit'];
+    $sql .= " AND create_at BETWEEN '$from_date_exit' AND '$to_date_exit 23:59:00'";
 }
 
-if (isset($_POST['category']) && $_POST['category'] != '') {
-    $category = $_POST['category'];
-    if($category == 0){
-        $sql .= " AND category > $category";
+if (isset($_POST['category_exit']) && $_POST['category_exit'] != '') {
+    $category_exit = $_POST['category_exit'];
+    if($category_exit == 0){
+        $sql .= " AND category > $category_exit";
     }else {
-        $sql .= " AND category = $category";
+        $sql .= " AND category = $category_exit";
     }
 }
 
@@ -54,19 +54,17 @@ if (!empty($sql)) {
         <tbody>';
     
         foreach($getOutReports as $item) {
-            $expense_type = $item->expense;
-            $expense_type == "V" ? $expense_type = "Variada" : $expense_type = "Fixa"; 
-            $category = $item->category;
            
-            $total += (float)$item->value;
+            $value = str_replace('.', '', $item->value);
+            $total += (float) $value;
             $output .= '
             <tr>
                 <th scope="row">'.$item->id.'</th>
                 <td>'.$item->description.'</td>
                 <td>'.$item->value.'</td>
                 <td>'.$item->create_at.'</td>
-                <td>'.$expense_type.'</td>
-                <td>'.$category.'</td>
+                <td>'.$item->expense.'</td>
+                <td>'.$item->category.'</td>
                 <td>obs</td>
                 <td id="latest_moviments"><a href="#" data-toggle="modal"
                     data-target="#exampleModalCenter'.$item->id.'" title="Editar">
@@ -80,7 +78,7 @@ if (!empty($sql)) {
         echo $output . '
         <tfoot>
         <tr>
-            <td colspan="8"> <strong> Total: </strong> '.number_format($total, 2, ',', '.').'</td>
+            <td colspan="8"> <strong> Total: R$</strong> '.number_format($total, 2, ',', '.').'</td>
         </tr>
         </tfoot>
     </table>';

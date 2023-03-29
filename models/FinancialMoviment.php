@@ -19,6 +19,7 @@ interface FinancialMovimentDAOInterface {
     public function findAll(); // traz todas as movimentações financeiras
     public function getLatestFinancialMoviment($id); // Traz as últimas movimentações financeiras
     public function getAllOutFinancialMoviment($id); // Traz todas Saídas de movimentações financeiras
+    public function getAllEntryFinancialMoviment($id); // Traz todas Saídas de movimentações financeiras
     public function getAllCashInflow($id); // traz a soma de todas as entradas dashboard
     public function getHighValueIncome($id); // traz a maior receita do mês
     public function getLowerValueIncome($id); // traz a menor receita do mês

@@ -9,13 +9,9 @@ $categorysDao = new CategorysDAO($conn);
 // Traz todas as categorias disponiveis para despesas
 $exit_categorys = $categorysDao->getAllExitCategorys();
 
-// Traz as última movimentações do usuário
-$latestFinancialMoviments = $financialMovimentDao->getLatestFinancialMoviment($userData->id);
-
 // Traz total de saídas do usuário
 $outFinancialMoviments = $financialMovimentDao->getAllOutFinancialMoviment($userData->id);
 $total_out_value = 0;
-
 
 // Traz o array com os dados de saída da query personalizada 
 $sql = "";
@@ -41,14 +37,14 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
                 <div class="col-md-3">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Por nome:</h4>
-                        <input type="text" name="name_search" id="name_search" class="form-control" placeholder="Ex: salário">
+                        <input type="text" name="name_search_exit" id="name_search_exit" class="form-control" placeholder="Ex: salário">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Por valor:</h4>
                         <!-- <input class="form-control" type="number" name="values" id="values" placeholder="ex: até 500"> -->
-                        <select class="form-control" name="values" id="values">
+                        <select class="form-control" name="values_exit" id="values_exit">
                             <option value="">Selecione</option>
                             <option value="500">até R$ 500,00</option>
                             <option value="1500">de R$ 500 até R$ 1.500,00</option>
@@ -61,19 +57,19 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
                 <div class="col-md-2">
                     <div class="form-group">
                         <h4 class="font-weight-normal">De:</h4>
-                        <input type="date" name="from_date" id="from_date" class="form-control">
+                        <input type="date" name="from_date_exit" id="from_date_exit" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Até:</h4>
-                        <input type="date" name="to_date" id="to_date" class="form-control">
+                        <input type="date" name="to_date_exit" id="to_date_exit" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Categoria:</h4>
-                        <select class="form-control" name="category" id="category">
+                        <select class="form-control" name="category_exit" id="category_exit">
                             <option value="0">Selecione</option>
                             <?php foreach($exit_categorys as $category): ?>
                             <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
@@ -90,11 +86,11 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
             </div>
         </form>
     </div>
-
-    <div class="table_report my-3" id="test"></div>
-
-    <!-- TODO: colocar botão imprimir relatório  -->
-    <div class="table_report" id="table_report">
+                                
+    <div class="table_report my-3" id="search_exit"></div>
+    
+    <!-- table div thats receive all expenses without customize inputs parameters  -->
+    <div class="table_report" id="table_report_exit">
         <table class="table">
             <thead class="thead-dark">
                 <tr>
@@ -102,6 +98,7 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
                     <th scope="col">Descrição</th>
                     <th scope="col">Valor</th>
                     <th scope="col">Data</th>
+                    <th scope="col">Despesa</th>
                     <th scope="col">Categoria</th>
                     <th scope="col">Observação</th>
                     <th scope="col">Ação</th>
@@ -109,12 +106,14 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
             </thead>
             <tbody>
                 <?php foreach($outFinancialMoviments as $outFinancialMovimentItem): ?>
-                    <?php $total_out_value += (float)$outFinancialMovimentItem->value ?>
+                    <?php $value = str_replace('.', '', $outFinancialMovimentItem->value);
+                        $total_out_value += (float) $value; ?>
                 <tr>
                     <th scope="row"><?= $outFinancialMovimentItem->id ?></th>
                     <td><?= $outFinancialMovimentItem->description ?></td>
                     <td><?= $outFinancialMovimentItem->value ?></td>
                     <td><?= $outFinancialMovimentItem->create_at ?></td>
+                    <td><?= $outFinancialMovimentItem->expense ?></td>
                     <td><?= $outFinancialMovimentItem->category ?></td>
                     <td>obs</td>
                     <td id="latest_moviments"><a href="#" data-toggle="modal"
@@ -128,11 +127,12 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="7"> <strong> Total: </strong> R$ <?= number_format($total_out_value,2, ',', '.') ?></td>
+                    <td colspan="8"> <strong> Total: </strong> R$ <?= number_format($total_out_value,2, ',', '.') ?></td>
                 </tr>
             </tfoot>
         </table>
     </div>
+    <!-- table div thats receive all expenses without customize inputs parameters  -->
 
       <!-- Finance all expense moviment modal -->
       <?php foreach ($outFinancialMoviments as $outFinancialMovimentItem): ?>
@@ -316,8 +316,8 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
         <?php endforeach; ?>
         <!-- End Finance moviment modal -->
 
-        <!-- Modal para cofnirmação de exclusão de registro financeiro -->
-        <?php foreach ($latestFinancialMoviments as $financialMoviment): ?>
+        <!-- Modal para confirmação de exclusão de registro financeiro -->
+        <?php foreach ($getOutReports as $financialMoviment): ?>
         <div class="modal" tabindex="-1" id="modal_del_finance_moviment<?= $financialMoviment->id ?>">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -334,85 +334,8 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
             </div>
         </div>
         <?php endforeach; ?>
-        <!-- FIm Modal para cofnirmação de exclusão de registro financeiro -->
+        <!-- Fim Modal para cofnirmação de exclusão de registro financeiro -->
 </div>
 
 <?php require_once("templates/footer.php"); ?>
-
-<script>
-    $(document).ready(function() {
-
-        $("input").keyup(function() {
-
-            var table_origin = document.getElementById("table_report");
-            table_origin.style.display = "none";
-            
-            var name_search = $("#name_search").val();
-            var values = $("#values").val();
-            var from_date = $("#from_date").val();
-            var to_date = $("#to_date").val();
-            var category = $("#category").val();
-            var user_id = $("#user_id").val();
-
-            $.post("financial_exit_ajax.php", {
-                name_search: name_search,
-                values: values,
-                from_date: from_date,
-                to_date: to_date,
-                category: category,
-                user_id: user_id
-            }, function(data, status) {
-                $("#test").html(data);
-            });
-
-            
-        });
-
-        $("#values").on("click", function(){
-            var values = $("#values").val();
-            var name_search = $("#name_search").val();
-            var from_date = $("#from_date").val();
-            var to_date = $("#to_date").val();
-            var category = $("#category").val();
-            var user_id = $("#user_id").val();
-            var table_origin = document.getElementById("table_report");
-            table_origin.style.display = "none";
-            
-            $.post("financial_exit_ajax.php", {
-                values: values,
-                name_search: name_search,
-                from_date: from_date,
-                to_date: to_date,
-                category: category,
-                user_id: user_id
-            }, function(data, status) {
-                $("#test").html(data);
-            });
-        });
-
-        $("#category").on("click", function(){
-            var values = $("#values").val();
-            var name_search = $("#name_search").val();
-            var from_date = $("#from_date").val();
-            var to_date = $("#to_date").val();
-            var category = $("#category").val();
-            var user_id = $("#user_id").val();
-            var table_origin = document.getElementById("table_report");
-            table_origin.style.display = "none";
-            
-            $.post("financial_exit_ajax.php", {
-                values: values,
-                name_search: name_search,
-                from_date: from_date,
-                to_date: to_date,
-                category: category,
-                user_id: user_id
-            }, function(data, status) {
-                $("#test").html(data);
-            });
-        });
-
-
-    });
-
-</script>
+<script src="js/ajax_finance_expense_request.js"></script>

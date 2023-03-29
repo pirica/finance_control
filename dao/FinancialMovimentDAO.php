@@ -25,6 +25,7 @@
             $financialMoviment->id = $data['id'];
             $financialMoviment->description = $data['description'];
             $financialMoviment->expense = $data['expense'];
+            $financialMoviment->expense == "V" ? $financialMoviment->expense = "Variada" : $financialMoviment->expense = "Fixa"; 
             $financialMoviment->value = number_format($data['value'], 2, ',', '.');
             $financialMoviment->type = $data['type'];
 
@@ -222,6 +223,27 @@
                 }
             }
             return $outFinancialMoviments;
+        }
+
+        public function getAllEntryFinancialMoviment($id) {
+            
+            $entryFinancialMoviments = [];
+
+            $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE type = 1 AND category IS NOT NULL AND users_id = $id ORDER BY value DESC");
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                
+                $financialMovimentsArray = $stmt->fetchAll();
+
+                foreach ($financialMovimentsArray as $financialMoviment){
+
+                    $entryFinancialMoviments[] = $this->buildFinancialMoviment($financialMoviment);
+                
+                }
+            }
+            return $entryFinancialMoviments;
         }
 
 

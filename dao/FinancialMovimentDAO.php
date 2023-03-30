@@ -24,6 +24,7 @@
 
             $financialMoviment->id = $data['id'];
             $financialMoviment->description = $data['description'];
+            $financialMoviment->obs = $data['obs'];
             $financialMoviment->expense = $data['expense'];
             $financialMoviment->expense == "V" ? $financialMoviment->expense = "Variada" : $financialMoviment->expense = "Fixa"; 
             $financialMoviment->value = number_format($data['value'], 2, ',', '.');
@@ -300,7 +301,7 @@
 
             $reportEntryData = [];
 
-            $stmt = $this->conn->query("SELECT id, description, value, expense, type, category, create_at, update_at, users_id FROM tb_finances WHERE users_id = $id AND type = $type AND category IS NOT NULL $sql");
+            $stmt = $this->conn->query("SELECT id, description, obs, value, expense, type, category, create_at, update_at, users_id FROM tb_finances WHERE users_id = $id AND type = $type AND category IS NOT NULL $sql");
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -370,13 +371,14 @@
         public function create(FinancialMoviment $financialMoviment) {
 
             $stmt = $this->conn->prepare("INSERT INTO tb_finances (
-                id, description, value, type, expense, category, create_at, users_id
+                id, description, obs, value, type, expense, category, create_at, users_id
             ) VALUES(
-                :id, :description, :value, :type, :expense, :category, now(), :users_id
+                :id, :description, :obs, :value, :type, :expense, :category, now(), :users_id
             )");
 
             $stmt->bindParam(':id', $financialMoviment->id);
             $stmt->bindParam(':description', $financialMoviment->description);
+            $stmt->bindParam(':obs', $financialMoviment->obs);
             $stmt->bindParam(':value', $financialMoviment->value);
             $stmt->bindParam(':type', $financialMoviment->type);
             $stmt->bindParam(':expense', $financialMoviment->expense);
@@ -397,6 +399,7 @@
 
             $stmt = $this->conn->prepare("UPDATE tb_finances SET
                 description = :description,
+                obs = :obs,
                 value = :value,
                 expense = :expense,
                 category = :category,
@@ -405,6 +408,7 @@
              ");
 
              $stmt->bindParam(":description", $financialMoviment->description);
+             $stmt->bindParam(":obs", $financialMoviment->obs);
              $stmt->bindParam(":value", $financialMoviment->value);
              $stmt->bindParam(":expense", $financialMoviment->expense);
              $stmt->bindParam(":category", $financialMoviment->category);

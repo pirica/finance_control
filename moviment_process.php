@@ -28,7 +28,7 @@ if ($type == "create_finance_moviment") {
 
     
 
-    // echo $category; exit;
+    // echo $obs; exit;
 
     $financialMoviment = new FinancialMoviment();
 
@@ -57,6 +57,7 @@ if ($type == "create_finance_moviment") {
 } else if ($type == "edit_finance_moviment") {
     // Edição de movimento financeiro existente
     $description_edit = filter_input(INPUT_POST, "description_edit");
+    $obs = filter_input(INPUT_POST, "obs");
     $value_edit = filter_input(INPUT_POST, "value_edit");
     $value_edit = str_replace('.', '', $value_edit); // remove ponto "." no valor
     $expense_type_edit = filter_input(INPUT_POST, "expense_type_edit");
@@ -66,6 +67,7 @@ if ($type == "create_finance_moviment") {
 
     // Preenche os dados de finança no objeto
     $financialMoviment->description = $description_edit;
+    $financialMoviment->obs = $obs;
     $financialMoviment->value = $value_edit;
     $financialMoviment->expense = $expense_type_edit;
     $financialMoviment->category = $category_edit;
@@ -80,4 +82,5 @@ $id = $_GET["id"];
 // Deletar selecionado Registro
 if ($_GET["delete"] == "s") {
     $financialMovimentDao->destroy($id);
+    $message->setMessage("Registro excluído com sucesso", "success", "back");
 }

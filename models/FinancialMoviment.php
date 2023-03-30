@@ -4,6 +4,7 @@ Class FinancialMoviment {
 
     public $id;
     public $description;
+    public $obs;
     public $value;
     public $type;
     public $expense;

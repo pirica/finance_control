@@ -328,6 +328,7 @@ input::placeholder {
     display: block;
   }
 /* End calendar */
+
 #expense {
     display: none;
 }
@@ -487,16 +488,60 @@ table {
 ----------------------------------------------------- */
 
 /* ---------------------------------------------------
-   REPORTS
+   REPORTS PAGES
 ----------------------------------------------------- */
 
 .entrys-search .btn {
     margin-top: 2rem;
 }
 
+.tooltip_ {
+    display: none;
+}
+
+#conteudo {
+    /* left: 30rem; */
+    padding: 10px 15px;
+    box-shadow: 0px 0px 3px #777;
+    background-color: #FFF2CC;
+    width: 10rem;
+    color: gray;
+    position: absolute;
+    z-index: 99999;
+}
+
+#conteudo:before {
+    /*a seta do div flutuante*/
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 79px;
+    height: 20px;
+    width: 20px;
+    background-color: #FFF2CC;
+    transform: rotate(45deg);
+    box-shadow: -2px -2px 1px #ccc;
+}
+
+.bloco:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+}
+
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
+@media only screen and (min-width: 1920px) { 
+    #conteudo {
+        right: 18.4rem;
+    }
+}
+
+
+@media (max-width: 1024px) { 
+    #conteudo {
+        right: 8rem;
+    }
+}
 
 @media (max-width: 768px) {
     #sidebar {
@@ -514,12 +559,28 @@ table {
     #iframe-body {
         overflow: auto;
     }
+
+    #conteudo {
+        right: 5rem;
+    }
 }
 
 @media (max-width: 575px) { 
 
     #iframe-body {
         overflow: auto;
+    }
+
+    #conteudo {
+        right: 9rem;
+    }
+
+}
+
+@media (max-width: 325px) { 
+
+    #conteudo {
+        right: 5.5rem;
     }
 
 }

@@ -56,6 +56,22 @@ if (!empty($sql)) {
            
             $value = str_replace('.', '', $item->value);
             $total += (float) $value;
+            $obs = "";
+            if($item->obs != ""):
+                $obs = '<a href="#!" id="grupos'.$item->id.'" onclick="openTooltip('.$item->id.')"> <img src="'.$BASE_URL.'assets/home/dashboard-main/message_alert.gif" alt="message_alert" title="ver observação" width="33" height="30"> </a>
+                <div class="tooltip_" id="tooltip_'.$item->id.'">
+                    <div id="conteudo">
+                        <div class="bloco" style="display: flex; justify-content: space-between">
+                            <h5>Observação</h5>
+                            <a href="#!" id="close'.$item->id.'"><i class="fa-solid fa-xmark"></i></a>
+                        </div>
+                        <div class="bloco">
+                            <small>'.$item->obs.'</small>
+                        </div>
+                    </div>
+                </div>';
+            endif;
+
             $output .= '
             <tr>
                 <th scope="row">'.$item->id.'</th>
@@ -63,7 +79,7 @@ if (!empty($sql)) {
                 <td>'.$item->value.'</td>
                 <td>'.$item->create_at.'</td>
                 <td>'.$item->category.'</td>
-                <td>obs</td>
+                <td>'.$obs.'</td>
                 <td id="latest_moviments"><a href="#" data-toggle="modal"
                     data-target="#exampleModalCenter'.$item->id.'" title="Editar">
                     <i class="fa-solid fa-file-pen"></i></a>

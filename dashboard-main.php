@@ -149,9 +149,6 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                     </div>
                 </div>
 
-
-
-
             </div>
 
         </div>
@@ -251,7 +248,7 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                                     </strong></span>
                             </td>
                             <td>
-                                <span> <?= $financialMoviment->value ?></span>
+                                <span> R$ <?= $financialMoviment->value ?></span>
                             </td>
                             <td>
                                 <span> <?= $financialMoviment->create_at ?> </span>
@@ -281,11 +278,11 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
             </div>
         </div>
 
-        <!-- Finance moviment modal -->
+        <!-- Finance moviment modalEdit -->
         <?php foreach ($latestFinancialMoviments as $financialMoviment): ?>
         <div class="modal fade" id="exampleModalCenter<?=$financialMoviment->id?>" tabindex="-1" role="dialog"
             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-top" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Editar Movimentação</h5>
@@ -360,7 +357,11 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                                 </select>
                             </div>
                             <?php endif; ?>
-                            <input type="submit" value="Enviar" class="btn btn-lg btn-success">
+                            <div class="form-group">
+                                <label for="obs">Observação:</label>
+                                <textarea class="form-control" name="obs" id="obs" rows="5" placeholder="Adicione uma observação..."><?= $financialMoviment->obs ?></textarea>
+                            </div>
+                            <input type="submit" value="Enviar" class="btn btn-lg btn-success" onclick="scrollToTop()">
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -395,6 +396,10 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
 <script src="js/Chart.js"></script>
 
 <script>
+function scrollToTop() {
+    window.scrollTo(0, 0);
+}
+
 // Converte o array php em json 
 var phpArrayCashInflow = <?php echo json_encode($cashInflowMonthsArray); ?>;
 var phpArrayCashOutflow = <?php echo json_encode($cashOutflowMonthsArray); ?>;

@@ -169,9 +169,10 @@ main {
     cursor: pointer;
 }
 
-.fa-eye{
+.fa-eye {
     color: #000;
 }
+
 /* end Look Password register form */
 
 /* ---------------------------------------------------
@@ -188,7 +189,10 @@ main {
     margin: 15px auto;
 }
 
-#user_award {margin-top: 7rem; margin-left: 4rem;}
+#user_award {
+    margin-top: 7rem;
+    margin-left: 4rem;
+}
 
 .wrapper {
     display: flex;
@@ -212,7 +216,7 @@ main {
     background: #d9d9d9;
 }
 
-.sidebar-header .user_name{
+.sidebar-header .user_name {
     font-family: 'Poppins', sans-serif;
 }
 
@@ -282,11 +286,74 @@ a.download {
     transition: all 0.3s;
 }
 
+/* Popup Active */
+.container-popup {
+    position: absolute;
+    display: flex;
+    background-color: #000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.popup {
+    display: flex;
+    flex-direction: column;
+    width: 33rem;
+    padding: 3rem;
+    gap: 1rem;
+    background-color: white;
+    box-shadow: 0px 5px 35px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    transform: translateY(5%);
+    visibility: hidden;
+    transition: all 0.25s;
+    z-index: -1;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+}
+
+.close {
+    position: absolute;
+    color: black;
+    background-color: transparent;
+    font-weight: 700;
+    font-size: 1.25rem;
+    right: 0;
+    top: 0;
+    margin: 1rem 1.5rem;
+}
+
+.popup.active {
+    opacity: 1;
+    transform: translateY(0%);
+    visibility: visible;
+    z-index: 1;
+}
+
+@media screen and (max-width: 425px) {
+    .popup {
+        width: 20rem;
+    }
+}
+
+
+@media screen and (max-width: 320px) {
+    .popup {
+        width: 18rem;
+    }
+}
+
 /* ---------------------------------------------------
     DASHBOARD MAIN
 ----------------------------------------------------- */
 
-.card-div .card{
+.card-div .card {
     min-height: 272.8px;
 }
 
@@ -297,7 +364,7 @@ a.download {
     font-weight: 300;
 }
 
-.form-check-label{
+.form-check-label {
     font-size: 22px;
 }
 
@@ -313,20 +380,23 @@ input::placeholder {
 
 /* calendar */
 [type="date"] {
-    background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
-  }
-  [type="date"]::-webkit-inner-spin-button {
+    background: #fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png) 97% 50% no-repeat;
+}
+
+[type="date"]::-webkit-inner-spin-button {
     display: none;
-  }
-  [type="date"]::-webkit-calendar-picker-indicator {
+}
+
+[type="date"]::-webkit-calendar-picker-indicator {
     opacity: 0;
-  }
-  
-  /* custom styles */
-  
-  label {
+}
+
+/* custom styles */
+
+label {
     display: block;
-  }
+}
+
 /* End calendar */
 
 #expense {
@@ -355,13 +425,13 @@ hr.dashed {
     font-size: 25px;
 }
 
-#latest_moviments .fa-trash-can{
+#latest_moviments .fa-trash-can {
     font-size: 25px;
     color: #DF2E38;
 }
 
 
-#latest_moviments .fa-file-pen{
+#latest_moviments .fa-file-pen {
     font-size: 25px;
     color: #DC8449;
 }
@@ -405,7 +475,7 @@ table {
             width: 50%;
         }
 
-        .warning-text-expense{
+        .warning-text-expense {
             font-size: 76%;
         }
     }
@@ -433,22 +503,24 @@ table {
 }
 
 .visa {
-    background: rgb(199,12,17);
-    background: linear-gradient(180deg, rgba(199,12,17,1) 0%, rgba(111,6,6,1) 100%);    
+    background: rgb(199, 12, 17);
+    background: linear-gradient(180deg, rgba(199, 12, 17, 1) 0%, rgba(111, 6, 6, 1) 100%);
 }
 
 .master-card {
-    background: rgb(55,55,60);
-    background: linear-gradient(180deg, rgba(55,55,60,1) 0%, rgba(0,0,0,1) 100%);
+    background: rgb(55, 55, 60);
+    background: linear-gradient(180deg, rgba(55, 55, 60, 1) 0%, rgba(0, 0, 0, 1) 100%);
 }
 
 .visa_logo {
     text-align: end;
     padding: 10px;
 }
+
 .visa_info {
     padding: 10px;
 }
+
 .visa_info img {
     width: 45px;
     height: 35px;
@@ -471,13 +543,13 @@ table {
     color: #ffffff;
 }
 
-#cards-page .fa-trash-can{
+#cards-page .fa-trash-can {
     font-size: 25px;
     color: #DF2E38;
 }
 
 
-#cards-page .fa-file-pen{
+#cards-page .fa-file-pen {
     font-size: 25px;
     color: #DC8449;
 }
@@ -530,14 +602,14 @@ table {
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
-@media only screen and (min-width: 1920px) { 
+@media only screen and (min-width: 1920px) {
     #conteudo {
         right: 18.4rem;
     }
 }
 
 
-@media (max-width: 1024px) { 
+@media (max-width: 1024px) {
     #conteudo {
         right: 8rem;
     }
@@ -565,7 +637,7 @@ table {
     }
 }
 
-@media (max-width: 575px) { 
+@media (max-width: 575px) {
 
     #iframe-body {
         overflow: auto;
@@ -577,7 +649,7 @@ table {
 
 }
 
-@media (max-width: 325px) { 
+@media (max-width: 325px) {
 
     #conteudo {
         right: 5.5rem;

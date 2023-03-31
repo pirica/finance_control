@@ -6,9 +6,14 @@ require_once("dao/UserDAO.php");
 require_once("models/Message.php");
 
 $userDao = new UserDAO($conn, $BASE_URL);
-
 $message = new Message($BASE_URL);
 
+$_SESSION['email_login'] = $_POST['email_login'];
+$_SESSION['email'] = $_POST['email'];
+$_SESSION['name'] = $_POST['name'];
+$_SESSION['lastname'] = $_POST['lastname'];
+$_SESSION['password'] = $_POST['password'];
+$_SESSION['confirmPassword'] = $_POST['confirmPassword'];
 
 $type = filter_input(INPUT_POST, "type");
 
@@ -66,7 +71,7 @@ if ($type === "register") {
 
 } else if ($type === "login") {
    
-    $email = filter_input(INPUT_POST, "email");
+    $email = filter_input(INPUT_POST, "email_login");
     $password = filter_input(INPUT_POST, "password");
 
     // Tenta atenticas usuário

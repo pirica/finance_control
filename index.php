@@ -26,14 +26,14 @@ if (!empty($flashMessage)) {
             <!-- Login Form -->
             <div class="col-md-6 login-form-1">
                 <div class="text-center mb-2">
-                <img src="<?= $BASE_URL ?>assets/finance_logo.png" width="50%" alt="">
+                    <img src="<?= $BASE_URL ?>assets/finance_logo.png" width="50%" alt="">
                 </div>
-               
+
                 <h3>Login</h3>
                 <form action="<?= $BASE_URL ?>auth_process.php" method="POST">
                     <input type="hidden" name="type" value="login">
                     <div class="form-group">
-                        <input type="email" class="form-control" name="email" placeholder="Digite seu e-mail *" value="" />
+                        <input type="email" class="form-control" name="email_login" placeholder="Digite seu e-mail *" value="<?php if(isset($_SESSION["email_login"])){ echo $_SESSION["email_login"]; } ?>" />
                     </div>
                     <div class="form-group">
                         <input type="password" class="form-control" name="password" placeholder="Digite sua senha *" value="" />
@@ -42,9 +42,9 @@ if (!empty($flashMessage)) {
                         <input type="submit" class="btnSubmit" value="Entrar" />
                     </div>
                 </form>
-                <div class="form-group text-center">
+                <!-- <div class="form-group text-center">
                     <a href="#" class="btnForgetPwd">Esqueci a senha?</a>
-                </div>
+                </div> -->
             </div>
             <!-- End Login Form -->
 
@@ -57,15 +57,21 @@ if (!empty($flashMessage)) {
                 <form action="<?= $BASE_URL ?>auth_process.php" method="POST">
                     <input type="hidden" name="type" value="register">
                     <div class="form-group">
-                        <input type="email" class="form-control" name="email" placeholder="Seu Email *" value="" />
+                        <input type="email" class="form-control" name="email" placeholder="Seu Email *" value="<?php if(isset($_SESSION['email'])){ echo $_SESSION['email'];} ?>" />
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="name" id="" placeholder="Nome *" value="">
+                        <input type="text" class="form-control" name="name" id="" placeholder="Nome *" value="<?php if(isset($_SESSION['name'])){ echo $_SESSION['name'];} ?>">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="lastname" id="" placeholder="Sobrenome *" value="">
+                        <input type="text" class="form-control" name="lastname" id="" placeholder="Sobrenome *" value="<?php if(isset($_SESSION['lastname'])){ echo $_SESSION['lastname'];} ?>">
                     </div>
                     <div class="form-group">
+                        <style>
+                            #alert_psw {
+                                display: none;
+                            }
+                        </style>
+                        <small id="alert_psw" style="color: yellow;">A senha deve ter 8 caracteres, sendo 1 letra maiúscula, 1 minúscula, 1 número e 1 simbolo.</small>
                         <div class="pwd" style="position: relative">
                             <input type="password" class="form-control" id="password" name="password" placeholder="Digite sua senha *" value="" />
                             <div class="p-viewer" onclick="show_password()">
@@ -90,13 +96,28 @@ if (!empty($flashMessage)) {
         </div>
     </div>
 </main>
+<script src="js/jquery.min.js"></script>
 <script>
-        function show_password() {
-            var password = document.getElementById('password');
-            var confirmPassword = document.getElementById('confirmPassword');
-            
-            (password.type == "password") ? password.type = "text" : password.type = "password";
+    // Bind keyup event on the input
+    $('#password').keyup(function() {
 
-            (confirmPassword.type == "password") ? confirmPassword.type = "text" : confirmPassword.type = "password";
+        // Se o valor estiver vazio esconde
+        if ($(this).val().length == 0) {
+            // Hide the element
+            $('#alert_psw').hide();
+        } else {
+            // de outra forma ele mostra a  div
+            $('#alert_psw').show();
         }
+    }).keyup(); // Aciona o evento keyup, executando assim o manipulador no carregamento da página
+
+
+    function show_password() {
+        var password = document.getElementById('password');
+        var confirmPassword = document.getElementById('confirmPassword');
+
+        (password.type == "password") ? password.type = "text": password.type = "password";
+
+        (confirmPassword.type == "password") ? confirmPassword.type = "text": confirmPassword.type = "password";
+    }
 </script>

@@ -355,10 +355,4 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
 
 <?php require_once("templates/footer.php"); ?>
 
-<script>
-    // $("#expense_exit").click(function(){
-    //     alert($("#expense_exit").val());
-    // });
-</script>
-
 <script src="js/ajax_finance_expense_request.js"></script>

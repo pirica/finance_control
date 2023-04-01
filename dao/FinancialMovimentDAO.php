@@ -144,7 +144,7 @@
 
             $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances WHERE MONTH(create_at) = '$mes' AND TYPE = 2 AND users_id = $id GROUP BY value DESC LIMIT 1");
             $stmt->execute();
-           
+
             $data = $stmt->fetchAll();
 
             foreach ($data as $row){
@@ -167,7 +167,7 @@
 
             $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances WHERE MONTH(create_at) = '$mes' AND TYPE = 2 AND users_id = $id GROUP BY value ASC LIMIT 1");
             $stmt->execute();
-           
+
             $data = $stmt->fetchAll();
 
             foreach ($data as $row){
@@ -227,7 +227,6 @@
         }
 
         public function getAllEntryFinancialMoviment($id) {
-            
             $entryFinancialMoviments = [];
 
             $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE type = 1 AND category IS NOT NULL AND users_id = $id ORDER BY value DESC");
@@ -263,7 +262,6 @@
     
                 return $sum;
             }
-           
 
         }
 
@@ -301,7 +299,7 @@
 
             $reportEntryData = [];
 
-            $stmt = $this->conn->query("SELECT id, description, obs, value, expense, type, category, create_at, update_at, users_id FROM tb_finances WHERE users_id = $id AND type = $type AND category IS NOT NULL $sql");
+            $stmt = $this->conn->query("SELECT id, description, obs, value, expense, type, category, create_at, update_at, users_id FROM tb_finances WHERE users_id = $id AND type = $type AND category IS NOT NULL $sql ORDER BY value DESC");
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {

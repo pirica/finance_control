@@ -49,17 +49,18 @@ if ($userData->image == "") {
                 <div id="user_award">
                     <i class="fa-solid fa-award fa-3x text-danger"></i>
                 </div>
-                
+
             </div>
             <h5 class="user_name"><?= $fullName ?></h5>
-            
+
             <span id="DisplayClock" onload="showTime()"></span>
             <?= $msg_saudacao; ?>
 
         </div>
 
         <ul class="list-unstyled components">
-            <?php foreach ($menus as  $menu) : ?>
+            <?php foreach ($menus as $menu) : ?>
+
                 <?php if ($menu->getSubMenu() == "") : ?>
                     <li><a href="<?= $BASE_URL . $menu->getUrl(); ?>" target="myFrame" onclick="addClass(<?= $menu->getIdMenu() ?>)"><i class="<?= $menu->getClassIcon() ?>"></i><?= $menu->getMenuName() ?></a></li>
                 <?php else : ?>
@@ -71,12 +72,13 @@ if ($userData->image == "") {
                             <?php $subMenus = $menu_Dao->findSubMenu($menu->getIdMenu());
                             foreach ($subMenus as $subMenu) : ?>
                                 <li>
-                                    <a href="<?= $BASE_URL ?><?= $subMenu->getUrlSubMenu(); ?>"  onclick="addClass(<?= $menu->getIdMenu() ?>)" target="myFrame"><i class="<?= $subMenu->getClassIconSubMenu() ?>"></i><?= $subMenu->getSubMenuName(); ?></a>
+                                    <a href="<?= $BASE_URL ?><?= $subMenu->getUrlSubMenu(); ?>" onclick="addClass(<?= $menu->getIdMenu() ?>)" target="myFrame"><i class="<?= $subMenu->getClassIconSubMenu() ?>"></i><?= $subMenu->getSubMenuName(); ?></a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
                     </li>
                 <?php endif; ?>
+
             <?php endforeach; ?>
         </ul>
     </nav>
@@ -95,24 +97,52 @@ if ($userData->image == "") {
         </nav>
 
         <div class="row">
+
             <div class="container-fluid">
                 <iframe src="dashboard-main.php" name="myFrame" id="myFrame" fullscreen="allow" frameborder="0" width="100%"></iframe>
             </div>
         </div>
     </div>
     <!-- End Page Content  -->
+    
+        <div class="container-popup" id="container-popup">
+            <div class="popup" id="popup-card">
+                <h2>This is a popup</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem atque error eveniet quisquam necessitatibus non.</p>
+                <button class="popup-close close">x</button>
+                <input class="btn btn-lg btn-info" value="OK"></input>
+            </div>
+        </div>
+    
+
 </div>
 
 <script>
+    // deixar item do menu clicado como active
     function addClass() {
-        $(document).ready(function(){
-        $('ul li a').click(function(){
-            $('li a').removeClass("active");
-            $(this).addClass("active");
-        });
+        $(document).ready(function() {
+            $('ul li a').click(function() {
+                $('li a').removeClass("active");
+                $(this).addClass("active");
+            });
         });
     }
-    
+
+    // Abrir e fechar Popup
+    const popupWindow = document.querySelector("#popup-card");
+    const popupClose = document.querySelectorAll(".popup-close");
+    const containerClose = document.getElementById("container-popup");
+
+    window.addEventListener("load", () => {
+        popupWindow.classList.add("active");
+    });
+
+    popupClose.forEach((close) =>
+        close.addEventListener("click", () => {
+            popupWindow.classList.remove("active");
+            containerClose.style.display = "none";
+        }));
+    // Popup
 </script>
 
 <?php require_once("templates/footer.php"); ?>

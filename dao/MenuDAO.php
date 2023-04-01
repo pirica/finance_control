@@ -11,7 +11,7 @@ Class MenuDAO implements MenuDAOInterface{
     public function findMenu() {
         $menus = [];
 
-        $stmt = $this->conn->query("SELECT idmenu, class_icon, sub_menu, url, menu_name FROM menu WHERE menu_name IS NOT NULL");
+        $stmt = $this->conn->query("SELECT idmenu, class_icon, sub_menu, url, menu_name FROM menu WHERE menu_name IS NOT NULL AND show_item = 'S'");
         $data = $stmt->fetchAll();
 
         foreach($data as $item){

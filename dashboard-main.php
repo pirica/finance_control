@@ -36,9 +36,10 @@ $totalCashOutflow = $financialMovimentDao->getAllCashOutflow($userData->id);
 // Calculo de quantos % as despesas representa com relação as receitas
 // calculo -> despesas * 100 / receitas
 if($totalCashInflow != "0,00" && $totalCashOutflow != "0,00") {
-   
+
     $expensePercent = (float)$totalCashOutflow * 100 / (float)$totalCashInflow;
     $resultExpensePercent = (int)number_format($expensePercent, 2);
+
 }else {
     $resultExpensePercent = 0;
 }
@@ -75,12 +76,24 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
 
     $financialMovimentDao->checkGraphicDataMonths($userData->id);
 }
+
 ?>
 
 <body id="iframe-body">
 
     <div class="container-fluid">
-
+        <div class="offset-md-3 col-md-6">
+            <?php if($resultExpensePercent > 50): ?>
+            <div class="mt-3" style="display: inline-flex">
+                <i class="fa-solid fa-triangle-exclamation fa-2x text-warning"></i>
+                <span class="warning-text-expense">
+                    <strong>Cuidado despesas já são <?= $resultExpensePercent ?>% da sua renda! 
+                            Até 50% é o indicado para a saúde financeira.
+                    </strong>
+                </span>
+            </div>
+            <?php endif; ?>
+        </div>
         <div class="card-div mb-3 my-3 text-center">
             <div class="row">
                 <div class="col-md-3">
@@ -114,25 +127,15 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                 <div class="col-md-3">
                     <div class="card mb-3 shadow-sm">
                         <div class="card-header">
-                            <h4 class="my-0 font-weight-normal">Saldo</h4>
+                            <h4 class="my-0 font-weight-normal">Saldo 
+                                <a href="#!" id="btn" ><i class="fa-solid fa-eye-slash" id="eye_icon" style="float: right"><span class="span" style="display: none">add</span></i></a>
+                            </h4>
                         </div>
                         <div class="card-body">
-                            <h1 class="card-title pricing-card-title <?= $balance_color_text ?>"> R$
+                            <h1 class="card-title pricing-card-title <?= $balance_color_text ?>" id="ammount"> R$
                                 <?= $total_balance ?>
-                                <small class="text-muted"></small>
                             </h1>
                             <i class="fa-solid fa-sack-dollar fa-4x <?= $balance_color_text ?>"></i> <br>
-                            <?php if($resultExpensePercent > 50): ?>
-
-                            <div class="mt-2" style="display: inline-flex">
-                                <i class="fa-solid fa-triangle-exclamation fa-2x text-warning"></i>
-                                <small class="warning-text-expense text-danger">
-                                <strong>Cuidado despesas já são <?= $resultExpensePercent ?>% da sua renda! <br>
-                                        Até 50% é o indicado para a saúde financeira.
-                                </strong></small>
-                            </div>
-                            <?php endif; ?>
-
                         </div>
                     </div>
                 </div>
@@ -164,7 +167,7 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                     </div>
                     <div class="col-md-2">
                         <h4 class="font-weight-normal">Valor</h4>
-                        <input type="text" name="value" id="value" class="form-control number-separator"
+                        <input type="text" name="value" id="value" class="form-control money"
                             placeholder="Ex: 80,00:">
                     </div>
                     <div class="col-md-2 text-center">
@@ -212,9 +215,6 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                         </select>
                     </div>
                     <div class="col-md-1">
-                        <!-- TODO: futuramente colocar agendamento futuro de entrada e saída -->
-                        <!-- <h4 class="font-weight-normal">Agendar (opcional)</h4>
-                        <input class="form-control" type="date" name="dateofbirth" id="dateofbirth"> -->
                         <input type="submit" class="btn btn-lg btn-success" value="Adicionar"></input>
                     </div>
                 </div>
@@ -223,59 +223,72 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                     </div>
             </form>
         </div>
+        
+        <div class="row">
 
-        <div class="actions mb-5 py-2 px-3 bg-light rounded-3 shadow-sm">
-            <h3 class="font-weight-normal text-center">Últimas 10 movimentações</h3>
-            <!-- <hr class="dashed"> -->
-            <div class="row" id="latest_moviments">
-
-                <table class="table">
-                    <thead>
-                        <!-- <th>id</th> -->
-                        <th>Descrição</th>
-                        <th>Valor</th>
-                        <th>Data</th>
-                        <th>Tipo</th>
-                        <th>Categoria</th>
-                        <th>Ação</th>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($latestFinancialMoviments as $financialMoviment): ?>
-                        <tr class="pb-2">
-                            <!-- <th scope="row"><?= $financialMoviment->id ?></th> -->
-                            <td>
-                                <span class="table_description"> <strong> <?= $financialMoviment->description ?>
-                                    </strong></span>
-                            </td>
-                            <td>
-                                <span> R$ <?= $financialMoviment->value ?></span>
-                            </td>
-                            <td>
-                                <span> <?= $financialMoviment->create_at ?> </span>
-                            </td>
-                            <td>
-                                <?php if ($financialMoviment->type == 1): ?>
-                                <i class="fa-solid fa-circle-up entrada"></i>
-                                <?php else: ?>
-                                <i class="fa-solid fa-circle-down saida"></i>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <span> <?= $financialMoviment->category ?> </span>
-                            </td>
-                            <td><a href="#" data-toggle="modal"
-                                    data-target="#exampleModalCenter<?= $financialMoviment->id ?>" title="Editar">
-                                    <i class="fa-solid fa-file-pen"></i></a>
-                                <a href="#" data-toggle="modal" data-target="#modal_del_finance_moviment<?= $financialMoviment->id ?>"
-                                     title="Deletar"><i class="fa-solid fa-trash-can"></i></a>
-                            </td>
-                        </tr>
-
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-
+            <div class="col-md-4">
+                <div class="actions mb-5 py-3 bg-light rounded-3 shadow-sm">
+                    <h4 class="text-center my-3">Meus Lembretes</h4>
+                    <p class="text-center">Em breve</p>
+                </div>
             </div>
+
+            <div class="col-md-8">
+                <div class="actions mb-5 py-2 px-3 bg-light rounded-3 shadow-sm">
+                    <h4 class="font-weight-normal text-center my-3">Últimas 10 movimentações</h4>
+                    <!-- <hr class="dashed"> -->
+                    <div class="row" id="latest_moviments">
+
+                        <table class="table">
+                            <thead>
+                                <!-- <th>id</th> -->
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Categoria</th>
+                                <th>Ação</th>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($latestFinancialMoviments as $financialMoviment): ?>
+                                <tr class="pb-2">
+                                    <!-- <th scope="row"><?= $financialMoviment->id ?></th> -->
+                                    <td>
+                                        <span class="table_description"> <strong> <?= $financialMoviment->description ?>
+                                            </strong></span>
+                                    </td>
+                                    <td>
+                                        <span> R$ <?= $financialMoviment->value ?></span>
+                                    </td>
+                                    <td>
+                                        <span> <?= $financialMoviment->create_at ?> </span>
+                                    </td>
+                                    <td>
+                                        <?php if ($financialMoviment->type == 1): ?>
+                                        <i class="fa-solid fa-circle-up entrada"></i>
+                                        <?php else: ?>
+                                        <i class="fa-solid fa-circle-down saida"></i>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <span> <?= $financialMoviment->category ?> </span>
+                                    </td>
+                                    <td><a href="#" data-toggle="modal"
+                                            data-target="#exampleModalCenter<?= $financialMoviment->id ?>" title="Editar">
+                                            <i class="fa-solid fa-file-pen"></i></a>
+                                        <a href="#" data-toggle="modal" data-target="#modal_del_finance_moviment<?= $financialMoviment->id ?>"
+                                            title="Deletar"><i class="fa-solid fa-trash-can"></i></a>
+                                    </td>
+                                </tr>
+
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            
         </div>
 
         <!-- Finance moviment modalEdit -->
@@ -301,7 +314,7 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                             </div>
                             <div class="form-group">
                                 <label for="value">Valor:</label>
-                                <input type="text" name="value_edit" id="" class="form-control"
+                                <input type="text" name="value_edit" id="" class="form-control money"
                                     placeholder="Insira um novo valor" value="<?= $financialMoviment->value ?>">
                             </div>
                             <?php if($financialMoviment->type == 2): ?>
@@ -394,8 +407,14 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
         <!-- FIm Modal para cofnirmação de exclusão de registro financeiro -->
 </body>
 <script src="js/Chart.js"></script>
+<?php require_once("templates/footer.php"); ?>
+
 
 <script>
+
+$('.money').mask('000.000.000.000.000,00', {reverse: true});
+
+// Carregar página no topo
 function scrollToTop() {
     window.scrollTo(0, 0);
 }
@@ -450,6 +469,27 @@ new Chart("myChart2", {
         }
     }
 });
+
+
+// Esconde valor do Saldo clicando no icone do Olho
+$(document).ready(function(){
+    $('#btn').on('click',function(){
+        var i = $("#eye_icon").val();
+        if ($(".span").text() == 'add'){
+            $(".span").text('remove');
+
+            $("#eye_icon").removeClass("fa-solid fa-eye-slash");
+            $("#eye_icon").addClass("fa-solid fa-eye");
+            $("#ammount").addClass("blur");
+        } else {
+
+            $(".span").text('add');
+            $("#eye_icon").removeClass("fa-solid fa-eye");
+            $("#eye_icon").addClass("fa-solid fa-eye-slash");
+            $("#ammount").removeClass("blur");
+        }
+    });
+});
+
 </script>
 
-<?php require_once("templates/footer.php"); ?>

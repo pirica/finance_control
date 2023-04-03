@@ -58,16 +58,22 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
                         </select>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 col-sm-6">
                     <div class="form-group">
                         <h4 class="font-weight-normal">De:</h4>
-                        <input type="date" name="from_date_exit" id="from_date_exit" class="form-control">
+                        <input type="text" name="from_date_exit" id="from_date_exit" class="form-control placeholder" placeholder="__/__/____">
+                        <div class="p-date" onclick="show_password()">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 col-sm-6">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Até:</h4>
-                        <input type="date" name="to_date_exit" id="to_date_exit" class="form-control">
+                        <input type="text" name="to_date_exit" id="to_date_exit" class="form-control placeholder" placeholder="__/__/____">
+                        <div class="p-date" onclick="show_password()">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -178,7 +184,7 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
                             </div>
                             <div class="form-group">
                                 <label for="value">Valor:</label>
-                                <input type="text" name="value_edit" id="" class="form-control" placeholder="Insira um novo valor" value="<?= $outFinancialMovimentItem->value ?>">
+                                <input type="text" name="value_edit" id="" class="form-control money" placeholder="Insira um novo valor" value="<?= $outFinancialMovimentItem->value ?>">
                             </div>
                             <?php if ($outFinancialMovimentItem->type == 2) : ?>
                                 <div class="form-group">
@@ -265,7 +271,7 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
                             </div>
                             <div class="form-group">
                                 <label for="value">Valor:</label>
-                                <input type="text" name="value_edit" id="" class="form-control" placeholder="Insira um novo valor" value="<?= $customizeFinancialMovimentItem->value ?>">
+                                <input type="text" name="value_edit" id="" class="form-control money" placeholder="Insira um novo valor" value="<?= $customizeFinancialMovimentItem->value ?>">
                             </div>
                             <?php if ($customizeFinancialMovimentItem->type == 2) : ?>
                                 <div class="form-group">
@@ -354,5 +360,12 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
 </div>
 
 <?php require_once("templates/footer.php"); ?>
+
+<script>
+$(document).ready(function(){
+    $('.placeholder').mask("00/00/0000", {placeholder: "__/__/____"});
+});
+
+</script>
 
 <script src="js/ajax_finance_expense_request.js"></script>

@@ -23,12 +23,12 @@ if ($type == "create_finance_moviment") {
     $value = filter_input(INPUT_POST, "value");
     $type_action = filter_input(INPUT_POST, "type_action");
     $expense_type = filter_input(INPUT_POST, "expense_type");
-    $value = str_replace(',', '', $value);
+    
+    $value=preg_replace("/[^0-9,]+/i","",$value);
+    $value=str_replace(",",".",$value);
     $category = filter_input(INPUT_POST, "category");
 
-    
-
-    // echo $obs; exit;
+     //echo $value; exit;
 
     $financialMoviment = new FinancialMoviment();
 
@@ -59,7 +59,8 @@ if ($type == "create_finance_moviment") {
     $description_edit = filter_input(INPUT_POST, "description_edit");
     $obs = filter_input(INPUT_POST, "obs");
     $value_edit = filter_input(INPUT_POST, "value_edit");
-    $value_edit = str_replace('.', '', $value_edit); // remove ponto "." no valor
+    $value_edit=preg_replace("/[^0-9,]+/i","",$value_edit);
+    $value_edit=str_replace(",",".",$value_edit);
     $expense_type_edit = filter_input(INPUT_POST, "expense_type_edit");
     $category_edit = filter_input(INPUT_POST, "category_edit");
 

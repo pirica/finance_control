@@ -92,7 +92,7 @@ if ($userData->image == "") {
                 <button type="button" id="sidebarCollapse" class="btn btn-info" onclick="mudaIconeToogle()">
                     <i class="fa-solid fa-arrows-left-right fa-2x"></i>
                 </button>
-                <h5 class="text-center text-info">Mês de Referência atual: <?= $nome_mes_atual ?></h5>
+                <h5 class="text-center text-info">Mês atual: <?= $nome_mes_atual ?></h5>
             </div>
         </nav>
 
@@ -104,16 +104,17 @@ if ($userData->image == "") {
         </div>
     </div>
     <!-- End Page Content  -->
-    
-        <div class="container-popup" id="container-popup">
+        
+        <!-- Popup messages  -->
+        <!-- <div class="container-popup" id="container-popup">
             <div class="popup" id="popup-card">
                 <h2>This is a popup</h2>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem atque error eveniet quisquam necessitatibus non.</p>
                 <button class="popup-close close">x</button>
                 <input class="btn btn-lg btn-info" value="OK"></input>
             </div>
-        </div>
-    
+        </div> -->
+        <!-- Popup messages  -->
 
 </div>
 

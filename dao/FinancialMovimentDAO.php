@@ -188,7 +188,7 @@
             $financialMoviments = [];
             $mes = date('m');
 
-            $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE MONTH(create_at) = '$mes' AND users_id = $id ORDER BY id DESC LIMIT 10");
+            $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE MONTH(create_at) = '$mes' AND users_id = $id ORDER BY id DESC LIMIT 5");
 
             $stmt->execute();
 

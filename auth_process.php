@@ -49,6 +49,13 @@ if ($type === "register") {
 
                     $auth = true;
 
+                    $_SESSION['email_login'] = "";
+                    $_SESSION['email'] = "";
+                    $_SESSION['name'] = "";
+                    $_SESSION['lastname'] = "";
+                    $_SESSION['password'] = "";
+                    $_SESSION['confirmPassword'] = "";
+
                     // criação e login automático
                     $userDao->create($user, $auth);                     
 
@@ -76,6 +83,7 @@ if ($type === "register") {
 
     // Tenta atenticas usuário
     if ($userDao->authenticatorUser($email, $password)) {
+        $_SESSION['email_login'] = "";
 
         // Dá as boas vindas para o usuário que efetuou o login
         $message->setMessage("Seja bem-vindo!", "success", "dashboard.php");

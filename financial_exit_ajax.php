@@ -18,8 +18,12 @@ if (isset($_POST['values_exit']) && $_POST['values_exit'] != '') {
 }
 
 if (isset($_POST['from_date_exit']) && $_POST['from_date_exit'] != '' && isset($_POST['to_date_exit']) && $_POST['to_date_exit'] != '') {
-    $from_date_exit = $_POST['from_date_exit'];
-    $to_date_exit = $_POST['to_date_exit'];
+    $formato = 'd/m/Y';
+    $from_date_exit = DateTime::createFromFormat($formato, $_POST['from_date_exit']);
+    $from_date_exit = $from_date_exit->format('Y-m-d');
+    
+    $to_date_exit = DateTime::createFromFormat($formato, $_POST['to_date_exit']);
+    $to_date_exit = $to_date_exit->format('Y-m-d');
     $sql .= " AND create_at BETWEEN '$from_date_exit' AND '$to_date_exit 23:59:00'";
 }
 
@@ -37,6 +41,8 @@ if (isset($_POST['expense_exit']) && $_POST['expense_exit'] != '') {
     $sql .= " AND expense = '$expense_exit'";
 }
 
+
+// echo $sql; exit;
 
 // Traz o array com os dados da query personalizada 
 $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);

@@ -166,7 +166,7 @@ $getEntryReports = $financialMovimentDao->getReports($sql, 1, $userData->id);
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Editar Movimentação</h5>
-                        <button type="button" class="close" data-dismiss="modal" arial-label="fechar">
+                        <button type="button" class="close_reports" data-dismiss="modal" arial-label="fechar">
                             <span arial-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -253,7 +253,7 @@ $getEntryReports = $financialMovimentDao->getReports($sql, 1, $userData->id);
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Editar Movimentação</h5>
-                        <button type="button" class="close" data-dismiss="modal" arial-label="fechar">
+                        <button type="button" class="close close_reports" data-dismiss="modal" arial-label="fechar">
                             <span arial-hidden="true">&times;</span>
                         </button>
                     </div>

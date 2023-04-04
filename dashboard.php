@@ -4,6 +4,8 @@ require_once("connection/conn.php");
 require_once("models/User.php");
 require_once("dao/UserDAO.php");
 require_once("dao/MenuDAO.php");
+require_once("dao/FinancialMovimentDAO.php");
+$financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
 
 $user = new User();
 $userDao = new UserDao($conn, $BASE_URL);
@@ -19,6 +21,33 @@ $fullName = $user->getFullName($userData);
 
 if ($userData->image == "") {
     $userData->image = "user.png";
+}
+
+// Traz total de entradas do usuário
+$totalCashInflow = $financialMovimentDao->getAllCashInflow($userData->id);
+
+// Traz total de saídas do usuário
+$totalCashOutflow = $financialMovimentDao->getAllCashOutflow($userData->id);
+
+// Calculo de quantos % as despesas representa com relação as receitas
+// calculo -> despesas * 100 / receitas
+if ($totalCashInflow != "0,00" && $totalCashOutflow != "0,00") {
+
+    $expensePercent = (float)$totalCashOutflow * 100 / (float)$totalCashInflow;
+    $resultExpensePercent = (int)number_format($expensePercent, 2);
+} else {
+    $resultExpensePercent = 0;
+}
+
+$awardColor = "";
+if($resultExpensePercent < 30){
+    $awardColor = "text-warning";
+}else if($resultExpensePercent < 40) {
+    $awardColor = "text-light";
+}else if($resultExpensePercent <= 50) {
+    $awardColor = "text-info";
+}else {
+    $awardColor = "text-danger";
 }
 
 ?>
@@ -47,7 +76,7 @@ if ($userData->image == "") {
         <div class="sidebar-header text-center">
             <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/avatar/<?= $userData->image ?>')">
                 <div id="user_award">
-                    <i class="fa-solid fa-award fa-3x text-danger"></i>
+                    <i class="fa-solid fa-award fa-3x <?= $awardColor ?>"></i>
                 </div>
 
             </div>

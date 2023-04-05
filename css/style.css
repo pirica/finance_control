@@ -296,9 +296,10 @@ a.download {
     display: flex;
     background-color: #000;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
+    padding-top: 8rem;
     align-items: center;
-    height: 100%;
+    height: 136%;
     width: 100%;
 }
 
@@ -322,7 +323,7 @@ button {
     cursor: pointer;
 }
 
-.close {
+.close_popup {
     position: absolute;
     color: black;
     background-color: transparent;
@@ -460,6 +461,32 @@ table {
 
 .actions .btn {
     margin-top: 2rem;
+}
+
+.fa-plus {
+    display: inline-block;
+    border-radius: 60px;
+    color: #0cb006;
+    border: solid 2px #0cb006;
+    padding: 0.5em 0.6em;
+}
+
+.fa-plus:hover {
+    background-color: #0cb006;
+    color: #fff;
+}
+
+.fa-minus {
+    display: inline-block;
+    border-radius: 60px;
+    border: solid 2px #c00537;
+    color: #c00537;
+    padding: 0.5em 0.6em;
+}
+
+.fa-minus:hover {
+    background-color: #c00537;
+    color: #fff;
 }
 
 @media not print {
@@ -620,8 +647,95 @@ table {
     box-shadow: -2px -2px 1px #ccc;
 }
 
+.bloco {
+    display: flex;
+    justify-content: space-between
+}
+
 .bloco:not(:last-child) {
     border-bottom: 1px solid #ccc;
+}
+
+/* ---------------------------------------------------
+    INFO PAGE
+----------------------------------------------------- */
+
+.lessons_container {
+    padding: 2% 5%;
+    background: #faf7f7;
+    border-radius: 20px;
+
+}
+
+#first-steps span {
+    color: #999;
+}
+
+.lessons_div {
+    width: 100%;
+    border: solid 1px #e9e9e9;
+    border-radius: 10px;
+    display: block;
+    text-align: left;
+    background-color: #fff;
+}
+
+.lessons_div a {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 22px 20px;
+}
+
+.lessons_div button {
+    width: 70px;
+    height: 50px;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.lessons_div div {
+    display: flex;
+    flex-direction: column;
+    padding-right: 5px;
+}
+
+.lessons_div span {
+    color: #999;
+    line-height: 20px;
+}
+
+.box {
+    width: auto;
+}
+
+img.animated-gif {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100%;
+    min-height: auto;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    margin: 0 auto;
+}
+
+.bd-lessons .close {
+    font-size: 2rem;
+}
+
+@media (max-width: 425px) {
+    .lessons_div a {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .lessons_div button {
+
+        margin: 10px auto;
+    }
 }
 
 /* ---------------------------------------------------

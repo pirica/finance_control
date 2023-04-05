@@ -1,5 +1,5 @@
-<?php 
-require_once("templates/header_iframe.php"); 
+<?php
+require_once("templates/header_iframe.php");
 require_once("dao/FinancialMovimentDAO.php");
 require_once("dao/CategorysDAO.php");
 
@@ -35,12 +35,11 @@ $totalCashOutflow = $financialMovimentDao->getAllCashOutflow($userData->id);
 
 // Calculo de quantos % as despesas representa com relação as receitas
 // calculo -> despesas * 100 / receitas
-if($totalCashInflow != "0,00" && $totalCashOutflow != "0,00") {
+if ($totalCashInflow != "0,00" && $totalCashOutflow != "0,00") {
 
     $expensePercent = (float)$totalCashOutflow * 100 / (float)$totalCashInflow;
     $resultExpensePercent = (int)number_format($expensePercent, 2);
-
-}else {
+} else {
     $resultExpensePercent = 0;
 }
 
@@ -62,7 +61,7 @@ $totalCashInflow <= "0,00" ? $total_balance = -(float)$totalCashOutflow : $total
 $totalCashOutflow <= "0,00" ? $total_balance = $totalCashInflow : $totalCashOutflow;
 
 $balance_color_text = "";
-$total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text = "text-danger"; 
+$total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text = "text-danger";
 
 /*
 O bloco de códigos abaixo confere se todos os meses anteriores ao atual possuem dados de entradas e saídas
@@ -83,15 +82,15 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
 
     <div class="container-fluid">
         <div class="offset-md-3 col-md-6">
-            <?php if($resultExpensePercent > 50): ?>
-            <div class="mt-3" style="display: inline-flex">
-                <i class="fa-solid fa-triangle-exclamation fa-2x text-warning"></i>
-                <span class="warning-text-expense">
-                    <strong>Cuidado despesas já são <?= $resultExpensePercent ?>% da sua renda! 
+            <?php if ($resultExpensePercent > 50) : ?>
+                <div class="mt-3" style="display: inline-flex">
+                    <i class="fa-solid fa-triangle-exclamation fa-2x text-warning"></i>
+                    <span class="warning-text-expense">
+                        <strong>Cuidado despesas já são <?= $resultExpensePercent ?>% da sua renda!
                             Até 50% é o indicado para a saúde financeira.
-                    </strong>
-                </span>
-            </div>
+                        </strong>
+                    </span>
+                </div>
             <?php endif; ?>
         </div>
         <div class="card-div mb-3 my-3 text-center">
@@ -102,7 +101,7 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                             <h4 class="my-0 font-weight-normal">Receita Mensal</h4>
                         </div>
                         <div class="card-body">
-                            <h1 class="card-title pricing-card-title text-success">+ R$ <?= $totalCashInflow ?> </h1>
+                            <h1 class="card-title pricing-card-title text-success" id="revenue_h1">+ R$ <?= $totalCashInflow ?> </h1>
                             <small class="text-muted"><strong>Menor receita</strong> <br> <?= $lowerValueIncome ?> <br>
                                 <strong>Maior receita</strong> <br> <?= $highValueIncome ?>
                             </small>
@@ -116,7 +115,7 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                             <h4 class="my-0 font-weight-normal">Despesa Mensal</h4>
                         </div>
                         <div class="card-body">
-                            <h1 class="card-title pricing-card-title text-danger">- R$ <?= $totalCashOutflow ?></h1>
+                            <h1 class="card-title pricing-card-title text-danger" id="expense_h1">- R$ <?= $totalCashOutflow ?></h1>
                             <small class="text-muted"><strong>Menor despesa</strong> <br> <?= $lowerExpense ?> <br>
                                 <strong>Maior despesa</strong> <br> <?= $biggetsExpense ?>
                             </small>
@@ -127,8 +126,8 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                 <div class="col-md-3">
                     <div class="card mb-3 shadow-sm">
                         <div class="card-header">
-                            <h4 class="my-0 font-weight-normal">Saldo 
-                                <a href="#!" id="btn" ><i class="fa-solid fa-eye-slash" id="eye_icon" style="float: right"><span class="span" style="display: none">add</span></i></a>
+                            <h4 class="my-0 font-weight-normal">Saldo
+                                <a href="#!" id="btn"><i class="fa-solid fa-eye-slash" id="eye_icon" style="float: right"></i></a>
                             </h4>
                         </div>
                         <div class="card-body">
@@ -162,37 +161,31 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                 <div class="row">
                     <div class="col-md-3">
                         <h4 class="font-weight-normal">Descriçao</h4>
-                        <input type="text" name="description" id="description" class="form-control"
-                            placeholder="Ex: Conta de luz">
+                        <input type="text" name="description" id="description" class="form-control" placeholder="Ex: Conta de luz">
                     </div>
                     <div class="col-md-2">
                         <h4 class="font-weight-normal">Valor</h4>
-                        <input type="text" name="value" id="value" class="form-control money"
-                            placeholder="Ex: 80,00:">
+                        <input type="text" name="value" id="value" class="form-control money" placeholder="Ex: 80,00:">
                     </div>
                     <div class="col-md-2 text-center">
                         <h4 class="font-weight-normal">Tipo</h4>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="type_action" id="entry" value="1"
-                                onclick="show_expense()">
+                            <input class="form-check-input" type="radio" name="type_action" id="entry" value="1" onclick="show_expense()">
                             <label class="form-check-label" for="inlineRadio1">Entrada</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="type_action" id="out" value="2"
-                                onclick="show_expense()">
+                            <input class="form-check-input" type="radio" name="type_action" id="out" value="2" onclick="show_expense()">
                             <label class="form-check-label" for="inlineRadio2">Saída</label>
                         </div>
                     </div>
                     <div class="col-md-2 text-center" id="expense">
                         <h4 class="font-weight-normal">Despesa</h4>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="expense_type" id="fixa"
-                                class="expense_type" value="F">
+                            <input class="form-check-input" type="radio" name="expense_type" id="fixa" class="expense_type" value="F">
                             <label class="form-check-label" for="inlineRadio1">Fixa</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="expense_type" id="variavel"
-                                class="expense_type" value="V">
+                            <input class="form-check-input" type="radio" name="expense_type" id="variavel" class="expense_type" value="V">
                             <label class="form-check-label" for="inlineRadio2">Variada</label>
                         </div>
                     </div>
@@ -200,8 +193,8 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                         <h4 class="font-weight-normal">Categoria</h4>
                         <select class="form-control" name="category" id="category_entry">
                             <option value="">Selecione</option>
-                            <?php foreach($entry_categorys as $category): ?>
-                            <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                            <?php foreach ($entry_categorys as $category) : ?>
+                                <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -209,8 +202,8 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                         <h4 class="font-weight-normal">Categoria</h4>
                         <select class="form-control" name="category" id="category_exit">
                             <option value="">Selecione</option>
-                            <?php foreach($exit_categorys as $category): ?>
-                            <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                            <?php foreach ($exit_categorys as $category) : ?>
+                                <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -219,11 +212,11 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                     </div>
                 </div>
                 <div class="row">
-                        
-                    </div>
+
+                </div>
             </form>
         </div>
-        
+
         <div class="row">
 
             <div class="col-md-4">
@@ -250,159 +243,167 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                                 <th>Ação</th>
                             </thead>
                             <tbody>
-                                <?php foreach ($latestFinancialMoviments as $financialMoviment): ?>
-                                <tr class="pb-2">
-                                    <!-- <th scope="row"><?= $financialMoviment->id ?></th> -->
-                                    <td>
-                                        <span class="table_description"> <strong> <?= $financialMoviment->description ?>
-                                            </strong></span>
-                                    </td>
-                                    <td>
-                                        <span> R$ <?= $financialMoviment->value ?></span>
-                                    </td>
-                                    <td>
-                                        <span> <?= $financialMoviment->create_at ?> </span>
-                                    </td>
-                                    <td>
-                                        <?php if ($financialMoviment->type == 1): ?>
-                                        <i class="fa-solid fa-circle-up entrada"></i>
-                                        <?php else: ?>
-                                        <i class="fa-solid fa-circle-down saida"></i>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td>
-                                        <span> <?= $financialMoviment->category ?> </span>
-                                    </td>
-                                    <td><a href="#" data-toggle="modal"
-                                            data-target="#exampleModalCenter<?= $financialMoviment->id ?>" title="Editar">
-                                            <i class="fa-solid fa-file-pen"></i></a>
-                                        <a href="#" data-toggle="modal" data-target="#modal_del_finance_moviment<?= $financialMoviment->id ?>"
-                                            title="Deletar"><i class="fa-solid fa-trash-can"></i></a>
-                                    </td>
-                                </tr>
+                                <?php foreach ($latestFinancialMoviments as $financialMoviment) : ?>
+                                    <tr class="pb-2">
+                                        <!-- <th scope="row"><?= $financialMoviment->id ?></th> -->
+                                        <td>
+                                            <span class="table_description"> <strong> <?= $financialMoviment->description ?>
+                                                </strong></span>
+                                        </td>
+                                        <td>
+                                            <span> R$ <?= $financialMoviment->value ?></span>
+                                        </td>
+                                        <td>
+                                            <span> <?= $financialMoviment->create_at ?> </span>
+                                        </td>
+                                        <td>
+                                            <?php if ($financialMoviment->type == 1) : ?>
+                                                <i class="fa-solid fa-circle-up entrada"></i>
+                                            <?php else : ?>
+                                                <i class="fa-solid fa-circle-down saida"></i>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <span> <?= $financialMoviment->category ?> </span>
+                                        </td>
+                                        <td><a href="#" data-toggle="modal" data-target="#exampleModalCenter<?= $financialMoviment->id ?>" title="Editar">
+                                                <i class="fa-solid fa-file-pen"></i></a>
+                                            <a href="#" data-toggle="modal" data-target="#modal_del_finance_moviment<?= $financialMoviment->id ?>" title="Deletar"><i class="fa-solid fa-trash-can"></i></a>
+                                        </td>
+                                    </tr>
 
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
 
                     </div>
+                    <div class="offset-md-3 col-md-6 pb-3 text-center icons_latest">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 my-2 ver_entradas">
+                                <a href="<?= $BASE_URL ?>financial_entry_report.php">
+                                    <i class="fa-solid fa-plus"></i>
+                                    &nbsp; Ver Todas Entradas
+                                </a>
+                            </div>
+
+                            <div class="col-md-6 col-sm-12 my-2 ver_saidas">
+                                <a href="<?= $BASE_URL ?>financial_exit_report.php">
+                                    <i class="fa-solid fa-minus"></i>
+                                    &nbsp; Ver Todas Saídas
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-            
+
         </div>
 
         <!-- Finance moviment modalEdit -->
-        <?php foreach ($latestFinancialMoviments as $financialMoviment): ?>
-        <div class="modal fade" id="exampleModalCenter<?=$financialMoviment->id?>" tabindex="-1" role="dialog"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-top" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Editar Movimentação</h5>
-                        <button type="button" class="close" data-dismiss="modal" arial-label="fechar">
-                            <span arial-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="<?= $BASE_URL ?>moviment_process.php?id=<?=$financialMoviment->id?>" method="post">
-                            <input type="hidden" name="type" value="edit_finance_moviment">
-                            <div class="form-group">
-                                <label for="description">Descriçao:</label>
-                                <input type="text" name="description_edit" id="" class="form-control"
-                                    placeholder="Insira uma nova descrição"
-                                    value="<?= $financialMoviment->description ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="value">Valor:</label>
-                                <input type="text" name="value_edit" id="" class="form-control money"
-                                    placeholder="Insira um novo valor" value="<?= $financialMoviment->value ?>">
-                            </div>
-                            <?php if($financialMoviment->type == 2): ?>
-                            <div class="form-group">
-                                <label for="expense_type">Despesa:</label>
-                                <?php if($financialMoviment->expense == "F"): ?>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="expense_type_edit"
-                                        id="inlineRadio1" value="F" checked>
-                                    <label class="edit_moviment_label" for="inlineRadio1">Fixa</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="expense_type_edit"
-                                        id="inlineRadio2" value="V">
-                                    <label class="edit_moviment_label" for="inlineRadio2">Váriavel</label>
-                                </div>
-                                <?php else: ?>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="expense_type_edit"
-                                        id="inlineRadio1" value="F">
-                                    <label class="edit_moviment_label" for="inlineRadio1">Fixa</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="expense_type_edit"
-                                        id="inlineRadio2" value="V" checked>
-                                    <label class="edit_moviment_label" for="inlineRadio2">Váriavel</label>
-                                </div>
-                                <?php endif; ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="category">Categoria:</label>
-                                <select name="category_edit" id="" class="form-control">
-                                    <?php foreach($exit_categorys as $category): ?>
-                                        <?php if($category->category_name == $financialMoviment->category): ?>
-                                            <option value="<?= $category->id ?>" selected> <?= $category->category_name ?></option>
-                                        <?php else: ?>
-                                            <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <?php else: ?>
+        <?php foreach ($latestFinancialMoviments as $financialMoviment) : ?>
+            <div class="modal fade" id="exampleModalCenter<?= $financialMoviment->id ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-top" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Editar Movimentação</h5>
+                            <button type="button" class="close" data-dismiss="modal" arial-label="fechar">
+                                <span arial-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="<?= $BASE_URL ?>moviment_process.php?id=<?= $financialMoviment->id ?>" method="post">
+                                <input type="hidden" name="type" value="edit_finance_moviment">
                                 <div class="form-group">
-                                <label for="category">Categoria:</label>
-                                <select name="category_edit" id="" class="form-control">
-                                    <?php foreach($entry_categorys as $category): ?>
-                                        <?php if($category->category_name == $financialMoviment->category): ?>
-                                            <option value="<?= $category->id ?>" selected> <?= $category->category_name ?></option>
-                                        <?php else: ?>
-                                            <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                                    <label for="description">Descriçao:</label>
+                                    <input type="text" name="description_edit" id="" class="form-control" placeholder="Insira uma nova descrição" value="<?= $financialMoviment->description ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="value">Valor:</label>
+                                    <input type="text" name="value_edit" id="" class="form-control money" placeholder="Insira um novo valor" value="<?= $financialMoviment->value ?>">
+                                </div>
+                                <?php if ($financialMoviment->type == 2) : ?>
+                                    <div class="form-group">
+                                        <label for="expense_type">Despesa:</label>
+                                        <?php if ($financialMoviment->expense == "F") : ?>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="expense_type_edit" id="inlineRadio1" value="F" checked>
+                                                <label class="edit_moviment_label" for="inlineRadio1">Fixa</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="expense_type_edit" id="inlineRadio2" value="V">
+                                                <label class="edit_moviment_label" for="inlineRadio2">Váriavel</label>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="expense_type_edit" id="inlineRadio1" value="F">
+                                                <label class="edit_moviment_label" for="inlineRadio1">Fixa</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="expense_type_edit" id="inlineRadio2" value="V" checked>
+                                                <label class="edit_moviment_label" for="inlineRadio2">Váriavel</label>
+                                            </div>
                                         <?php endif; ?>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <?php endif; ?>
-                            <div class="form-group">
-                                <label for="obs">Observação:</label>
-                                <textarea class="form-control" name="obs" id="obs" rows="5" placeholder="Adicione uma observação..."><?= $financialMoviment->obs ?></textarea>
-                            </div>
-                            <input type="submit" value="Enviar" class="btn btn-lg btn-success" onclick="scrollToTop()">
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category">Categoria:</label>
+                                        <select name="category_edit" id="" class="form-control">
+                                            <?php foreach ($exit_categorys as $category) : ?>
+                                                <?php if ($category->category_name == $financialMoviment->category) : ?>
+                                                    <option value="<?= $category->id ?>" selected> <?= $category->category_name ?></option>
+                                                <?php else : ?>
+                                                    <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                <?php else : ?>
+                                    <div class="form-group">
+                                        <label for="category">Categoria:</label>
+                                        <select name="category_edit" id="" class="form-control">
+                                            <?php foreach ($entry_categorys as $category) : ?>
+                                                <?php if ($category->category_name == $financialMoviment->category) : ?>
+                                                    <option value="<?= $category->id ?>" selected> <?= $category->category_name ?></option>
+                                                <?php else : ?>
+                                                    <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="form-group">
+                                    <label for="obs">Observação:</label>
+                                    <textarea class="form-control" name="obs" id="obs" rows="5" placeholder="Adicione uma observação..."><?= $financialMoviment->obs ?></textarea>
+                                </div>
+                                <input type="submit" value="Enviar" class="btn btn-lg btn-success" onclick="scrollToTop()">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         <?php endforeach; ?>
         <!-- End Finance moviment modal -->
 
         <!-- Modal para cofnirmação de exclusão de registro financeiro -->
-        <?php foreach ($latestFinancialMoviments as $financialMoviment): ?>
-        <div class="modal" tabindex="-1" id="modal_del_finance_moviment<?= $financialMoviment->id ?>">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <p>Tem certeza que deseja excluir o registro?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
-                        <form action="<?= $BASE_URL?>moviment_process.php?delete=s&id=<?= $financialMoviment->id ?>" method="POST">
-                            <button type="submit" class="btn btn-primary">Sim</button>
-                        </form>
+        <?php foreach ($latestFinancialMoviments as $financialMoviment) : ?>
+            <div class="modal" tabindex="-1" id="modal_del_finance_moviment<?= $financialMoviment->id ?>">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body text-center">
+                            <p>Tem certeza que deseja excluir o registro?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                            <form action="<?= $BASE_URL ?>moviment_process.php?delete=s&id=<?= $financialMoviment->id ?>" method="POST">
+                                <button type="submit" class="btn btn-primary">Sim</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         <?php endforeach; ?>
         <!-- FIm Modal para cofnirmação de exclusão de registro financeiro -->
 </body>
@@ -411,85 +412,94 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
 
 
 <script>
+    $('.money').mask('000.000.000.000.000,00', {
+        reverse: true
+    });
 
-$('.money').mask('000.000.000.000.000,00', {reverse: true});
-
-// Carregar página no topo
-function scrollToTop() {
-    window.scrollTo(0, 0);
-}
-
-// Converte o array php em json 
-var phpArrayCashInflow = <?php echo json_encode($cashInflowMonthsArray); ?>;
-var phpArrayCashOutflow = <?php echo json_encode($cashOutflowMonthsArray); ?>;
-
-var dataCashInflow = new Array();
-var dataCashOutflow = new Array();
-
-// itera o Json colocando cada valor de entrada em um array JS
-for (var i = 0; i < phpArrayCashInflow.length; i++) {
-  if(phpArrayCashInflow[i][0] == 1) {
-    dataCashInflow.push(phpArrayCashInflow[i][0] == 0);
-  }else {
-    dataCashInflow.push(phpArrayCashInflow[i][0]);
-  } 
-  
-}
-
-// itera o Json colocando cada valor de Saída em um array JS
-for (var i = 0; i < phpArrayCashOutflow.length; i++) {
-    if(phpArrayCashOutflow[i][0] == 1) {
-        dataCashOutflow.push(phpArrayCashOutflow[i][0] = 0);
-    }else {
-        dataCashOutflow.push(phpArrayCashOutflow[i][0]);
+    // Carregar página no topo
+    function scrollToTop() {
+        window.scrollTo(0, 0);
     }
-}
 
+    // Converte o array php em json 
+    var phpArrayCashInflow = <?php echo json_encode($cashInflowMonthsArray); ?>;
+    var phpArrayCashOutflow = <?php echo json_encode($cashOutflowMonthsArray); ?>;
 
-// Mychart graficos dos projetos em forma de linhas 
-var xValues = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+    var dataCashInflow = new Array();
+    var dataCashOutflow = new Array();
 
-new Chart("myChart2", {
-    type: "line",
-    data: {
-        labels: xValues,
-        datasets: [{
-            data: dataCashOutflow,
-            borderColor: "red",
-            fill: false
-        }, {
-            data: dataCashInflow,
-            borderColor: "green",
-            fill: false
-        }]
-    },
-    options: {
-        legend: {
-            display: false
+    // itera o Json colocando cada valor de entrada em um array JS
+    for (var i = 0; i < phpArrayCashInflow.length; i++) {
+        if (phpArrayCashInflow[i][0] == 1) {
+            dataCashInflow.push(phpArrayCashInflow[i][0] == 0);
+        } else {
+            dataCashInflow.push(phpArrayCashInflow[i][0]);
+        }
+
+    }
+
+    // itera o Json colocando cada valor de Saída em um array JS
+    for (var i = 0; i < phpArrayCashOutflow.length; i++) {
+        if (phpArrayCashOutflow[i][0] == 1) {
+            dataCashOutflow.push(phpArrayCashOutflow[i][0] = 0);
+        } else {
+            dataCashOutflow.push(phpArrayCashOutflow[i][0]);
         }
     }
-});
 
 
-// Esconde valor do Saldo clicando no icone do Olho
-$(document).ready(function(){
-    $('#btn').on('click',function(){
-        var i = $("#eye_icon").val();
-        if ($(".span").text() == 'add'){
-            $(".span").text('remove');
+    // Mychart graficos dos projetos em forma de linhas 
+    var xValues = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 
-            $("#eye_icon").removeClass("fa-solid fa-eye-slash");
-            $("#eye_icon").addClass("fa-solid fa-eye");
-            $("#ammount").addClass("blur");
-        } else {
-
-            $(".span").text('add');
-            $("#eye_icon").removeClass("fa-solid fa-eye");
-            $("#eye_icon").addClass("fa-solid fa-eye-slash");
-            $("#ammount").removeClass("blur");
+    new Chart("myChart2", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                data: dataCashOutflow,
+                borderColor: "red",
+                fill: false
+            }, {
+                data: dataCashInflow,
+                borderColor: "green",
+                fill: false
+            }]
+        },
+        options: {
+            legend: {
+                display: false
+            }
         }
     });
-});
 
+
+    // Esconde valor do Saldo clicando no icone do Olho
+    $(document).ready(function() {
+
+        if (localStorage.getItem('hidden_ammount') == 'S') {
+            $("#expense_h1").addClass("blur");
+            $("#revenue_h1").addClass("blur");
+            $("#ammount").addClass("blur");
+        } else {
+            $("#expense_h1").removeClass("blur");
+            $("#revenue_h1").removeClass("blur");
+            $("#ammount").removeClass("blur");
+        }
+
+        $('#btn').on("click", function() {
+            $('#ammount').toggleClass('blur');
+            $('#expense_h1').toggleClass('blur');
+            $('#revenue_h1').toggleClass('blur');
+            if ($('#ammount').hasClass('blur')) {
+                localStorage.setItem('hidden_ammount', 'S');
+                $("#eye_icon").removeClass("fa-eye-slash");
+                $("#eye_icon").addClass("fa-eye");
+            } else {
+                localStorage.setItem('hidden_ammount', 'N');
+                $("#eye_icon").removeClass("fa-eye");
+                $("#eye_icon").addClass("fa-eye-slash");
+            }
+        });
+
+    });
 </script>
-

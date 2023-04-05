@@ -31,7 +31,7 @@ if ($userData->image == "") {
                     <input type="submit" class="btn btn-success" value="Alterar">
                 </div>
                 <div class="col-md-4">
-                    <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/avatar/<?= $userData->image ?>')">
+                    <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>assets/home/avatar/<?= $userData->image ?>')">
                     </div>
                     <div class="form-group">
                         <label for="Foto:">Foto:</label>

@@ -1,4 +1,4 @@
-<?php require_once("templates/header_iframe.php");?>
+<?php require_once("templates/header_iframe.php"); ?>
 
 <div class="container-fluid">
     <h1 class="text-center my-5 text-secondary">Adicionar Cartão de Crédito</h1>
@@ -48,14 +48,14 @@
                     <img src="<?= $BASE_URL ?>assets/home/dashboard-main/chip.png" alt="">
                     <p class="mt-3" id="card_number">4586 7985 9271 6388</p>
                 </div>
-                
+
                 <div class="visa_crinfo">
-               
+
                     <p id="card_name">
-                    <!-- <small>Titular da conta:</small> <br> -->
+                        <!-- <small>Titular da conta:</small> <br> -->
                         João Silva Costa
-                    </p>                  
-                    
+                    </p>
+
                     <div class="form-group">
                         <small class="text-light">Expira</small>
                         <p id="expired_date">05/23</p>
@@ -72,14 +72,13 @@
             </div> -->
         </div>
     </div>
-     <!-- Card contaider auto fill -->
+    <!-- Card contaider auto fill -->
 
 
 </div>
 <?php require_once("templates/footer.php"); ?>
 
 <script type="text/javascript">
-
     // Imput nome do cartão aceitará apenas letras
     $("#name_card").on("input", function() {
         var regexp = /[^a-zA-Z]/g;
@@ -90,50 +89,78 @@
 
 
     // Auto Preenchimento do cartão exemplo e identificação da bandeira do cartão
-    $(document).ready(function(){
+    $(document).ready(function() {
 
-        $("input").keyup(function (){
+        $("input").keyup(function() {
             var card_name = $("#name_card").val();
             var account = $("#cc").val();
             var flag_number = account.substr(0, 1);
 
             $("#card_number").html(account);
             $("#card_name").html(card_name);
-            
-            
+
+
             if (flag_number == 4) {
-                $( "#card-credit-bg" ).removeClass( "master-card" );
-                $("#flag_icon").removeClass( "fa-brands fa-cc-mastercard fa-3x ");
+                $("#card-credit-bg").removeClass("master-card");
+                $("#flag_icon").removeClass("fa-brands fa-cc-mastercard fa-3x ");
                 $("#flag_icon").addClass("fa-brands fa-cc-visa fa-3x ");
                 $("#card-credit-bg").last().addClass("visa");
-            }else if(flag_number == 5){
-                $( "#card-credit-bg" ).removeClass( "visa" );
-                $("#flag_icon").removeClass( "fa-brands fa-cc-visa fa-3x");
+            } else if (flag_number == 5) {
+                $("#card-credit-bg").removeClass("visa");
+                $("#flag_icon").removeClass("fa-brands fa-cc-visa fa-3x");
                 $("#flag_icon").addClass("fa-brands fa-cc-mastercard fa-3x ");
                 $("#card-credit-bg").last().addClass("master-card");
             }
-            
-            if( account == "") {
+
+            if (account == "") {
                 //console.log("entrou no if");
-                $( "#card-credit-bg" ).removeClass("master-card visa");
-                $( "#flag_icon" ).removeClass("fa-brands fa-cc-mastercard fa-cc-visa fa-3x");
+                $("#card-credit-bg").removeClass("master-card visa");
+                $("#flag_icon").removeClass("fa-brands fa-cc-mastercard fa-cc-visa fa-3x");
 
                 var nome_ex = "Joao Silva Costa";
                 var num_ex = "1234 5678 9876 5432";
-                if(card_name == "") {
+                if (card_name == "") {
                     $("#card_number").append(num_ex);
                     $("#card_name").append(nome_ex);
                 }
             }
-            
+
         });
 
-        $("input").click(function (){
+        $("input").click(function() {
             var expired_card = $("#expired_card").val();
-            
+
             $("#expired_date").html(expired_card);
-         });
+        });
+
+        /* Máscaras ER CC ex: 4321 5678 ...  */
+        function mascara(o, f) {
+            v_obj = o
+            v_fun = f
+            setTimeout("execmascara()", 1)
+        }
+
+        function execmascara() {
+            v_obj.value = v_fun(v_obj.value)
+        }
+
+        function mcc(v) {
+            v = v.replace(/\D/g, "");
+            v = v.replace(/^(\d{4})(\d)/g, "$1 $2");
+            v = v.replace(/^(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3");
+            v = v.replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3 $4");
+            return v;
+        }
+
+        function id(el) {
+            return document.getElementById(el);
+        }
+        window.onload = function() {
+            id('cc').onkeypress = function() {
+                mascara(this, mcc);
+            }
+        }
+        /* Máscaras ER */
 
     });
-
 </script>

@@ -7,6 +7,7 @@
 <body>
    <form>
       <input type="text"  class="money"/><br>
+      <p>teste</p>
    </form>
 
 <script>

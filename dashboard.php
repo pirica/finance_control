@@ -40,13 +40,13 @@ if ($totalCashInflow != "0,00" && $totalCashOutflow != "0,00") {
 }
 
 $awardColor = "";
-if($resultExpensePercent < 30){
+if ($resultExpensePercent < 30) {
     $awardColor = "text-warning";
-}else if($resultExpensePercent < 40) {
+} else if ($resultExpensePercent < 40) {
     $awardColor = "text-light";
-}else if($resultExpensePercent <= 50) {
+} else if ($resultExpensePercent <= 50) {
     $awardColor = "text-info";
-}else {
+} else {
     $awardColor = "text-danger";
 }
 
@@ -74,7 +74,7 @@ if($resultExpensePercent < 30){
     <!-- Sidebar  -->
     <nav id="sidebar">
         <div class="sidebar-header text-center">
-            <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>/assets/home/avatar/<?= $userData->image ?>')">
+            <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>assets/home/avatar/<?= $userData->image ?>')">
                 <div id="user_award">
                     <i class="fa-solid fa-award fa-3x <?= $awardColor ?>"></i>
                 </div>
@@ -133,17 +133,24 @@ if($resultExpensePercent < 30){
         </div>
     </div>
     <!-- End Page Content  -->
-        
-        <!-- Popup messages  -->
-        <!-- <div class="container-popup" id="container-popup">
-            <div class="popup" id="popup-card">
-                <h2>This is a popup</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem atque error eveniet quisquam necessitatibus non.</p>
-                <button class="popup-close close">x</button>
-                <input class="btn btn-lg btn-info" value="OK"></input>
+
+    <!-- Popup messages  -->
+    <div class="container-popup" id="container-popup">
+        <div class="popup text-center" id="popup-card">
+            <h2>This is a popup</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem atque error eveniet quisquam necessitatibus non.</p>
+            <!-- <div>
+                <img class="animated-gif" src="<?=$BASE_URL ?>assets/control_finance_mockup.png" alt="Example gif">
+            </div> -->
+            <div class="form-group">
+                <label for="no_show_again">Clique na caixinha abaixo para não mostrar novamente essa mensagem.</label>
+                <input type="checkbox" name="" id="" class="form-control">
             </div>
-        </div> -->
-        <!-- Popup messages  -->
+            <button class="popup-close close_popup">x</button>
+            <input type="submit" class="btn btn-lg btn-info" value="OK"></input>
+        </div>
+    </div>
+    <!-- Popup messages  -->
 
 </div>
 

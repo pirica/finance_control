@@ -51,7 +51,7 @@ $(document).ready(function() {
         });
     });
 
-    $("#category_exit").keyup(function() {
+    $("#category_exit").on("click", function() {
         var values_exit = $("#values_exit").val();
         var name_search_exit = $("#name_search_exit").val();
         var from_date_exit = $("#from_date_exit").val();

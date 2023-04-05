@@ -296,9 +296,10 @@ a.download {
     display: flex;
     background-color: #000;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
+    padding-top: 8rem;
     align-items: center;
-    height: 100%;
+    height: 136%;
     width: 100%;
 }
 
@@ -322,7 +323,7 @@ button {
     cursor: pointer;
 }
 
-.close_reports {
+.close_popup {
     position: absolute;
     color: black;
     background-color: transparent;
@@ -644,6 +645,11 @@ table {
     background-color: #FFF2CC;
     transform: rotate(45deg);
     box-shadow: -2px -2px 1px #ccc;
+}
+
+.bloco {
+    display: flex;
+    justify-content: space-between
 }
 
 .bloco:not(:last-child) {

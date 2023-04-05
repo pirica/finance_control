@@ -2,9 +2,10 @@
 require_once("templates/header_iframe.php");
 
 $images = array(
-    "-entry-out" => "finance_login.gif",
-    "2" => "validate_register_form.gif",
-    "3" => "finance_logo.png",
+    "-editar-perfil" => "editar_perfil.gif",
+    "-entry-out" => "entrada_saida.gif",
+    "-editar-entrada-saida" => "editar_entrada_saida.gif",
+    "-relatorios" => "relatorios.gif",
 );
 
 ?>
@@ -12,7 +13,7 @@ $images = array(
 <div class="container-fluid my-5" id="first-steps">
     <h1 class="text-center">Primeiros Passos <i class="fa-solid fa-money-bill-trend-up text-success"></i></h1>
     <div class="row my-3 text-center d-flex flex-column">
-        <h4>Ta em dúvida de como usar a plataforma?</h4>
+        <h4>Está em dúvida de como usar a plataforma?</h4>
         <span>Comece sua jornada de sucesso aprendendo a fazer as tarefas abaixo!</span>
     </div>
     <div class="row my-3 lessons_container text-center">
@@ -24,7 +25,7 @@ $images = array(
                         <h4 class="font-weight-normal"><i class="fa-solid fa-user-pen"></i> Editar perfil </h4>
                         <span> Veja a seguir como editar o seu perfil.</span>
                     </div>
-                    <button class="btn btn-outline-success" data-toggle="modal" data-target=".bd-lessons-entry-out">
+                    <button class="btn btn-outline-success" data-toggle="modal" data-target=".bd-lessons-editar-perfil">
                         ver
                     </button>
                 </a>
@@ -41,18 +42,19 @@ $images = array(
                     </button>
                 </a>
             </div>
-            <!-- Alterar entrada ou saída -->
+
+            <!-- Cadastrar Lembretes -->
             <div class="lessons_div my-3">
-                <a href="#!" data-toggle="modal" data-target="#lesson">
-                    <div>
-                        <h4 class="font-weight-normal"><i class="fa-solid fa-file-pen"></i> Alterar entrada ou saída </h4>
-                        <span> Veja a seguir como fazer a alteração de entradas e saídas.</span>
-                    </div>
-                    <button class="btn btn-outline-success" data-toggle="modal" data-target=".bd-lessons-entry-out">
-                        ver
-                    </button>
-                </a>
-            </div>
+            <a href="#!" data-toggle="modal" data-target="#lesson">
+                <div>
+                    <h4 class="font-weight-normal"><i class="fa-solid fa-solid fa-bell"></i> Cadastrar lembretes</h4>
+                    <span> Veja a seguir como cadastrar lembretes.</span>
+                </div>
+                <button class="btn btn-outline-success" data-toggle="modal" data-target=".bd-lessons-entry-out">
+                    ver
+                </button>
+            </a>
+        </div>
 
         </div>
         <div class="col-md-6">
@@ -63,20 +65,20 @@ $images = array(
                         <h4 class="font-weight-normal"><i class="fa-solid fa-square-poll-vertical"></i> Relatórios </h4>
                         <span> Veja a seguir como entrar e pesquisar nos relatórios.</span>
                     </div>
-                    <button class="btn btn-outline-success" data-toggle="modal" data-target=".bd-lessons-entry-out">
+                    <button class="btn btn-outline-success" data-toggle="modal" data-target=".bd-lessons-relatorios">
                         ver
                     </button>
                 </a>
             </div>
 
-            <!-- Cadastrar Lembretes -->
+            <!-- Alterar entrada ou saída -->
             <div class="lessons_div my-3">
                 <a href="#!" data-toggle="modal" data-target="#lesson">
                     <div>
-                        <h4 class="font-weight-normal"><i class="fa-solid fa-solid fa-bell"></i> Cadastrar lembretes</h4>
-                        <span> Veja a seguir como cadastrar lembretes.</span>
+                        <h4 class="font-weight-normal"><i class="fa-solid fa-file-pen"></i> Alterar entrada ou saída </h4>
+                        <span> Veja a seguir como fazer a alteração de entradas e saídas.</span>
                     </div>
-                    <button class="btn btn-outline-success" data-toggle="modal" data-target=".bd-lessons-entry-out">
+                    <button class="btn btn-outline-success" data-toggle="modal" data-target=".bd-lessons-editar-entrada-saida">
                         ver
                     </button>
                 </a>
@@ -119,7 +121,7 @@ $images = array(
                         </div>
                         <div class="modal-body">
                             <div>
-                                <img class="animated-gif" src="' . $BASE_URL . 'assets/' . $item . '" alt="Example gif">
+                                <img class="animated-gif" src="' . $BASE_URL . 'assets/home/dashboard-main/lessons/' . $item . '" alt="Example gif">
                             </div>
                         </div>
                         <div class="modal-footer mx-auto">

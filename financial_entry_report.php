@@ -130,7 +130,7 @@ $getEntryReports = $financialMovimentDao->getReports($sql, 1, $userData->id);
                                 <a href="#!" id="grupos<?= $entryFinancialMovimentItem->id ?>" onclick="openTooltip(<?= $entryFinancialMovimentItem->id ?>)"><img src="<?= $BASE_URL ?>assets/home/dashboard-main/message_alert.gif" alt="message_alert" title="ver observação" width="33" height="30"> </a>
                                 <div class="tooltip_" id="tooltip_<?= $entryFinancialMovimentItem->id ?>">
                                     <div id="conteudo">
-                                        <div class="bloco" style="display: flex; justify-content: space-between">
+                                        <div class="bloco">
                                             <h5>Observação</h5>
                                             <a href="#!" id="close<?= $entryFinancialMovimentItem->id ?>"><i class="fa-solid fa-xmark"></i></a>
                                         </div>
@@ -361,7 +361,6 @@ $getEntryReports = $financialMovimentDao->getReports($sql, 1, $userData->id);
 $(document).ready(function(){
     $('.placeholder').mask("00/00/0000", {placeholder: "__/__/____"});
 });
-
 </script>
 
 <script src="js/ajax_finance_entrys_request.js"></script>

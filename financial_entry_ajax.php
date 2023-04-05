@@ -37,8 +37,6 @@ if (isset($_POST['category_entry']) && $_POST['category_entry'] != '') {
     }
 }
 
-// echo $sql; exit;
-
 // Traz o array com os dados da query personalizada 
 $getEntryReports = $financialMovimentDao->getReports($sql, 1, $userData->id);
 

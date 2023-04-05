@@ -48,7 +48,7 @@ $(document).ready(function() {
         });
     });
 
-    $("#category_entry").keyup(function() {
+    $("#category_entry").on("click", function() {
         var values_entry = $("#values_entry").val();
         var name_search_entry = $("#name_search_entry").val();
         var from_date_entry = $("#from_date_entry").val();

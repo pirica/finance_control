@@ -403,18 +403,18 @@
                 category = :category,
                 update_at = now() 
                 WHERE id = :id
-             ");
+            ");
 
-             $stmt->bindParam(":description", $financialMoviment->description);
-             $stmt->bindParam(":obs", $financialMoviment->obs);
-             $stmt->bindParam(":value", $financialMoviment->value);
-             $stmt->bindParam(":expense", $financialMoviment->expense);
-             $stmt->bindParam(":category", $financialMoviment->category);
-             $stmt->bindParam(":id", $financialMoviment->id);
+            $stmt->bindParam(":description", $financialMoviment->description);
+            $stmt->bindParam(":obs", $financialMoviment->obs);
+            $stmt->bindParam(":value", $financialMoviment->value);
+            $stmt->bindParam(":expense", $financialMoviment->expense);
+            $stmt->bindParam(":category", $financialMoviment->category);
+            $stmt->bindParam(":id", $financialMoviment->id);
 
-             if($stmt->execute()) {
-                $this->message->setMessage("Registro alterado com sucesso!", "success", "back");
-             }
+            if($stmt->execute()) {
+            $this->message->setMessage("Registro alterado com sucesso!", "success", "back");
+            }
 
         }
 

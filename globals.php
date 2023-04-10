@@ -19,8 +19,9 @@ if($hora_atual > 0 && $hora_atual <= 12){
     $msg_saudacao = "Boa noite!";
 }
 
-$meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+$meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", 
+"julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 
 $mes_numb = ltrim(date("m"), '0');
 
-$nome_mes_atual = $meses[$mes_numb];
+$nome_mes_atual = $meses[$mes_numb-1];

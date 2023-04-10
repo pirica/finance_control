@@ -2,14 +2,18 @@
 
 require_once("models/Popup.php");
 require_once("models/User.php");
+require_once("models/Message.php");
 
     Class PopupDAO implements PopupDAOInterface {
 
         private $conn;
         private $url;
+        private $message;
 
-        public function __construct(PDO $conn) {
+        public function __construct(PDO $conn, $url) {
             $this->conn = $conn;
+            $this->url = $url;
+            $this->message = new Message($url);
         }
 
 
@@ -27,7 +31,7 @@ require_once("models/User.php");
             return $popup;
         }
 
-        public function findById($id) {
+        public function welcomePopup($id) {
 
             $stmt = $this->conn->prepare("SELECT title, description, image, created_at, date_expired FROM popup INNER JOIN popup_users ON popup.id  = popup_users.id_welcome_popup WHERE popup_users.show_welcome_popup = 'S' AND popup_users.users_id = $id");
             $stmt->execute();
@@ -39,6 +43,24 @@ require_once("models/User.php");
                 return $popup;
             }
             
+        }
+
+        public function updateWelcomePopupUser($users_id) {
+
+            $stmt = $this->conn->prepare("UPDATE popup_users SET 
+            show_welcome_popup = :show_welcome_popup, 
+            welcome_status = :welcome_status 
+            WHERE users_id = :id
+            ");
+
+            $stmt->bindParam(":show_welcome_popup", "N");
+            $stmt->bindParam(":welcome_status", "S");
+            $stmt->bindParam(":id", $users_id);
+
+            if($stmt->execute()) {
+                $this->message->setMessage("sucesso", "success", "back");
+            }
+
         }
 
     }

@@ -13,6 +13,7 @@
     interface PopupDAOInterface {
 
         public function buildPopup($data);
-        public function findById($id);
+        public function welcomePopup($id);
+        public function updateWelcomePopupUser($users_id);
 
     }

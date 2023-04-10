@@ -57,8 +57,8 @@ if ($resultExpensePercent < 30) {
     $awardColor = "text-danger";
 }
 
-$popupDao = new PopupDAO($conn);
-$welcomePopup = $popupDao->findById($userData->id);
+$popupDao = new PopupDAO($conn, $BASE_URL);
+$welcomePopup = $popupDao->welcomePopup($userData->id);
 
 ?>
 
@@ -145,24 +145,26 @@ $welcomePopup = $popupDao->findById($userData->id);
     <!-- End Page Content  -->
 
     <!-- Popup messages  -->
-    <?php if ($welcomePopup != ""): ?>
-    <div class="container-popup" id="container-popup">
-        <div class="popup text-center" id="popup-card">
-            <h2><?= $welcomePopup->title ?></h2>
-            <p><?= $welcomePopup->description?></p>
-            <?php if ($welcomePopup->image != ""): ?>
-            <div>
-                <img class="animated-gif" src="<?=$BASE_URL ?>assets/<?= $welcomePopup->image ?>" alt="Example gif">
+    <?php if ($welcomePopup != "") : ?>
+        <div class="container-popup" id="container-popup">
+            <div class="popup text-center" id="popup-card">
+                <h2><?= $welcomePopup->title ?></h2>
+                <p><?= $welcomePopup->description ?></p>
+                <?php if ($welcomePopup->image != "") : ?>
+                    <div>
+                        <img class="animated-gif" src="<?= $BASE_URL ?>assets/<?= $welcomePopup->image ?>" alt="imagm popup">
+                    </div>
+                <?php endif; ?>
+                <form action="<?= $BASE_URL ?>popup_process.php" method="post">
+                    <div class="form-group">
+                        <label for="no_show_again">Clique abaixo para não mostrar mensagem novamente.</label>
+                        <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="N">
+                    </div>
+                    <button class="popup-close close_popup">x</button>
+                    <input type="submit" class="btn btn-lg btn-info" value="OK"></input>
+                </form>
             </div>
-            <?php endif; ?>
-            <div class="form-group">
-                <label for="no_show_again">Clique na caixinha abaixo para não mostrar novamente essa mensagem.</label>
-                <input type="checkbox" name="" id="" class="form-control">
-            </div>
-            <button class="popup-close close_popup">x</button>
-            <input type="submit" class="btn btn-lg btn-info" value="OK"></input>
         </div>
-    </div>
     <?php endif; ?>
     <!-- Popup messages  -->
 
@@ -194,6 +196,14 @@ $welcomePopup = $popupDao->findById($userData->id);
             containerClose.style.display = "none";
         }));
     // Popup
+
+    // $(document).ready(function() {
+
+    //     $("#no_show_popup").on("click", function() {
+    //         alert("Popup");
+    //     });
+
+    // });
 </script>
 
 <?php require_once("templates/footer.php"); ?>

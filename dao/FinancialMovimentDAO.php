@@ -1,6 +1,6 @@
 <?php 
     require_once("models/FinancialMoviment.php");
-    require_once("models/User.php");
+    // require_once("models/User.php");
     require_once("models/Message.php");
     require_once("models/Categorys.php");
 

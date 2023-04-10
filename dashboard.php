@@ -5,6 +5,13 @@ require_once("models/User.php");
 require_once("dao/UserDAO.php");
 require_once("dao/MenuDAO.php");
 require_once("dao/FinancialMovimentDAO.php");
+require_once("dao/PopupDAO.php");
+
+// $dia = date("d");
+
+
+// echo "$dia $welcomePopup->date_expired";
+
 $financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
 
 $user = new User();
@@ -49,6 +56,9 @@ if ($resultExpensePercent < 30) {
 } else {
     $awardColor = "text-danger";
 }
+
+$popupDao = new PopupDAO($conn);
+$welcomePopup = $popupDao->findById($userData->id);
 
 ?>
 
@@ -135,13 +145,16 @@ if ($resultExpensePercent < 30) {
     <!-- End Page Content  -->
 
     <!-- Popup messages  -->
+    <?php if ($welcomePopup != ""): ?>
     <div class="container-popup" id="container-popup">
         <div class="popup text-center" id="popup-card">
-            <h2>This is a popup</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem atque error eveniet quisquam necessitatibus non.</p>
-            <!-- <div>
-                <img class="animated-gif" src="<?=$BASE_URL ?>assets/control_finance_mockup.png" alt="Example gif">
-            </div> -->
+            <h2><?= $welcomePopup->title ?></h2>
+            <p><?= $welcomePopup->description?></p>
+            <?php if ($welcomePopup->image != ""): ?>
+            <div>
+                <img class="animated-gif" src="<?=$BASE_URL ?>assets/<?= $welcomePopup->image ?>" alt="Example gif">
+            </div>
+            <?php endif; ?>
             <div class="form-group">
                 <label for="no_show_again">Clique na caixinha abaixo para não mostrar novamente essa mensagem.</label>
                 <input type="checkbox" name="" id="" class="form-control">
@@ -150,6 +163,7 @@ if ($resultExpensePercent < 30) {
             <input type="submit" class="btn btn-lg btn-info" value="OK"></input>
         </div>
     </div>
+    <?php endif; ?>
     <!-- Popup messages  -->
 
 </div>

@@ -9,13 +9,15 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Titular do Cartão:</h4>
-                        <input type="text" name="name_card" id="name_card" class="form-control" placeholder="Insira o nome como está no cartão">
+                        <input type="text" name="name_card" id="name_card" class="form-control"
+                            placeholder="Insira o nome como está no cartão">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Numero do Cartão:</h4>
-                        <input type="tel" name="cc" id="cc" class="form-control" maxlength="19" placeholder="1234 5678 9876 5432">
+                        <input type="tel" name="cc" id="cc" class="form-control" maxlength="19"
+                            placeholder="1234 5678 9876 5432">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -27,7 +29,8 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Limite do Cartão:</h4>
-                        <input type="text" name="credit_value" id="credit_value" class="form-control number-separator" placeholder="4.000">
+                        <input type="text" name="credit_value" id="credit_value money" class="form-control money"
+                            placeholder="4.000">
                     </div>
                 </div>
                 <div class="col-md-1">
@@ -77,10 +80,10 @@
 
 </div>
 <?php require_once("templates/footer.php"); ?>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js"></script>
 <script type="text/javascript">
     // Imput nome do cartão aceitará apenas letras
-    $("#name_card").on("input", function() {
+    $("#name_card").on("input", function () {
         var regexp = /[^a-zA-Z]/g;
         if (this.value.match(regexp)) {
             $(this).val(this.value.replace(regexp, ' '));
@@ -89,9 +92,9 @@
 
 
     // Auto Preenchimento do cartão exemplo e identificação da bandeira do cartão
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-        $("input").keyup(function() {
+        $("input").keyup(function () {
             var card_name = $("#name_card").val();
             var account = $("#cc").val();
             var flag_number = account.substr(0, 1);
@@ -127,40 +130,23 @@
 
         });
 
-        $("input").click(function() {
+        $("input").click(function () {
             var expired_card = $("#expired_card").val();
-
             $("#expired_date").html(expired_card);
         });
+        // Auto Preenchimento data de validade
 
-        /* Máscaras ER CC ex: 4321 5678 ...  */
-        function mascara(o, f) {
-            v_obj = o
-            v_fun = f
-            setTimeout("execmascara()", 1)
-        }
+        // fomata input numero do cartão
+        $('#cc').inputmask({
+            mask: '(3(4|7)99 9{6} 9{5}|3999 9{4} 9{4} 9{4}|9{4} 9{4} 9{4} 9{4})'
+        }).change(function () {
+            let value = $(this).val().substr(0, 2);
+        });
 
-        function execmascara() {
-            v_obj.value = v_fun(v_obj.value)
-        }
-
-        function mcc(v) {
-            v = v.replace(/\D/g, "");
-            v = v.replace(/^(\d{4})(\d)/g, "$1 $2");
-            v = v.replace(/^(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3");
-            v = v.replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3 $4");
-            return v;
-        }
-
-        function id(el) {
-            return document.getElementById(el);
-        }
-        window.onload = function() {
-            id('cc').onkeypress = function() {
-                mascara(this, mcc);
-            }
-        }
-        /* Máscaras ER */
+        /// formata input limite do cartão
+        $('.money').mask('000.000.000.000.000,00', {
+            reverse: true
+        });
 
     });
 </script>

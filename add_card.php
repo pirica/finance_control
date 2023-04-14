@@ -10,27 +10,27 @@
                     <div class="form-group">
                         <h4 class="font-weight-normal">Titular do Cartão:</h4>
                         <input type="text" name="name_card" id="name_card" class="form-control"
-                            placeholder="Insira o nome como está no cartão">
+                            placeholder="Insira o nome como está no cartão" value="<?= $_SESSION['name_card'] ?>">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Numero do Cartão:</h4>
                         <input type="tel" name="cc" id="cc" class="form-control" maxlength="19"
-                            placeholder="1234 5678 9876 5432">
+                            placeholder="1234 5678 9876 5432" value="<?= $_SESSION['card_number'] ?>">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Validade:</h4>
-                        <input type="month" name="expired_card" id="expired_card" class="form-control">
+                        <input type="month" name="expired_card" id="expired_card" class="form-control" value="<?= $_SESSION['expired_card'] ?>">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Limite do Cartão:</h4>
-                        <input type="text" name="credit_value" id="credit_value money" class="form-control money"
-                            placeholder="4.000">
+                        <input type="text" name="limit_value" id="credit_value money" class="form-control money"
+                            placeholder="4.000" value="<?= $_SESSION['limit_value'] ?>">
                     </div>
                 </div>
                 <div class="col-md-1">

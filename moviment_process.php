@@ -28,8 +28,6 @@ if ($type == "create_finance_moviment") {
     $value=str_replace(",",".",$value);
     $category = filter_input(INPUT_POST, "category");
 
-    echo $value; exit;
-
     $financialMoviment = new FinancialMoviment();
 
     if ($description && $value && $type_action) {

@@ -543,45 +543,98 @@ table {
     position: relative;
 }
 
+.amex {
+    background: #999999;
+    background: linear-gradient(180deg, #999999 0%, #666666 100%);
+}
+
 .visa {
     background: rgb(199, 12, 17);
     background: linear-gradient(180deg, rgba(199, 12, 17, 1) 0%, rgba(111, 6, 6, 1) 100%);
 }
+
+.diners {
+    background: #D4D5D7;
+    background: linear-gradient(180deg, #ededed 0%, #bdbdbd 100%);
+}
+
 
 .master-card {
     background: rgb(55, 55, 60);
     background: linear-gradient(180deg, rgba(55, 55, 60, 1) 0%, rgba(0, 0, 0, 1) 100%);
 }
 
-.visa_logo {
+.master-card-icon {
+    background-image: url("../assets/home/dashboard-main/mastercard.png");
+    width: 75px;
+    height: 45px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    float: right;
+}
+
+.visa-icon {
+    background-image: url("../assets/home/dashboard-main/visa.png");
+    width: 75px;
+    height: 45px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    float: right;
+}
+
+.amex-icon {
+    background-image: url("../assets/home/dashboard-main/amex_card.png");
+    width: 75px;
+    height: 45px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    float: right;
+}
+
+.diners-icon {
+    background-image: url("../assets/home/dashboard-main/diners.png");
+    width: 56px;
+    height: 45px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    float: right;
+}
+
+.card_logo {
     text-align: end;
     padding: 10px;
 }
 
-.visa_info {
+.card_info {
     padding: 10px;
+    text-align: left;
+    margin-top: 4rem;
 }
 
-.visa_info img {
+.card_info img {
     width: 45px;
     height: 35px;
 }
 
-.visa_info p {
+.card_info p {
     font-size: 22px;
     /* padding: 10px 0; */
     letter-spacing: 2px;
     color: #ffffff;
 }
 
-.visa_crinfo {
+.card_crinfo {
     display: flex;
     justify-content: space-between;
     padding: 0 10px;
 }
 
-.visa_crinfo p {
-    color: #ffffff;
+#card_name {
+    color: #fff;
 }
 
 #cards-page .fa-trash-can {
@@ -593,6 +646,16 @@ table {
 #cards-page .fa-file-pen {
     font-size: 25px;
     color: #DC8449;
+}
+
+@media (max-width: 400px) {
+    .card_info p {
+        font-size: 16px;
+    }
+
+    #card_name {
+        font-size: 10px;
+    }
 }
 
 

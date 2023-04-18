@@ -23,7 +23,8 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <h4 class="font-weight-normal">Validade:</h4>
-                        <input type="month" name="expired_card" id="expired_card" class="form-control" value="<?= $_SESSION['expired_card'] ?>">
+                        <input type="month" name="expired_card" id="expired_card" class="form-control"
+                            value="<?= $_SESSION['expired_card'] ?>">
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -44,16 +45,16 @@
     <div class="card_example" id="cards-page">
         <div class="offset-md-4 col-md-4">
             <div class="card-credit bg-secondary" id="card-credit-bg">
-                <div class="visa_logo">
-                    <i class="text-light" id="flag_icon"></i>
+                <div class="card_logo">
+                    <!-- <i class="" id="flag_icon"></i> -->
+                    <div id="flag_icon" alt="">
                 </div>
-                <div class="visa_info">
+                <div class="card_info">
                     <img src="<?= $BASE_URL ?>assets/home/dashboard-main/chip.png" alt="">
                     <p class="mt-3" id="card_number">4586 7985 9271 6388</p>
                 </div>
 
-                <div class="visa_crinfo">
-
+                <div class="card_crinfo">
                     <p id="card_name">
                         <!-- <small>Titular da conta:</small> <br> -->
                         João Silva Costa
@@ -65,14 +66,15 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="text-center my-2">
+            <div class=" my-5">
+                <h6>aqui</h6>
                 <a href="#" data-toggle="modal" data-target="#exampleModalCenter" title="Editar">
                     <i class="fa-solid fa-file-pen"></i>
                 </a>
                 <a href="#" data-toggle="modal" data-target="#modal_del_finance_moviment" title="Deletar">
                     <i class="fa-solid fa-trash-can"></i>
                 </a>
-            </div> -->
+            </div>
         </div>
     </div>
     <!-- Card contaider auto fill -->
@@ -80,7 +82,7 @@
 
 </div>
 <?php require_once("templates/footer.php"); ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js"></script>
+<script src="js/jquery.inputmask.bundle.min.js"></script>
 <script type="text/javascript">
     // Imput nome do cartão aceitará apenas letras
     $("#name_card").on("input", function () {
@@ -97,28 +99,46 @@
         $("input").keyup(function () {
             var card_name = $("#name_card").val();
             var account = $("#cc").val();
-            var flag_number = account.substr(0, 1);
+            var flag_number = account.substr(0, 2);
+
 
             $("#card_number").html(account);
             $("#card_name").html(card_name);
 
+            // TODO: americam 34 e 37 diners 36 e 38
+            if(flag_number == 34 || flag_number == 37) {
+                $("#card-credit-bg").removeClass("master-card visa diners");
+                $("#flag_icon").removeClass("master-card-icon visa-icon diners-icon");
+                $("#flag_icon").addClass("amex-icon");
+                $("#card-credit-bg").last().addClass("amex");
 
-            if (flag_number == 4) {
-                $("#card-credit-bg").removeClass("master-card");
-                $("#flag_icon").removeClass("fa-brands fa-cc-mastercard fa-3x ");
-                $("#flag_icon").addClass("fa-brands fa-cc-visa fa-3x ");
+                
+            } else if(flag_number == 36 || flag_number == 38) {
+
+                $("#card-credit-bg").removeClass("master-card visa amex");
+                $("#flag_icon").removeClass("master-card-icon visa-icon amex-icon");
+                $("#flag_icon").addClass("diners-icon");
+                $("#card-credit-bg").last().addClass("diners");
+
+            } else if (flag_number >= 40 && flag_number < 50) {
+
+                $("#card-credit-bg").removeClass("master-card diners amex");
+                $("#flag_icon").removeClass("master-card-icon diners-icon amex-icon");
+                $("#flag_icon").addClass("visa-icon");
                 $("#card-credit-bg").last().addClass("visa");
-            } else if (flag_number == 5) {
-                $("#card-credit-bg").removeClass("visa");
-                $("#flag_icon").removeClass("fa-brands fa-cc-visa fa-3x");
-                $("#flag_icon").addClass("fa-brands fa-cc-mastercard fa-3x ");
+
+            } else if (flag_number >= 50 && flag_number <= 55) {
+
+                $("#card-credit-bg").removeClass("visa diners amex");
+                $("#flag_icon").removeClass("visa-icon diners-icon amex-icon");
+                $("#flag_icon").addClass("master-card-icon");
                 $("#card-credit-bg").last().addClass("master-card");
             }
 
             if (account == "") {
-                //console.log("entrou no if");
-                $("#card-credit-bg").removeClass("master-card visa");
-                $("#flag_icon").removeClass("fa-brands fa-cc-mastercard fa-cc-visa fa-3x");
+            
+                $("#card-credit-bg").removeClass("master-card visa diners amex");
+                $("#flag_icon").removeClass("master-card-icon diners-icon visa-icon amex-icon");
 
                 var nome_ex = "Joao Silva Costa";
                 var num_ex = "1234 5678 9876 5432";
@@ -128,13 +148,15 @@
                 }
             }
 
+            // Auto Preenchimento data de validade
+            $("input").click(function () {
+                var expired_card = $("#expired_card").val();
+                $("#expired_date").html(expired_card);
+            });
+            
+
         });
 
-        $("input").click(function () {
-            var expired_card = $("#expired_card").val();
-            $("#expired_date").html(expired_card);
-        });
-        // Auto Preenchimento data de validade
 
         // fomata input numero do cartão
         $('#cc').inputmask({

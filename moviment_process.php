@@ -28,8 +28,6 @@ if ($type == "create_finance_moviment") {
     $value=str_replace(",",".",$value);
     $category = filter_input(INPUT_POST, "category");
 
-    echo $value; exit;
-
     $financialMoviment = new FinancialMoviment();
 
     if ($description && $value && $type_action) {
@@ -75,13 +73,17 @@ if ($type == "create_finance_moviment") {
     $financialMoviment->id = $_GET["id"];
 
     $financialMovimentDao->update($financialMoviment);
+    
+}else if($type == "deletar"){
+
+    // Pega id de resgitro para deleção
+    $id = filter_input(INPUT_POST, "id");
+
+    // Deletar selecionado Registro
+    if ($id != null) {
+        $financialMovimentDao->destroy($id);
+        $message->setMessage("Registro excluído com sucesso", "success", "back");
+    }
+
 }
 
-// Pega id de resgitro para deleção
-$id = $_GET["id"];
-
-// Deletar selecionado Registro
-if ($_GET["delete"] == "s") {
-    $financialMovimentDao->destroy($id);
-    $message->setMessage("Registro excluído com sucesso", "success", "back");
-}

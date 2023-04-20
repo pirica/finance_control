@@ -343,7 +343,9 @@ $getEntryReports = $financialMovimentDao->getReports($sql, 1, $userData->id);
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
-                        <form action="<?= $BASE_URL ?>moviment_process.php?delete=s&id=<?= $financialMoviment->id ?>" method="POST">
+                        <form action="<?= $BASE_URL ?>moviment_process.php" method="POST">
+                            <input type="hidden" name="type" value="deletar">
+                            <input type="hidden" name="id" value="<?= $financialMoviment->id ?>">    
                             <button type="submit" class="btn btn-primary">Sim</button>
                         </form>
                     </div>

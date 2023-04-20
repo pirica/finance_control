@@ -7,10 +7,6 @@ require_once("dao/MenuDAO.php");
 require_once("dao/FinancialMovimentDAO.php");
 require_once("dao/PopupDAO.php");
 
-// $dia = date("d");
-
-
-// echo "$dia $welcomePopup->date_expired";
 
 $financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
 
@@ -58,7 +54,7 @@ if ($resultExpensePercent < 30) {
 }
 
 $popupDao = new PopupDAO($conn, $BASE_URL);
-///$welcomePopup = $popupDao->welcomePopup($userData->id);
+//$welcomePopup = $popupDao->welcomePopup($userData->id);
 
 ?>
 

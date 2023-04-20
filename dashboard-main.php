@@ -387,7 +387,7 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
         <?php endforeach; ?>
         <!-- End Finance moviment modal -->
 
-        <!-- Modal para cofnirmação de exclusão de registro financeiro -->
+        <!-- Modal para confirmação de exclusão de registro financeiro -->
         <?php foreach ($latestFinancialMoviments as $financialMoviment) : ?>
             <div class="modal" tabindex="-1" id="modal_del_finance_moviment<?= $financialMoviment->id ?>">
                 <div class="modal-dialog modal-dialog-centered">
@@ -397,7 +397,9 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
-                            <form action="<?= $BASE_URL ?>moviment_process.php?delete=s&id=<?= $financialMoviment->id ?>" method="POST">
+                            <form action="<?= $BASE_URL ?>moviment_process.php" method="POST">
+                                <input type="hidden" name="type" value="deletar">
+                                <input type="hidden" name="id" value="<?= $financialMoviment->id ?>">
                                 <button type="submit" class="btn btn-primary">Sim</button>
                             </form>
                         </div>

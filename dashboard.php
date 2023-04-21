@@ -89,46 +89,19 @@ $popupDao = new PopupDAO($conn, $BASE_URL);
                 </div>
 
             </div>
+            <!-- user name in sidebar -->
             <h5 class="user_name">
                 <?= $fullName ?>
             </h5>
-
+            <!-- User Greet -->
             <span id="DisplayClock" onload="showTime()"></span>
             <?= $msg_saudacao; ?>
 
         </div>
 
-        <ul class="list-unstyled components">
-            <?php foreach ($menus as $menu): ?>
+        <!-- Menu items  sidebar -->
+        <?php require_once("utils/menu_items.php"); ?>
 
-                <?php if ($menu->getSubMenu() == ""): ?>
-                    <li><a href="<?= $BASE_URL . $menu->getUrl(); ?>" target="myFrame"
-                            onclick="addClass(<?= $menu->getIdMenu() ?>)"><i class="<?= $menu->getClassIcon() ?>"></i>
-                            <?= $menu->getMenuName() ?>
-                        </a></li>
-                <?php else: ?>
-                    <li>
-                        <a href="<?= $menu->getUrl(); ?>" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
-                            onclick="addClass(<?= $menu->getIdMenu() ?>)">
-                            <i class="<?= $menu->getClassIcon() ?>"></i>
-                            <?= $menu->getMenuName() ?>
-                        </a>
-                        <ul class="collapse list-unstyled" id="<?= substr($menu->getUrl(), 1); ?>">
-                            <?php $subMenus = $menu_Dao->findSubMenu($menu->getIdMenu()); foreach ($subMenus as $subMenu): ?>
-                                <li>
-                                    <a href="<?= $BASE_URL ?><?= $subMenu->getUrlSubMenu(); ?>"
-                                        onclick="addClass(<?= $menu->getIdMenu() ?>)" target="myFrame"><i
-                                            class="<?= $subMenu->getClassIconSubMenu() ?>"></i>
-                                        <?= $subMenu->getSubMenuName(); ?>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </li>
-                <?php endif; ?>
-
-            <?php endforeach; ?>
-        </ul>
     </nav>
 
     <!-- Page Content  -->
@@ -156,12 +129,14 @@ $popupDao = new PopupDAO($conn, $BASE_URL);
     </div>
     <!-- End Page Content  -->
 
+
+    TODO: <!-- Terminar lógica para sistemas de notificação por popups -->
     <!-- Popup messages  -->
-    <?php if ($welcomePopup != ""): ?>
+    <!-- <?php if ($welcomePopup != ""): ?>
         <div class="container-popup" id="container-popup">
             <form action="<?= $BASE_URL ?>popup_process.php" method="post">
                 <div class="popup text-center" id="popup-card">
-                <button class="popup-close close_popup">x</button>
+                    <button class="popup-close close_popup">x</button>
                     <h2>
                         <?= $welcomePopup->title ?>
                     </h2>
@@ -180,11 +155,11 @@ $popupDao = new PopupDAO($conn, $BASE_URL);
                         <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="N">
                     </div>
                     <input type="submit" class="btn btn-lg btn-info" value="OK"></input>
-                    
+
                 </div>
             </form>
         </div>
-    <?php endif; ?>
+    <?php endif; ?> -->
     <!-- Popup messages  -->
 
 </div>
@@ -213,7 +188,7 @@ $popupDao = new PopupDAO($conn, $BASE_URL);
         close.addEventListener("click", () => {
             popupWindow.classList.remove("active");
             containerClose.style.display = "none";
-    }));
+        }));
     // Popup
 
     // $(document).ready(function() {

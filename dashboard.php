@@ -191,13 +191,7 @@ $popupDao = new PopupDAO($conn, $BASE_URL);
         }));
     // Popup
 
-    // $(document).ready(function() {
-
-    //     $("#no_show_popup").on("click", function() {
-    //         alert("Popup");
-    //     });
-
-    // });
+   
 </script>
 
 <?php require_once("templates/footer.php"); ?>

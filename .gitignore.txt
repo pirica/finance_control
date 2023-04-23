@@ -1,4 +1,4 @@
 teste.php
 teste copy.php
-/utils/email_send.php
-/utils/email_send copy.php
+utils/email_send.php
+utils/email_send copy.php

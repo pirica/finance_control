@@ -1,8 +1,13 @@
 <?php
 require_once("globals.php");
 require_once("templates/header.php");
+require_once("utils/email_send.php");
 require_once("models/Message.php");
+require_once("connection/conn.php");
+require_once("dao/UserDAO.php");
 
+
+$userDao = new UserDAO($conn, $BASE_URL);
 $message = new Message($BASE_URL);
 
 $flashMessage = $message->getMessage();
@@ -11,14 +16,35 @@ if (!empty($flashMessage)) {
     $message->clearMessage();
 }
 
+if (isset($_POST["recovery_email"]) && $_POST["recovery_email"] != "") {
+    $to = $_POST['recovery_email'];
+    $password = str_shuffle("Finance_Control$97Br");
+    $final_password = password_hash($password, PASSWORD_DEFAULT);
+
+
+    if ($userDao->findByEmail($to)) {
+
+        $userDao->recoveryPassword($to, $final_password);
+            //echo "senha alterada";
+        send_email($to, $password);
+        $message->setMessage("Sucesso, confira seu e-mail!", "success", "index.php");
+        
+    } else {
+        $message->setMessage("E-mail não existe em nosso sistema.", "error", "index.php");
+    }
+
+}
+
 ?>
 
 <main>
 
     <div class="container login-container">
-        <?php if (!empty($flashMessage["msg"])) : ?>
+        <?php if (!empty($flashMessage["msg"])): ?>
             <div class="container text-center <?= ($flashMessage["type"]) ?> mb-5 p-2">
-                <span id="msg-status"><?= $flashMessage["msg"] ?></span>
+                <span id="msg-status">
+                    <?= $flashMessage["msg"] ?>
+                </span>
             </div>
         <?php endif; ?>
         <div class="row">
@@ -33,18 +59,23 @@ if (!empty($flashMessage)) {
                 <form action="<?= $BASE_URL ?>auth_process.php" method="POST">
                     <input type="hidden" name="type" value="login">
                     <div class="form-group">
-                        <input type="email" class="form-control" name="email_login" placeholder="Digite seu e-mail *" value="<?php if(isset($_SESSION["email_login"])){ echo $_SESSION["email_login"]; } ?>" />
+                        <input type="email" class="form-control" name="email_login" placeholder="Digite seu e-mail *"
+                            value="<?php if (isset($_SESSION["email_login"])) {
+                                echo $_SESSION["email_login"];
+                            } ?>" />
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" name="password" placeholder="Digite sua senha *" value="" />
+                        <input type="password" class="form-control" name="password" placeholder="Digite sua senha *"
+                            value="" />
                     </div>
                     <div class="form-group text-center">
                         <input type="submit" class="btnSubmit" value="Entrar" />
                     </div>
                 </form>
-                <!-- <div class="form-group text-center">
-                    <a href="#" class="btnForgetPwd">Esqueci a senha?</a>
-                </div> -->
+                <div class=" text-center">
+                    <button href="#" class="btn btn-outline-warning" data-toggle="modal"
+                        data-target="#exampleModalCenter">Esqueceu a senha?</button>
+                </div>
             </div>
             <!-- End Login Form -->
 
@@ -57,13 +88,22 @@ if (!empty($flashMessage)) {
                 <form action="<?= $BASE_URL ?>auth_process.php" method="POST">
                     <input type="hidden" name="type" value="register">
                     <div class="form-group">
-                        <input type="email" class="form-control" name="email" placeholder="Seu Email *" value="<?php if(isset($_SESSION['email'])){ echo $_SESSION['email'];} ?>" />
+                        <input type="email" class="form-control" name="email" placeholder="Seu Email *"
+                            value="<?php if (isset($_SESSION['email'])) {
+                                echo $_SESSION['email'];
+                            } ?>" />
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="name" id="" placeholder="Nome *" value="<?php if(isset($_SESSION['name'])){ echo $_SESSION['name'];} ?>">
+                        <input type="text" class="form-control" name="name" id="" placeholder="Nome *"
+                            value="<?php if (isset($_SESSION['name'])) {
+                                echo $_SESSION['name'];
+                            } ?>">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="lastname" id="" placeholder="Sobrenome *" value="<?php if(isset($_SESSION['lastname'])){ echo $_SESSION['lastname'];} ?>">
+                        <input type="text" class="form-control" name="lastname" id="" placeholder="Sobrenome *"
+                            value="<?php if (isset($_SESSION['lastname'])) {
+                                echo $_SESSION['lastname'];
+                            } ?>">
                     </div>
                     <div class="form-group">
                         <style>
@@ -71,9 +111,11 @@ if (!empty($flashMessage)) {
                                 display: none;
                             }
                         </style>
-                        <small id="alert_psw" style="color: yellow;">A senha deve ter 8 caracteres, sendo 1 letra maiúscula, 1 minúscula, 1 número e 1 simbolo.</small>
+                        <small id="alert_psw" style="color: yellow;">A senha deve ter 8 caracteres, sendo 1 letra
+                            maiúscula, 1 minúscula, 1 número e 1 simbolo.</small>
                         <div class="pwd" style="position: relative">
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Digite sua senha *" value="" />
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Digite sua senha *" value="" />
                             <div class="p-viewer" onclick="show_password()">
                                 <i class="fa-solid fa-eye"></i>
                             </div>
@@ -81,7 +123,8 @@ if (!empty($flashMessage)) {
                     </div>
                     <div class="form-group">
                         <div class="pwd" style="position: relative">
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirme sua senha *" value="" />
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                placeholder="Confirme sua senha *" value="" />
                             <div class="p-viewer" onclick="show_password()">
                                 <i class="fa-solid fa-eye"></i>
                             </div>
@@ -93,13 +136,45 @@ if (!empty($flashMessage)) {
                 </form>
             </div>
             <!-- End Register Form -->
+
+            <!-- Modal password recovery -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Recuperar senha</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" method="post">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="passwrod">Informe email de login:</label>
+                                    <input type="email" class="form-control" id="recovery_email" name="recovery_email"
+                                        placeholder="Seu Email *">
+                                </div>
+                                <p class="text-center">Você recebera um e-mail com instruções para recuperar a senha.
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary">Recuperar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- End Modal password recovery -->
         </div>
     </div>
 </main>
+<?php require_once("templates/footer.php"); ?>
 <script src="js/jquery.min.js"></script>
 <script>
-    // Bind keyup event on the input
-    $('#password').keyup(function() {
+    // Show password rules div
+    $('#password').keyup(function () {
 
         // Se o valor estiver vazio esconde
         if ($(this).val().length == 0) {
@@ -116,8 +191,8 @@ if (!empty($flashMessage)) {
         var password = document.getElementById('password');
         var confirmPassword = document.getElementById('confirmPassword');
 
-        (password.type == "password") ? password.type = "text": password.type = "password";
+        (password.type == "password") ? password.type = "text" : password.type = "password";
 
-        (confirmPassword.type == "password") ? confirmPassword.type = "text": confirmPassword.type = "password";
+        (confirmPassword.type == "password") ? confirmPassword.type = "text" : confirmPassword.type = "password";
     }
 </script>

@@ -254,6 +254,27 @@ Class UserDAO implements UserDAOInterface{
         //redireciona e apresenta a mensagem de sucesso
         $this->message->setMessage("Senha alterada com sucesso!", "success", "edit_profile.php");
 
-    }   
+    }
+    
+    public function recoveryPassword($email, $password){
+
+        $stmt = $this->conn->prepare("UPDATE users set
+            password = :password
+            WHERE email = :email
+        ");
+
+        $stmt->bindParam(":password", $password);
+        $stmt->bindParam(":email", $email);
+
+        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            echo "\nPDO::errorInfo():\n";
+            print_r($this->conn->errorInfo());
+        }else {
+            //echo "sucesso";
+        }
+
+    }  
 
 }

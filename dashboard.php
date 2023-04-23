@@ -130,7 +130,7 @@ $popupDao = new PopupDAO($conn, $BASE_URL);
     <!-- End Page Content  -->
 
 
-    TODO: <!-- Terminar lógica para sistemas de notificação por popups -->
+   <!--  TODO: Terminar lógica para sistemas de notificação por popups -->
     <!-- Popup messages  -->
     <!-- <?php if ($welcomePopup != ""): ?>
         <div class="container-popup" id="container-popup">

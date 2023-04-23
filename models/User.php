@@ -36,4 +36,5 @@ interface UserDAOInterface {
     public function findByToken($token); #irá encontrar usuário no sistema pelo token
     public function destroyToken(); // destroy a sessão através do token
     public function changePassword(User $user); #irá mudar o password
+    public function recoveryPassword($email, $password); # função para recuperar password
 }

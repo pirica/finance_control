@@ -36,14 +36,12 @@ Class MenuDAO implements MenuDAOInterface{
 
         if ($stmt->rowCount() > 0) {
 
-            
             $data = $stmt->fetchAll();
             
             foreach ($data as $item_menu){
                 // echo "entrou no for"; exit;
 
                 $menus[] = $this->buildMenu($item_menu);
-                
                 
             }
             return $menus;

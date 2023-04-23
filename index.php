@@ -151,11 +151,11 @@ if (isset($_POST["recovery_email"]) && $_POST["recovery_email"] != "") {
                         <form action="" method="post">
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label for="passwrod">Informe email de login:</label>
+                                    <label for="passwrod">Informe o e-mail de login:</label>
                                     <input type="email" class="form-control" id="recovery_email" name="recovery_email"
                                         placeholder="Seu Email *">
                                 </div>
-                                <p class="text-center">Você recebera um e-mail com instruções para recuperar a senha.
+                                <p class="text-center">Você receberá um e-mail com instruções para recuperar a senha, se necessário confira caixa de spam ou lixo eletrônico.
                                 </p>
                             </div>
                             <div class="modal-footer">

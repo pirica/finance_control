@@ -9,7 +9,7 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require 'vendor/autoload.php';
 
-function send_email($to, $password) {
+function send_email($to,$name, $password) {
 
     $mail = new PHPMailer(true);
 
@@ -48,8 +48,8 @@ function send_email($to, $password) {
       <br> 
       <div style="margin: 30px">
       <h3>
-        	  Ola siga as instruções abaixo para recuperar sua senha. 
-               Entre com o mesmo endereço de e-mail e a senha: <span style="color: red">'.$password.' </span>
+        	  Ola <span style="color: red">'.utf8_decode($name).'</span> siga as instruções abaixo para recuperar sua senha. 
+               Entre com o mesmo endereço de e-mail e a senha a seguir: <span style="color: red">'.$password.' </span>
             <br>
             faça login utilizando a senha informada, depois vá em editar perfil e coloque uma nova senha.
             <br>
@@ -61,7 +61,7 @@ function send_email($to, $password) {
       //Content
       $mail->isHTML(true); //Set email format to HTML
       $mail->msgHTML($body);
-      $mail->Subject = utf8_decode('Recuperação de senha');
+      $mail->Subject = utf8_decode('Recuperação de senha de '.$name);
 
       $mail->Body = $body;
       //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';

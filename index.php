@@ -21,12 +21,17 @@ if (isset($_POST["recovery_email"]) && $_POST["recovery_email"] != "") {
     $password = str_shuffle("Finance_Control$97Br");
     $final_password = password_hash($password, PASSWORD_DEFAULT);
 
-
+    // checa se o e-mail existe no BD
     if ($userDao->findByEmail($to)) {
+        // Builda para pegar nome do  usuário
+        $user = $userDao->findByEmail($to);
+        $name = $user->name;
 
+        // Cria uma nova senha temporária
         $userDao->recoveryPassword($to, $final_password);
-            //echo "senha alterada";
-        send_email($to, $password);
+        // Envia um e-mail com instruções
+        send_email($to, $name, $password);
+
         $message->setMessage("Sucesso, confira seu e-mail!", "success", "index.php");
         
     } else {
@@ -148,7 +153,7 @@ if (isset($_POST["recovery_email"]) && $_POST["recovery_email"] != "") {
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="" method="post">
+                        <form action="" method="post" id="demo-form">
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="passwrod">Informe o e-mail de login:</label>
@@ -160,7 +165,9 @@ if (isset($_POST["recovery_email"]) && $_POST["recovery_email"] != "") {
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                                <button type="submit" class="btn btn-primary">Recuperar</button>
+                                <button type="submit" class="btn btn-primary g-recaptcha" data-sitekey="6LerVrQlAAAAAGTqG_0Ir32eNErvWsVHEjKp5rjs"
+                                data-callback="onSubmit"
+                                data-action="submit">Recuperar</button>
                             </div>
                         </form>
                     </div>
@@ -172,6 +179,7 @@ if (isset($_POST["recovery_email"]) && $_POST["recovery_email"] != "") {
 </main>
 <?php require_once("templates/footer.php"); ?>
 <script src="js/jquery.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <script>
     // Show password rules div
     $('#password').keyup(function () {
@@ -194,5 +202,10 @@ if (isset($_POST["recovery_email"]) && $_POST["recovery_email"] != "") {
         (password.type == "password") ? password.type = "text" : password.type = "password";
 
         (confirmPassword.type == "password") ? confirmPassword.type = "text" : confirmPassword.type = "password";
+    }
+
+    //recaptcha
+    function onSubmit(token) {
+     document.getElementById("demo-form").submit();
     }
 </script>

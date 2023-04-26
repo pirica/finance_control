@@ -101,7 +101,7 @@ $getEntryReports = $financialMovimentDao->getReports($sql, 1, $userData->id);
 
     <!-- table div thats receive all entrys without customize inputs parameters  -->
     <div class="table_report" id="table_report_entry">
-        <table class="table">
+        <table class="table table-hover table-striped">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Id</th>

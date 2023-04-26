@@ -38,9 +38,9 @@ function send_email($to,$name, $password) {
         <div style="display: flex">
           <th scope="col">
          
-          <img width="30%" src="https://github.com/bywilliams/finance_control/blob/main/assets/finance_logo.png?raw=true"></img>
+          <img width="20%" src="https://github.com/bywilliams/finance_control/blob/main/assets/finance_logo.png?raw=true"></img>
           </th>
-          <th scope="col" style="font-size: 2rem;">Finance Control <br> Seu dinheiro seguro!</th>
+          <th scope="col" style="font-size: 1.5rem;">Finance Control <br> Seu dinheiro seguro!</th>
         </div>
       </tr>
       </thead>    
@@ -48,13 +48,14 @@ function send_email($to,$name, $password) {
       <br> 
       <div style="margin: 30px">
       <h3>
-        	  Ola <span style="color: red">'.utf8_decode($name).'</span> siga as instruções abaixo para recuperar sua senha. 
-               Entre com o mesmo endereço de e-mail e a senha a seguir: <span style="color: red">'.$password.' </span>
+        	  Ola <span style="color: red">'.utf8_decode($name).'</span> siga as instruções abaixo para recuperar sua senha. </h3><br>
+            <p>   Entre com o mesmo endereço de e-mail e a senha a seguir: <span style="color: red">'.$password.' </span>
             <br>
-            faça login utilizando a senha informada, depois vá em editar perfil e coloque uma nova senha.
+            Faça login utilizando a senha informada, depois vá em editar perfil e coloque uma nova senha.
             <br>
-            Qualquer dúvida envie um e-mail para financecontrol997@gmail.com e iremos te ajudar!       
-      </h3>
+            Qualquer dúvida envie um e-mail para financecontrol997@gmail.com e iremos te ajudar!  <br>
+            Equipe Finance Control    
+            </p>
       </div>
       ';
 

@@ -108,7 +108,7 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
 
     <!-- table div thats receive all expenses without customize inputs parameters  -->
     <div class="table_report" id="table_report_exit">
-        <table class="table">
+        <table class="table table-hover table-striped">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Id</th>

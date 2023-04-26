@@ -2,6 +2,7 @@
 require_once("templates/header_iframe.php");
 require_once("dao/FinancialMovimentDAO.php");
 require_once("dao/CategorysDAO.php");
+include_once("utils/hg_finance_api.php");
 
 $financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
 $categorysDao = new CategorysDAO($conn);
@@ -154,7 +155,8 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
             </div>
 
         </div>
-
+       
+        <p id="cotation"><span class="text-info">Dolar -></span> R$ <?= $dollar ?> &nbsp;|&nbsp; <span class="text-info">Euro-></span> R$ <?= $euro ?> &nbsp;|&nbsp; <span class="text-info">Bitcoin-></span> R$ <?= $btc ?> &nbsp;|&nbsp; <span class="text-info"> Ibovespa-> </span> <?= $ibovespa ?> </p>
         <div class="actions p-5 mb-4 bg-light rounded-3 shadow-sm">
             <form action="<?= $BASE_URL ?>moviment_process.php" method="post">
                 <input type="hidden" name="type" value="create_finance_moviment">

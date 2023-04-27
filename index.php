@@ -1,7 +1,8 @@
 <?php
 require_once("globals.php");
 require_once("templates/header.php");
-require_once("utils/email_send.php");
+// COnfigure as informações de smtp de sua preferência
+require_once("utils/email_send_default.php");
 require_once("models/Message.php");
 require_once("connection/conn.php");
 require_once("dao/UserDAO.php");

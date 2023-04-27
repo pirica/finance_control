@@ -8,5 +8,4 @@ if ($userDao) {
     $userDao->destroyToken();
 }
 
-echo "<script>reload()
-</script>";
+echo "<script>window.top.location.href = 'index.php';</script>";

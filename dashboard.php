@@ -7,7 +7,6 @@ require_once("dao/MenuDAO.php");
 require_once("dao/FinancialMovimentDAO.php");
 require_once("dao/PopupDAO.php");
 
-
 $financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
 
 $user = new User();

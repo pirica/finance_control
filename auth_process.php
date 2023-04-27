@@ -84,6 +84,7 @@ if ($type === "register") {
     // Tenta atenticas usuário
     if ($userDao->authenticatorUser($email, $password)) {
         $_SESSION['email_login'] = "";
+        //$_SESSION['last_login'] = time();
 
         // Dá as boas vindas para o usuário que efetuou o login
         $message->setMessage("Seja bem-vindo!", "success", "dashboard.php");

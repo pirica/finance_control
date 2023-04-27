@@ -19,15 +19,15 @@ function send_email($to,$name, $password) {
       $mail->isSMTP(); 
       $mail->Host = 'smtp.gmail.com';
       $mail->SMTPAuth = true; 
-      $mail->Username = 'your_email@mail.com'; 
-      $mail->Password = 'your_passwrod_or_key'; //SMTP password
+      $mail->Username = 'youraccount@gmail.com'; 
+      $mail->Password = 'your_gmail_app_key'; //SMTP password
       $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; //Enable implicit TLS encryption
       $mail->Port = 465; //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
       //Recipients
-      $mail->setFrom('your_email@mail.com', 'Finance Control');
+      $mail->setFrom('youraccount@gmail.com', 'Finance Control');
       $mail->addAddress($to); //Add a recipient
-      $mail->addCC('emailcopy@mail.com');
+      $mail->addCC('willian.seu@gmail.com'); // Copy
       
       $mail->addReplyTo('noreply@gmail.com', 'Robot');
 

@@ -1,7 +1,7 @@
 <?php
 
 // Desloga usuário por inatividade de 15 minutos caso renova automáticamente 
-if ((time() - $_SESSION['last_login']) > 60) {
+if ((time() - $_SESSION['last_login']) > 900) {
     // Destrói a sessão atual
     session_unset();
     session_destroy();

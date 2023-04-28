@@ -1,4 +1,10 @@
-<?php require_once("templates/header_iframe.php"); ?>
+<?php
+require_once("templates/header_iframe.php");
+$_SESSION['name_card'] = "";
+$_SESSION['card_number'] = "";
+$_SESSION['expired_card'] = "";
+$_SESSION['limit_value'] = "";
+?>
 
 <div class="container-fluid">
     <h1 class="text-center my-5 text-secondary">Adicionar Cartão de Crédito</h1>

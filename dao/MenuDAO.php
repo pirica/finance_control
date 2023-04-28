@@ -30,7 +30,7 @@ Class MenuDAO implements MenuDAOInterface{
     public function findMenu() {
         $menus = [];
 
-        $stmt = $this->conn->query("SELECT idmenu, class_icon, sub_menu, url, menu_name FROM menu WHERE menu_name IS NOT NULL AND show_item = 'S' ORDER BY idmenu");        
+        $stmt = $this->conn->query("SELECT * FROM menu WHERE menu_name IS NOT NULL AND show_item = 'S' ORDER BY idmenu");        
         $stmt->execute();
        
 
@@ -53,7 +53,7 @@ Class MenuDAO implements MenuDAOInterface{
     public function findSubMenu(int $id) {
         $subMenus = [];
         //SELECT id_submenu, main_menu_id, class_icon_submenu, url_submenu, submenu_name FROM menu WHERE submenu_name IS NOT NULL;
-        $stmt = $this->conn->query("SELECT id_submenu, main_menu_id, class_icon_submenu, url_submenu, submenu_name FROM menu WHERE main_menu_id = $id");
+        $stmt = $this->conn->query("SELECT * FROM menu WHERE main_menu_id = $id");
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {

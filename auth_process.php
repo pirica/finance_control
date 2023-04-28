@@ -55,6 +55,7 @@ if ($type === "register") {
                     $_SESSION['lastname'] = "";
                     $_SESSION['password'] = "";
                     $_SESSION['confirmPassword'] = "";
+                     $_SESSION['last_login'] = time();
 
                     // criação e login automático
                     $userDao->create($user, $auth);                     

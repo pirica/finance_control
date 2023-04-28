@@ -8,11 +8,6 @@
 -- versão do PHP: 8.2.0
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
 -- Banco de dados: `finance_db`
 --
@@ -20,11 +15,29 @@
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `lastname` varchar(100)  DEFAULT NULL,
+  `email` varchar(200)  DEFAULT NULL,
+  `password` varchar(200)  DEFAULT NULL,
+  `image` varchar(200)  DEFAULT NULL,
+  `token` varchar(200)  DEFAULT NULL,
+  `bio` text  DEFAULT NULL,
+  `register_date` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+
+--
 -- Estrutura da tabela `cards`
 --
 
 CREATE TABLE `cards` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
   `card_holder` varchar(100) DEFAULT NULL,
   `card_number` varchar(19) DEFAULT NULL,
   `flag_card` varchar(50) DEFAULT NULL,
@@ -32,7 +45,8 @@ CREATE TABLE `cards` (
   `dt_expired` datetime DEFAULT NULL,
   `limit_value` int(11) DEFAULT NULL,
   `available_limit` float DEFAULT NULL,
-  `users_id` int(11) UNSIGNED NOT NULL
+  `users_id` int(11) UNSIGNED NOT NULL,
+  FOREIGN KEY (users_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 
@@ -72,7 +86,7 @@ INSERT INTO `finance_categorys` (`id`, `category_type`, `category_name`) VALUES
 --
 
 CREATE TABLE `menu` (
-  `idmenu` int(11) NOT NULL,
+  `idmenu` int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
   `class_icon` varchar(50) DEFAULT NULL,
   `url` varchar(50) DEFAULT NULL,
   `sub_menu` char(1) DEFAULT NULL,
@@ -83,7 +97,7 @@ CREATE TABLE `menu` (
   `class_icon_submenu` varchar(50) DEFAULT NULL,
   `url_submenu` varchar(50) DEFAULT NULL,
   `submenu_name` varchar(50) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Extraindo dados da tabela `menu`
@@ -112,7 +126,7 @@ INSERT INTO `menu` (`idmenu`, `class_icon`, `url`, `sub_menu`, `menu_name`, `sho
 --
 
 CREATE TABLE `popup` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
   `title` varchar(200) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
@@ -134,22 +148,16 @@ INSERT INTO `popup` (`id`, `title`, `description`, `image`, `created_at`, `date_
 --
 
 CREATE TABLE `popup_users` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
   `id_welcome_popup` int(11) DEFAULT NULL,
   `show_welcome_popup` char(1) DEFAULT NULL,
   `welcome_status` char(1) DEFAULT NULL,
   `id_info_popup` int(11) DEFAULT NULL,
   `show_info_popup` char(1) DEFAULT NULL,
   `info_status` char(1) DEFAULT NULL,
-  `users_id` int(11) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Extraindo dados da tabela `popup_users`
---
-
-INSERT INTO `popup_users` (`id`, `id_welcome_popup`, `show_welcome_popup`, `welcome_status`, `id_info_popup`, `show_info_popup`, `info_status`, `users_id`) VALUES
-(1, 1, 'S', NULL, NULL, NULL, NULL, 13);
+  `users_id` int(11) UNSIGNED NOT NULL,
+  FOREIGN KEY (users_id) REFERENCES users(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -158,7 +166,7 @@ INSERT INTO `popup_users` (`id`, `id_welcome_popup`, `show_welcome_popup`, `welc
 --
 
 CREATE TABLE `tb_finances` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
   `description` varchar(200) DEFAULT NULL,
   `obs` longtext DEFAULT NULL,
   `value` int(11) DEFAULT NULL,
@@ -167,30 +175,9 @@ CREATE TABLE `tb_finances` (
   `category` int(11) DEFAULT NULL,
   `create_at` datetime DEFAULT NULL,
   `update_at` datetime DEFAULT NULL,
-  `users_id` int(11) UNSIGNED DEFAULT NULL
+  `users_id` int(11) UNSIGNED DEFAULT NULL,
+  FOREIGN KEY (users_id) REFERENCES users(id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--
 -- --------------------------------------------------------
 
---
--- Estrutura da tabela `users`
---
-
-CREATE TABLE `users` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `name` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `lastname` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `email` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `password` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `image` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `token` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `bio` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `register_date` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
-
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

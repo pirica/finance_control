@@ -17,9 +17,5 @@ $dollar = number_format( $newsData->results->currencies->USD->buy, 2, ',', '.');
 $euro = number_format($newsData->results->currencies->EUR->buy, 2, ",", '.');
 $btc = number_format($newsData->results->currencies->BTC->buy, 2, ",", ".");
 $ibovespa = $newsData->results->stocks->IBOVESPA->points;
-$taxa_selic = $newsData->results->taxes->selic;
-
-
-echo $taxa_selic;
 
 ?>

@@ -7,10 +7,6 @@
 -- Versão do servidor: 10.4.27-MariaDB
 -- versão do PHP: 8.2.0
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -39,14 +35,6 @@ CREATE TABLE `cards` (
   `users_id` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- Extraindo dados da tabela `cards`
---
-
-INSERT INTO `cards` (`id`, `card_holder`, `card_number`, `flag_card`, `flag_icon`, `dt_expired`, `limit_value`, `available_limit`, `users_id`) VALUES
-(20, 'William Silva Sebastiao', '4628 9472 8974 2893', 'visa', 'visa-icon', '2023-10-10 23:59:59', 3000, NULL, 13);
-
--- --------------------------------------------------------
 
 --
 -- Estrutura da tabela `finance_categorys`
@@ -201,118 +189,7 @@ CREATE TABLE `users` (
   `register_date` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
 
--- Índices para tabelas despejadas
---
-
---
--- Índices para tabela `cards`
---
-ALTER TABLE `cards`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `users_id` (`users_id`);
-
---
--- Índices para tabela `finance_categorys`
---
-ALTER TABLE `finance_categorys`
-  ADD PRIMARY KEY (`id`);
-
---
--- Índices para tabela `menu`
---
-ALTER TABLE `menu`
-  ADD PRIMARY KEY (`idmenu`);
-
---
--- Índices para tabela `popup`
---
-ALTER TABLE `popup`
-  ADD PRIMARY KEY (`id`);
-
---
--- Índices para tabela `popup_users`
---
-ALTER TABLE `popup_users`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `users_id` (`users_id`);
-
---
--- Índices para tabela `tb_finances`
---
-ALTER TABLE `tb_finances`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `users_id` (`users_id`);
-
---
--- Índices para tabela `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT de tabelas despejadas
---
-
---
--- AUTO_INCREMENT de tabela `cards`
---
-ALTER TABLE `cards`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
---
--- AUTO_INCREMENT de tabela `finance_categorys`
---
-ALTER TABLE `finance_categorys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT de tabela `menu`
---
-ALTER TABLE `menu`
-  MODIFY `idmenu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
--- AUTO_INCREMENT de tabela `popup`
---
-ALTER TABLE `popup`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de tabela `popup_users`
---
-ALTER TABLE `popup_users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de tabela `tb_finances`
---
-ALTER TABLE `tb_finances`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=257;
-
---
--- AUTO_INCREMENT de tabela `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
--- Restrições para despejos de tabelas
---
-
---
--- Limitadores para a tabela `cards`
---
-ALTER TABLE `cards`
-  ADD CONSTRAINT `cards_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`);
-
---
--- Limitadores para a tabela `popup_users`
---
-ALTER TABLE `popup_users`
-  ADD CONSTRAINT `popup_users_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`);
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

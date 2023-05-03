@@ -205,11 +205,11 @@
             return $financialMoviments;
         }
 
-        public function getAllOutFinancialMoviment($id) {
+        public function getAllOutFinancialMoviment($id, $resultsPerPage, $offset) {
             
             $outFinancialMoviments = [];
 
-            $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE type = 2 AND category IS NOT NULL AND users_id = $id ORDER BY value DESC");
+            $stmt = $this->conn->query("SELECT id, description, obs, value, expense, type, category, create_at, update_at, users_id FROM tb_finances WHERE users_id = $id AND type = 2 AND category IS NOT NULL ORDER BY id DESC LIMIT $resultsPerPage OFFSET $offset;");
 
             $stmt->execute();
 
@@ -226,10 +226,10 @@
             return $outFinancialMoviments;
         }
 
-        public function getAllEntryFinancialMoviment($id) {
+        public function getAllEntryFinancialMoviment($id, $resultsPerPage = "", $offset = "") {
             $entryFinancialMoviments = [];
 
-            $stmt = $this->conn->query("SELECT * FROM tb_finances WHERE type = 1 AND category IS NOT NULL AND users_id = $id ORDER BY value DESC");
+            $stmt = $this->conn->query("SELECT id, description, obs, value, expense, type, category, create_at, update_at, users_id FROM tb_finances WHERE users_id = $id AND type = 1 AND category IS NOT NULL ORDER BY id DESC LIMIT $resultsPerPage OFFSET $offset;");
 
             $stmt->execute();
 
@@ -296,6 +296,27 @@
         }
 
         public function getReports($sql, $type, $id) {
+
+            $reportEntryData = [];
+
+            $stmt = $this->conn->query("SELECT id, description, obs, value, expense, type, category, create_at, update_at, users_id FROM tb_finances WHERE users_id = $id AND type = $type AND category IS NOT NULL $sql ORDER BY value DESC");
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+
+                $data = $stmt->fetchAll();
+
+                foreach($data as $reportItem) {
+                    $reportEntryData[] = $this->buildFinancialMoviment($reportItem);
+                }
+
+            }
+
+            return $reportEntryData;
+
+        }
+
+        public function getAllEntryReports($sql, $type, $id) {
 
             $reportEntryData = [];
 

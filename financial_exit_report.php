@@ -9,13 +9,26 @@ $categorysDao = new CategorysDAO($conn);
 // Traz todas as categorias disponiveis para despesas
 $exit_categorys = $categorysDao->getAllExitCategorys();
 
-// Traz total de saídas do usuário
-$outFinancialMoviments = $financialMovimentDao->getAllOutFinancialMoviment($userData->id);
-$total_out_value = 0;
-
 // Traz o array com os dados de saída da query personalizada 
 $sql = "";
 $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
+
+// paginação do relatório
+$totalRegistros = count($getOutReports);
+
+$resultsPerPage = 10;
+$numberPages = ceil($totalRegistros / $resultsPerPage);
+// Pega numero da página atual
+$page = isset($_GET["page"]) ? $_GET["page"] : 1;
+// calcula o indice do primeiro registro da página atual
+$offset = ($page - 1) * $resultsPerPage;
+
+// Traz total de saídas do usuário
+$outFinancialMoviments = $financialMovimentDao->getAllOutFinancialMoviment($userData->id, $resultsPerPage, $offset);
+$total_out_value = 0;
+
+
+
 ?>
 
 <style>
@@ -161,6 +174,18 @@ $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
                 </tr>
             </tfoot>
         </table>
+        <nav aria-label="...">
+            <ul class="pagination pagination-lg">
+                <?php for ($i = 1; $i <= $numberPages; $i++): ?>
+                    <?php $active = ($i == $page) ? "active" : ""; ?>
+
+                    <li class="page-item <?=$active?>">
+                        <a class="page-link" href="<?= $BASE_URL ?>financial_exit_report.php?page=<?= $i ?>" tabindex="-1"><?= $i ?></a>
+                    </li>
+
+                <?php endfor ?>
+            </ul>
+        </nav>
     </div>
     <!-- table div thats receive all expenses without customize inputs parameters  -->
 

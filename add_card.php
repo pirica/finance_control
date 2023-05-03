@@ -111,7 +111,7 @@ $_SESSION['limit_value'] = "";
             $("#card_number").html(account);
             $("#card_name").html(card_name);
 
-            // TODO: americam 34 e 37 diners 36 e 38
+            // TODO: <!-- americam 34 e 37 diners 36 e 38 -->
             if(flag_number == 34 || flag_number == 37) {
                 $("#card-credit-bg").removeClass("master-card visa diners");
                 $("#flag_icon").removeClass("master-card-icon visa-icon diners-icon");

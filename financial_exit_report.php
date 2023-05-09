@@ -9,21 +9,22 @@ $categorysDao = new CategorysDAO($conn);
 // Traz todas as categorias disponiveis para despesas
 $exit_categorys = $categorysDao->getAllExitCategorys();
 
-// Traz o array com os dados de saída da query personalizada 
+// Traz os registros de saída da query personalizada 
 $sql = "";
 $getOutReports = $financialMovimentDao->getReports($sql, 2, $userData->id);
 
-// paginação do relatório
+/* paginação do relatório  */
 $totalRegistros = count($getOutReports);
 
 $resultsPerPage = 10;
 $numberPages = ceil($totalRegistros / $resultsPerPage);
+
 // Pega numero da página atual
 $page = isset($_GET["page"]) ? $_GET["page"] : 1;
 // calcula o indice do primeiro registro da página atual
 $offset = ($page - 1) * $resultsPerPage;
 
-// Traz total de saídas do usuário
+// Traz total de saídas do usuário default ou com paginação
 $outFinancialMoviments = $financialMovimentDao->getAllOutFinancialMoviment($userData->id, $resultsPerPage, $offset);
 $total_out_value = 0;
 
@@ -174,18 +175,22 @@ $total_out_value = 0;
                 </tr>
             </tfoot>
         </table>
-        <nav aria-label="...">
-            <ul class="pagination pagination-lg">
-                <?php for ($i = 1; $i <= $numberPages; $i++): ?>
-                    <?php $active = ($i == $page) ? "active" : ""; ?>
+        <!-- Pagination buttons -->
+        <div class="row justify-content-center">
+            <nav aria-label="...">
+                <ul class="pagination pagination-lg">
+                    <?php for ($i = 1; $i <= $numberPages; $i++): ?>
+                        <?php $active = ($i == $page) ? "active-pagination" : ""; ?>
 
-                    <li class="page-item <?=$active?>">
-                        <a class="page-link" href="<?= $BASE_URL ?>financial_exit_report.php?page=<?= $i ?>" tabindex="-1"><?= $i ?></a>
-                    </li>
+                        <li class="page-item <?=$active?>">
+                            <a class="page-link" href="<?= $BASE_URL ?>financial_exit_report.php?page=<?= $i ?>" tabindex="-1"><?= $i ?></a>
+                        </li>
 
-                <?php endfor ?>
-            </ul>
-        </nav>
+                    <?php endfor ?>
+                </ul>
+            </nav>
+        </div>
+         <!-- End pagination buttons -->
     </div>
     <!-- table div thats receive all expenses without customize inputs parameters  -->
 

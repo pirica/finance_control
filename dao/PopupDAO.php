@@ -48,17 +48,18 @@ require_once("models/Message.php");
         public function updateWelcomePopupUser($users_id) {
 
             $stmt = $this->conn->prepare("UPDATE popup_users SET 
-            show_welcome_popup = :show_welcome_popup, 
-            welcome_status = :welcome_status 
+            show_welcome_popup = 'N', 
+            welcome_status = 'S' 
             WHERE users_id = :id
             ");
 
-            $stmt->bindParam(":show_welcome_popup", "N");
-            $stmt->bindParam(":welcome_status", "S");
             $stmt->bindParam(":id", $users_id);
 
+
             if($stmt->execute()) {
-                $this->message->setMessage("sucesso", "success", "back");
+                $this->message->setMessage("Seja bem vindo", "success", "back");
+            }else {
+                echo "error";
             }
 
         }

@@ -100,8 +100,7 @@ if (!empty($sql)) {
             <td colspan="8"> <strong> Total: R$</strong> '.number_format($total, 2, ',', '.').'</td>
         </tr>
         </tfoot>
-    </table>    
-    ';
+    </table>';
     }else {
         echo "Nenhum registro encontrado, tente novamente";
     }

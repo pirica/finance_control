@@ -192,19 +192,22 @@ $total_entry_value = 0;
                 </tr>
             </tfoot>
         </table>
-        <nav aria-label="...">
-            <ul class="pagination pagination-lg">
-                <?php for ($i = 1; $i <= $numberPages; $i++):
-                    $active = ($i == $page) ? "active" : ""; ?>
-                    <!-- <a href='<?= $BASE_URL ?>financial_entry_report.php?page=<?= $i ?>' class='$active'><?= $i ?></a> -->
+        <!-- Pagination buttons -->
+        <div class="row justify-content-center">
+            <nav aria-label="..." >
+                <ul class="pagination pagination-lg">
+                    <?php for ($i = 1; $i <= $numberPages; $i++): ?>
+                       <?php $active = ($i == $page) ? "active-pagination" : ""; ?>
 
-                    <li class="page-item <?=$active?>">
-                        <a class="page-link" href="<?= $BASE_URL ?>financial_entry_report.php?page=<?= $i ?>" tabindex="-1"><?= $i ?></a>
-                    </li>
+                        <li class="page-item <?=$active?>">
+                            <a class="page-link" href="<?= $BASE_URL ?>financial_entry_report.php?page=<?= $i ?>" tabindex="-1"><?= $i ?></a>
+                        </li>
 
-                <?php endfor ?>
-            </ul>
-        </nav>
+                    <?php endfor ?>
+                </ul>
+            </nav>
+        </div>
+        <!-- End pagination buttons -->
     </div>
 
 

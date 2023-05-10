@@ -8,7 +8,7 @@
                 <h1 class="text-white text-center">Área administrativa</h1>
                     <img class="" src="<?= $BASE_URL ?>../assets/finance_logo.png" alt="">
                     
-                    <form>
+                    <form action="<?=$BASE_URL?>/admin.php" method="post">
                         <div class="form-group">
                             <label for="exampleInputEmail1">E-mail</label>
                             <input type="email" class="form-control" id="email" placeholder="e-mail:">
@@ -27,3 +27,4 @@
     </main>
 
 </body>
+<html>

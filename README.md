@@ -31,6 +31,10 @@ Agora será mostrado como está o projeto no momento.
 ![finance control](assets/finance-control.jpg)
 &nbsp;
 
+### Área Administrativa
+![finance control](assets/admin.png)
+&nbsp;
+
 ### Instalação
 - Clone este repositorio atráves do terminal, VS Code 
 

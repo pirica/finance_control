@@ -36,7 +36,10 @@ Agora será mostrado como está o projeto no momento.
 &nbsp;
 
 ### Instalação
-- Clone este repositorio atráves do terminal, VS Code 
+- Clone este repositorio atráves do terminal, VS Code
+
+### Deploy do projeto
+###### Quer testar está aplicação? acesse o link https://financecontrol.epizy.com faça um cadastro simples, nenhuma informação pessoal é requisitada e os seus dados são cryptografados. 
 
 ## Autor
 

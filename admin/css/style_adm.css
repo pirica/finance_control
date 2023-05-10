@@ -1,0 +1,19 @@
+body{
+    background-color: #394867;
+}
+
+main {
+    padding: 10% 0;
+}
+
+.container {
+    padding: 5% 18%;
+    background-color: #282726;
+}
+
+.container img{
+    margin: 0 auto;
+    display: block;
+    max-width: 30%;
+    height: auto;
+}

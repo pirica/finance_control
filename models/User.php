@@ -31,7 +31,9 @@ interface UserDAOInterface {
     public function verifyToken($protected = false); # irá verificar usuário
     public function setTokenSession($token, $redirect = true); # irá fazer o login
     public function authenticatorUser($email, $password); #junto com setTokenSession irá efetuar autenticação
+    public function authenticatorUserAdmin($email, $password); #junto com setTokenSession irá efetuar autenticação no admin
     public function findByEmail($email); #irá encontrar usuário por email
+    public function findAdminUser($email); #irá encontrar usuário admin
     public function findById($id); #irá encontrar usuário pelo ID
     public function findByToken($token); #irá encontrar usuário no sistema pelo token
     public function destroyToken(); // destroy a sessão através do token

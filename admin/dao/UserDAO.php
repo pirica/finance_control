@@ -1,9 +1,9 @@
 <?php 
-require_once("globals.php");
-require_once("models/User.php");
+require_once("../globals.php");
+require_once("models/UserAdmin.php");
 require_once("models/Message.php");
 
-Class UserDAO implements UserDAOInterface{
+Class UserDAO implements UserDAOAdminInterface{
 
     private $conn;
     private $url;
@@ -18,7 +18,7 @@ Class UserDAO implements UserDAOInterface{
     // constrói o objeto usuário
     public function buildUser($data){
 
-        $user = new User();
+        $user = new UserAdmin();
 
         $user->id = $data['id'];
         $user->name = $data['name'];
@@ -30,32 +30,9 @@ Class UserDAO implements UserDAOInterface{
         $user->bio = $data['bio'];
 
         return $user;
-
     } 
 
-    public function create(User $user, $authUser = false){
-
-        $stmt = $this->conn->prepare("INSERT INTO users (
-            name, lastname, email, password, token
-        ) VALUES (
-            :name, :lastname, :email, :password, :token
-        )");
-
-        $stmt->bindParam(":name", $user->name);
-        $stmt->bindParam(":lastname", $user->lastname);
-        $stmt->bindParam(":email", $user->email);
-        $stmt->bindParam(":password", $user->password);
-        $stmt->bindParam(":token", $user->token);
-
-        $stmt->execute();
-
-        if ($authUser) {
-            $this->setTokenSession($user->token);
-        }
-
-    }
-
-    public function update(User $user, $redirect = true){
+    public function update(UserAdmin $user, $redirect = true){
 
         $stmt = $this->conn->prepare("UPDATE users SET
             name = :name,
@@ -123,37 +100,6 @@ Class UserDAO implements UserDAOInterface{
         }
 
     } 
-    
-    public function authenticatorUser($email, $password){
-
-        $user = $this->findByEmail($email);
-
-        // Se encontrar - email no BD
-        if ($user) {
-            
-            if (password_verify($password, $user->password)) {
-                
-                // gera um novo token e insere na session
-                $token = $user->generateToken();
-
-                $this->setTokenSession($token, false);
-
-                //atualiza o token do usuário no objeto e depois no BD
-                $user->token = $token;
-
-                $this->update($user, false);
-
-                return true;
-
-            }else {
-                return false;
-            }
-
-        }else {
-            return false;
-        }
-
-    } 
 
     public function authenticatorUserAdmin($email, $password){
 
@@ -186,31 +132,6 @@ Class UserDAO implements UserDAOInterface{
 
     } 
 
-    public function findByEmail($email){
-
-        // Checa se existe valor na variável
-        if ($email != "") {
-            
-            $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = :email");
-            $stmt->bindParam(":email", $email);
-            $stmt->execute();
-
-            // verifica se a query retornou algo
-            if ($stmt->rowCount() > 0) {
-                $data = $stmt->fetch();
-                $user = $this->buildUser($data);
-
-                return $user;
-            }else {
-                return false;
-            }
-
-        }else {
-            return false;
-        }
-
-    }
-
     public function findAdminUser($email){
 
         // Checa se existe valor na variável
@@ -235,56 +156,32 @@ Class UserDAO implements UserDAOInterface{
         }
 
     }
-    
-    public function findById($id){
-
-         // Checa se existe valor na variável
-         if ($id != "") {
-            
-            $stmt = $this->conn->prepare("SELECT * FROM users WHERE id = :id");
-            $stmt->bindParam(":id", $id);
-            $stmt->execute();
-
-            // verifica se a query retornou algo
-            if ($stmt->rowCount() > 0) {
-                $data = $stmt->fetch();
-                $user = $this->buildUser($data);
-
-                return $user;
-            }else {
-                return false;
-            }
-
-        }else {
-            return false;
-        }
-
-    } 
 
     public function findByToken($token){
 
-         // Checa se existe valor na variável
-         if ($token != "") {
-            
-            $stmt = $this->conn->prepare("SELECT * FROM users WHERE token = :token");
-            $stmt->bindParam(":token", $token);
-            $stmt->execute();
+        // Checa se existe valor na variável
+        if ($token != "") {
+           
+           $stmt = $this->conn->prepare("SELECT * FROM users WHERE token = :token");
+           $stmt->bindParam(":token", $token);
+           $stmt->execute();
 
-            // verifica se a query retornou algo
-            if ($stmt->rowCount() > 0) {
-                $data = $stmt->fetch();
-                $user = $this->buildUser($data);
+           // verifica se a query retornou algo
+           if ($stmt->rowCount() > 0) {
+               $data = $stmt->fetch();
+               $user = $this->buildUser($data);
 
-                return $user;
-            }else {
-                return false;
-            }
+               return $user;
+           }else {
+               return false;
+           }
 
-        }else {
-            return false;
-        }
+       }else {
+           return false;
+       }
 
-    } 
+   } 
+
     public function destroyToken(){
 
         // Remove o tokeen da Session
@@ -294,43 +191,5 @@ Class UserDAO implements UserDAOInterface{
         $this->message->setMessage("Loggout efetuado com sucesso.", "success", "index.php");
 
     } 
-    
-    public function changePassword(User $user){
-
-        $stmt = $this->conn->prepare("UPDATE users set
-            password = :password
-            WHERE id = :id
-        ");
-
-        $stmt->bindParam(":password", $user->password);
-        $stmt->bindParam(":id", $user->id);
-
-        $stmt->execute();
-
-        //redireciona e apresenta a mensagem de sucesso
-        $this->message->setMessage("Senha alterada com sucesso!", "success", "edit_profile.php");
-
-    }
-    
-    public function recoveryPassword($email, $password){
-
-        $stmt = $this->conn->prepare("UPDATE users set
-            password = :password
-            WHERE email = :email
-        ");
-
-        $stmt->bindParam(":password", $password);
-        $stmt->bindParam(":email", $email);
-
-        $stmt->execute();
-
-        if (!$stmt->execute()) {
-            echo "\nPDO::errorInfo():\n";
-            print_r($this->conn->errorInfo());
-        }else {
-            //echo "sucesso";
-        }
-
-    }  
 
 }

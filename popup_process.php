@@ -15,11 +15,12 @@ $userData = $userDao->verifyToken();
 $no_show_popup = filter_input(INPUT_POST, "no_show_popup");
 
 
-if ($no_show_popup == "S") {
+if ($no_show_popup == 1) {
     $popupDao->updateWelcomePopupUser($userData->id);     
-}else {
+} elseif ($no_show_popup == 2) {
+    $popupDao->updateInfoPopupUser($userData->id);   
+} else  {
     $message->setMessage("", "", "back");
 }
-
 
 ?>

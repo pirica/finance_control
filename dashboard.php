@@ -54,6 +54,7 @@ if ($resultExpensePercent < 30) {
 
 $popupDao = new PopupDAO($conn, $BASE_URL);
 $welcomePopup = $popupDao->welcomePopup($userData->id);
+$infoPopup = $popupDao->infoPopup($userData->id);
 
 ?>
 
@@ -130,18 +131,14 @@ $welcomePopup = $popupDao->welcomePopup($userData->id);
 
 
     <!--  TODO: Terminar lógica para sistemas de notificação por popups -->
-    <!-- Popup messages  -->
+    <!-- Welcome Popup message  -->
     <?php if ($welcomePopup != ""): ?>
         <div class="container-popup" id="container-popup">
 
             <div class="popup text-center" id="popup-card">
                 <button class="popup-close close_popup">x</button>
-                <h2>
-                    <?= $welcomePopup->title ?>
-                </h2>
-                <p>
-                    <?= $welcomePopup->description ?>
-                </p>
+                <h2><?= $welcomePopup->title ?></h2>
+                <p><?= $welcomePopup->description ?></p>
                 <?php if ($welcomePopup->image != ""): ?>
                     <div>
                         <img class="animated-gif" src="<?= $BASE_URL ?>assets/<?= $welcomePopup->image ?>" alt="imagm popup">
@@ -149,8 +146,8 @@ $welcomePopup = $popupDao->welcomePopup($userData->id);
                 <?php endif; ?>
                 <form action="<?= $BASE_URL ?>popup_process.php" method="post">
                     <div class="form-group">
-                        <label for="no_show_again"><small> Clique abaixo para não mostrar esta mensagem novamente.</small></label>
-                        <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="S">
+                        <label for="no_show_again"><small> Marque a caixa abaixo e clique em OK <br> para não mostrar esta mensagem novamente.</small></label>
+                        <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="1">
                     </div>
                     <input type="submit" class="btn btn-lg btn-info" value="OK"></input>
                 </form>
@@ -159,6 +156,32 @@ $welcomePopup = $popupDao->welcomePopup($userData->id);
         </div>
     <?php endif; ?>
     <!-- Popup messages  -->
+
+     <!-- Info Popup message  -->
+     <?php if ($infoPopup != ""): ?>
+        <div class="container-popup" id="container-popup">
+
+            <div class="popup text-center" id="popup-card">
+                <button class="popup-close close_popup">x</button>
+                <h2><?= $infoPopup->title ?></h2>
+                <p><?= $infoPopup->description ?></p>
+                <?php if ($infoPopup->image != ""): ?>
+                    <div>
+                        <img class="animated-gif" src="<?= $BASE_URL ?>assets/home/popup/<?= $infoPopup->image ?>" alt="imagm popup">
+                    </div>
+                <?php endif; ?>
+                <form action="<?= $BASE_URL ?>popup_process.php" method="post">
+                    <div class="form-group">
+                        <label for="no_show_again"><small> Marque a caixa abaixo e clique em OK <br> para não mostrar esta mensagem novamente.</small></label>
+                        <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="2">
+                    </div>
+                    <input type="submit" class="btn btn-lg btn-info" value="OK"></input>
+                </form>
+            </div>
+
+        </div>
+    <?php endif; ?>
+    <!-- End Info Popup  -->
 
 </div>
 

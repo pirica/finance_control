@@ -28,6 +28,7 @@ Class UserDAO implements UserDAOAdminInterface{
         $user->image = $data['image'];
         $user->token = $data['token'];
         $user->bio = $data['bio'];
+        $user->register_date = $data['register_date'];
 
         return $user;
     } 

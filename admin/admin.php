@@ -3,11 +3,12 @@
 
 <div id="mySidebar" class="sidebar shadow">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-  <a href="dashboard-main.php" target="myAdmFrame"> Início </a>
+  <a href="dashboard-main.php" target="myAdmFrame"><i class="fa-solid fa-house"></i> Início </a>
   <a href="users.php" target="myAdmFrame"><i class="fa-solid fa-user-group"></i> Usuários</a>
+  <a href="#" target="myAdmFrame"><i class="fa-brands fa-elementor"></i> Menus</a>
   <a href="#" target="myAdmFrame"><i class="fa-solid fa-comments"></i> Popups</a>
   <a href="#" target="myAdmFrame"><i class="fa-solid fa-circle-exclamation"></i> Notificações Users</a>
-  <a href="#" target="myAdmFrame"><i class="fa-solid fa-square-poll-vertical"></i> Finanças Rank</a>
+  <a href="#" target="myAdmFrame"><i class="fa-solid fa-square-poll-vertical"></i> Rank Finanças</a>
   <a href="<?= $BASE_URL ?>logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
 </div>
 

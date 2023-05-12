@@ -9,6 +9,7 @@ Class User {
     public $password;
     public $token;
     public $bio;
+    public $register_date;
 
     public function getFullName($user){
         return $user->name . " " . $user->lastname;

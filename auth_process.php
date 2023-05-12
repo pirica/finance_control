@@ -3,9 +3,11 @@ require_once("globals.php");
 require_once("connection/conn.php");
 require_once("utils/check_password.php");
 require_once("dao/UserDAO.php");
+require_once("dao/PopupDAO.php");
 require_once("models/Message.php");
 
 $userDao = new UserDAO($conn, $BASE_URL);
+$popupDao = new PopupDAO($conn, $BASE_URL);
 $message = new Message($BASE_URL);
 
 $_SESSION['email_login'] = $_POST['email_login'];
@@ -55,10 +57,14 @@ if ($type === "register") {
                     $_SESSION['lastname'] = "";
                     $_SESSION['password'] = "";
                     $_SESSION['confirmPassword'] = "";
-                     $_SESSION['last_login'] = time();
+                    $_SESSION['last_login'] = time();
 
                     // criação e login automático
-                    $userDao->create($user, $auth);                     
+                    $userDao->create($user, $auth);
+                    
+                    // Insere o usuário no sistema de popups para notificações
+                    $userData = $userDao->findByEmail($email);
+                    $popupDao->createPopup($userData->id);                     
 
                 }else {
                     // envia mensagem de erro, usuário já existe
@@ -69,7 +75,6 @@ if ($type === "register") {
                 $message->setMessage("A senha deve possuir ao menos 8 caracteres, sendo pelo menos 1 letra maiúscula, 1 minúscula, 1 número e 1 simbolo.", "error", "back");
             }
 
-            echo "as senhas são iguais <br>";
         } else {
             $message->setMessage("As senhas não são iguais.", "error", "back");
         }

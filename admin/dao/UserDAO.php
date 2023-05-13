@@ -28,6 +28,7 @@ Class UserDAO implements UserDAOAdminInterface{
         $user->image = $data['image'];
         $user->token = $data['token'];
         $user->bio = $data['bio'];
+        $user->admin = $data['admin'];
         $user->register_date = $data['register_date'];
 
         return $user;
@@ -155,6 +156,27 @@ Class UserDAO implements UserDAOAdminInterface{
         }else {
             return false;
         }
+
+    }
+
+    public function findAllUsers() {
+
+        $usersArray = [];
+        $stmt = $this->conn->query("SELECT * FROM users");
+
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            
+            $data = $stmt->fetchAll();
+
+            foreach ($data as $user){
+
+                $usersArray[] = $this->buildUser($user);
+            
+            }
+        }
+        return $usersArray;
 
     }
 

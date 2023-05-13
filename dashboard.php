@@ -146,7 +146,8 @@ $infoPopup = $popupDao->infoPopup($userData->id);
                 <?php endif; ?>
                 <form action="<?= $BASE_URL ?>popup_process.php" method="post">
                     <div class="form-group">
-                        <label for="no_show_again"><small> Marque a caixa abaixo e clique em OK <br> para não mostrar esta mensagem novamente.</small></label>
+                        <label for="no_show_again"><small> Marque a caixa abaixo e clique em OK <br> para não mostrar esta
+                                mensagem novamente.</small></label>
                         <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="1">
                     </div>
                     <input type="submit" class="btn btn-lg btn-info" value="OK"></input>
@@ -157,8 +158,8 @@ $infoPopup = $popupDao->infoPopup($userData->id);
     <?php endif; ?>
     <!-- Popup messages  -->
 
-     <!-- Info Popup message  -->
-     <?php if ($infoPopup != ""): ?>
+    <!-- Info Popup message  -->
+    <?php if ($infoPopup != ""): ?>
         <div class="container-popup" id="container-popup">
 
             <div class="popup text-center" id="popup-card">
@@ -167,12 +168,14 @@ $infoPopup = $popupDao->infoPopup($userData->id);
                 <p><?= $infoPopup->description ?></p>
                 <?php if ($infoPopup->image != ""): ?>
                     <div>
-                        <img class="animated-gif" src="<?= $BASE_URL ?>assets/home/popup/<?= $infoPopup->image ?>" alt="imagm popup">
+                        <img class="animated-gif" src="<?= $BASE_URL ?>assets/home/popup/<?= $infoPopup->image ?>"
+                            alt="imagm popup">
                     </div>
                 <?php endif; ?>
                 <form action="<?= $BASE_URL ?>popup_process.php" method="post">
                     <div class="form-group">
-                        <label for="no_show_again"><small> Marque a caixa abaixo e clique em OK <br> para não mostrar esta mensagem novamente.</small></label>
+                        <label for="no_show_again"><small> Marque a caixa abaixo e clique em OK <br> para não mostrar esta
+                                mensagem novamente.</small></label>
                         <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="2">
                     </div>
                     <input type="submit" class="btn btn-lg btn-info" value="OK"></input>

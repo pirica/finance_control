@@ -11,5 +11,6 @@ interface UserDAOAdminInterface {
     public function setTokenSession($token, $redirect = true); # irá fazer o login
     public function authenticatorUserAdmin($email, $password); #junto com setTokenSession irá efetuar autenticação no admin
     public function findAdminUser($email); #irá encontrar usuário admin
+    public function findAllUsers(); //  traz  todos os usuários
     public function destroyToken(); // destroy a sessão através do token
 }

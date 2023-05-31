@@ -22,6 +22,7 @@ require_once("models/Message.php");
             $popup = new Popup();
 
             $popup->id = $data['id'];
+            $popup->name = $data['name'];
             $popup->title = $data['title'];
             $popup->description = $data['description'];
             $popup->image = $data['image'];
@@ -31,9 +32,9 @@ require_once("models/Message.php");
             return $popup;
         }
 
-        public function welcomePopup($id) {
+        public function popup($id) {
 
-            $stmt = $this->conn->prepare("SELECT title, description, image, created_at, date_expired FROM popup INNER JOIN popup_users ON popup.id  = popup_users.id_welcome_popup WHERE popup_users.show_welcome_popup = 'S' AND popup_users.welcome_status = 'N' AND popup_users.users_id = $id");
+            $stmt = $this->conn->prepare("SELECT popup.id, popup_name, title, description, image, created_at, date_expired FROM popup INNER JOIN popup_users ON popup.id  = popup_users.popup_id WHERE popup_users.show_popup = 'S' AND popup_users.status_visualized = 'N' AND popup_users.users_id = $id");
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -45,27 +46,12 @@ require_once("models/Message.php");
             
         }
 
-        public function infoPopup($id) {
-
-            $stmt = $this->conn->prepare("SELECT title, description, image, created_at, date_expired FROM popup INNER JOIN popup_users ON popup.id  = popup_users.id_info_popup WHERE popup_users.show_info_popup = 'S' AND popup_users.info_status = 'N' AND popup_users.users_id = $id");
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                $data = $stmt->fetch();
-                $popup = $this->buildPopup($data);
-
-                return $popup;
-            }
-            
-        }
-
-
-        public function createPopup($users_id) {
+        public function createWelcomePopup($users_id) {
 
             $stmt = $this->conn->prepare("INSERT INTO popup_users (
-                id_welcome_popup, show_welcome_popup, welcome_status, users_id
+                popup_id, show_popup, status_visualized, users_id, created
             ) VALUES (
-                1, 'S', 'N', :users_id
+                1, 'S', 'N', :users_id, now()
             )");
 
             $stmt->bindParam(":users_id", $users_id);
@@ -74,38 +60,35 @@ require_once("models/Message.php");
 
         }
 
-        public function updateWelcomePopupUser($users_id) {
+        public function createInfoPopup($users_id) {
 
-            $stmt = $this->conn->prepare("UPDATE popup_users SET 
-            show_welcome_popup = 'N', 
-            welcome_status = 'S' 
-            WHERE users_id = :id
-            ");
+            $stmt = $this->conn->prepare("INSERT INTO popup_users (
+                popup_id, show_popup, status_visualized, users_id, created
+            ) VALUES (
+                2, 'N', 'N', :users_id, now()
+            )");
 
-            $stmt->bindParam(":id", $users_id);
+            $stmt->bindParam(":users_id", $users_id);
 
-
-            if($stmt->execute()) {
-                $this->message->setMessage("Seja bem vindo", "success", "back");
-            }else {
-                echo "error";
-            }
+            $stmt->execute();
 
         }
 
-        public function updateInfoPopupUser($users_id) {
+        public function updatePopupUser($popup_id, $users_id) {
 
             $stmt = $this->conn->prepare("UPDATE popup_users SET 
-            show_info_popup = 'N', 
-            info_status = 'S' 
-            WHERE users_id = :id
+            show_popup = 'N', 
+            status_visualized = 'S',
+            modified = now() 
+            WHERE popup_id = :popup_id AND users_id = :users_id 
             ");
-
-            $stmt->bindParam(":id", $users_id);
-
+            
+            $stmt->bindParam(":popup_id", $popup_id);
+            $stmt->bindParam(":users_id", $users_id);
+            
 
             if($stmt->execute()) {
-                $this->message->setMessage("Seja bem vindo", "success", "back");
+                $this->message->setMessage("", "", "back");
             }else {
                 echo "error";
             }

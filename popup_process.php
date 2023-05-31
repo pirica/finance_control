@@ -14,13 +14,9 @@ $userData = $userDao->verifyToken();
 
 $no_show_popup = filter_input(INPUT_POST, "no_show_popup");
 
-
-if ($no_show_popup == 1) {
-    $popupDao->updateWelcomePopupUser($userData->id);     
-} elseif ($no_show_popup == 2) {
-    $popupDao->updateInfoPopupUser($userData->id);   
-} else  {
-    $message->setMessage("", "", "back");
+if (!empty($no_show_popup)) {
+        $popupDao->updatePopupUser($no_show_popup, $userData->id); 
+  
 }
 
 ?>

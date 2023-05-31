@@ -1,10 +1,8 @@
-<h1>Notícias</h1>
-
-<?php 
+<?php
 $config_user = $_SERVER["HTTP_USER_AGENT"];
 
 // HG Finance API
-$url = 'https://api.hgbrasil.com/finance?format=json-&key=f43b37b9';
+$url = 'https://newsapi.org/v2/top-headlines?sources=google-news-br&apiKey=27a753fdaaab471189742fb09cac21a3';
 
 // INICIALIZANDO O CURL
 $ch = curl_init($url);
@@ -14,11 +12,10 @@ curl_setopt($ch, CURLOPT_REFERER, $url);
 $newsData = json_decode(curl_exec($ch));
 curl_close($ch);
 
-$dollar = number_format( $newsData->results->currencies->USD->buy, 2, ',', '.');
-$euro = number_format($newsData->results->currencies->EUR->buy, 2, ",", '.');
-$btc = number_format($newsData->results->currencies->BTC->buy, 2, ",", ".");
-$ibovespa = $newsData->results->stocks->IBOVESPA->points;
 
-//print_r($taxa_selic["selic"]);
+//print_r($newsData);
 
 ?>
+
+<h1>News</h1>
+<?php 

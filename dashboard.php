@@ -52,9 +52,11 @@ if ($resultExpensePercent < 30) {
     $awardColor = "text-danger";
 }
 
+// Popups
 $popupDao = new PopupDAO($conn, $BASE_URL);
-$welcomePopup = $popupDao->welcomePopup($userData->id);
-$infoPopup = $popupDao->infoPopup($userData->id);
+$popups = $popupDao->popup($userData->id);
+date_default_timezone_set('America/Sao_Paulo');
+$data_atual = date('Y-m-d H:i:s');
 
 ?>
 
@@ -132,62 +134,38 @@ $infoPopup = $popupDao->infoPopup($userData->id);
 
     <!--  TODO: Terminar lógica para sistemas de notificação por popups -->
     <!-- Welcome Popup message  -->
-    <?php if ($welcomePopup != ""): ?>
-        <div class="container-popup" id="container-popup">
+    <?php if ($popups != ""): ?>
+        <?php if($data_atual < $popups->date_expired): ?>
+            <div class="container-popup" id="container-popup">
 
-            <div class="popup text-center" id="popup-card">
-                <button class="popup-close close_popup">x</button>
-                <h2><?= $welcomePopup->title ?></h2>
-                <p><?= $welcomePopup->description ?></p>
-                <?php if ($welcomePopup->image != ""): ?>
-                    <div>
-                        <img class="animated-gif" src="<?= $BASE_URL ?>assets/<?= $welcomePopup->image ?>" alt="imagm popup">
-                    </div>
-                <?php endif; ?>
-                <form action="<?= $BASE_URL ?>popup_process.php" method="post">
-                    <div class="form-group">
-                        <label for="no_show_again"><small> Marque a caixa abaixo e clique em OK <br> para não mostrar esta
-                                mensagem novamente.</small></label>
-                        <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="1">
-                    </div>
-                    <input type="submit" class="btn btn-lg btn-info" value="OK"></input>
-                </form>
+                <div class="popup text-center" id="popup-card">
+                    <button class="popup-close close_popup">x</button>
+                    <h2><?= $popups->title ?></h2>
+                    <p><?= $popups->description ?></p>
+                    <?php if ($popups->image != ""): ?>
+                        <div>
+                            <img class="animated-gif" src="<?= $BASE_URL ?>assets/<?= $popups->image ?>" alt="imagm popup">
+                        </div>
+                    <?php endif; ?>
+                    <form action="<?= $BASE_URL ?>popup_process.php" method="post">
+                        <div class="form-group">
+                            <label for="no_show_again"><small> Marque a caixa abaixo e clique em OK <br> para não mostrar esta
+                                    mensagem novamente.</small></label>
+                            <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="<?= $popups->id ?>">
+                        </div>
+                        <input type="submit" class="btn btn-lg btn-info" id="submit" value="OK"></input>
+                    </form>
+                </div>
+
             </div>
-
-        </div>
+        <?php endif; ?>
     <?php endif; ?>
     <!-- Popup messages  -->
 
-    <!-- Info Popup message  -->
-    <?php if ($infoPopup != ""): ?>
-        <div class="container-popup" id="container-popup">
-
-            <div class="popup text-center" id="popup-card">
-                <button class="popup-close close_popup">x</button>
-                <h2><?= $infoPopup->title ?></h2>
-                <p><?= $infoPopup->description ?></p>
-                <?php if ($infoPopup->image != ""): ?>
-                    <div>
-                        <img class="animated-gif" src="<?= $BASE_URL ?>assets/home/popup/<?= $infoPopup->image ?>"
-                            alt="imagm popup">
-                    </div>
-                <?php endif; ?>
-                <form action="<?= $BASE_URL ?>popup_process.php" method="post">
-                    <div class="form-group">
-                        <label for="no_show_again"><small> Marque a caixa abaixo e clique em OK <br> para não mostrar esta
-                                mensagem novamente.</small></label>
-                        <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="2">
-                    </div>
-                    <input type="submit" class="btn btn-lg btn-info" value="OK"></input>
-                </form>
-            </div>
-
-        </div>
-    <?php endif; ?>
-    <!-- End Info Popup  -->
+   
 
 </div>
-
+<?php require_once("templates/footer.php"); ?>
 <script>
     // deixar item do menu clicado como active
     function addClass() {
@@ -203,6 +181,7 @@ $infoPopup = $popupDao->infoPopup($userData->id);
     const popupWindow = document.querySelector("#popup-card");
     const popupClose = document.querySelectorAll(".popup-close");
     const containerClose = document.getElementById("container-popup");
+    const submitButtonPopup = document.getElementById("submit");
 
     window.addEventListener("load", () => {
         popupWindow.classList.add("active");
@@ -212,10 +191,18 @@ $infoPopup = $popupDao->infoPopup($userData->id);
         close.addEventListener("click", () => {
             popupWindow.classList.remove("active");
             containerClose.style.display = "none";
-        }));
+    }));
+    
+    // submit desligado enquanto checkbox de confirmação estiver vazio
+    $('#submit').prop('disabled', true);
+    $('#no_show_popup').click(function () {
+        if ($(this).is(':checked')) {
+            $('#submit').prop('disabled', false);
+        }
+    });
     // Popup
+   
 
 
 </script>
 
-<?php require_once("templates/footer.php"); ?>

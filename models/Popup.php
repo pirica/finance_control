@@ -2,6 +2,7 @@
 
     Class Popup {
         public $id;
+        public $name;
         public $title;
         public $description;
         public $image;
@@ -13,10 +14,9 @@
     interface PopupDAOInterface {
 
         public function buildPopup($data); // controi objeto popup
-        public function welcomePopup($users_id); // traz dados popup welcome
-        public function infoPopup($users_id); // traz dados info popup
-        public function createPopup($users_id); // insere popup welcome para usuários novos
-        public function updateWelcomePopupUser($users_id); // atualiza status popup welcome para usuário 
-        public function updateInfoPopupUser($users_id); // atualiza status popup info para usuário 
+        public function popup($users_id); // traz dados popup welcome
+        public function createWelcomePopup($users_id); // insere popup welcome para usuários novos
+        public function createInfoPopup($users_id); // insere popup welcome para usuários novos
+        public function updatePopupUser($pop_id, $users_id); // atualiza status popup welcome para usuário 
 
     }

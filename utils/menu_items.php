@@ -16,8 +16,9 @@
                     <?= $menu->menu_name ?>
                 </a>
                 <ul class="collapse list-unstyled" id="<?= substr($menu->url, 1); ?>">
-                    <?php $subMenus = $menu_Dao->findSubMenu($menu->id_menu); ?>
-                    <?php foreach ($subMenus as $subMenu): ?>
+                    <?php 
+                    $subMenus = $menu_Dao->findSubMenu($menu->id_menu); 
+                    foreach ($subMenus as $subMenu): ?>
 
                         <li>
                             <a href="<?= $BASE_URL ?><?= $subMenu->url_submenu; ?>" onclick="addClass(<?= $menu->id_menu ?>)"

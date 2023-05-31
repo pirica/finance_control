@@ -64,7 +64,10 @@ if ($type === "register") {
                     
                     // Insere o usuário no sistema de popups para notificações
                     $userData = $userDao->findByEmail($email);
-                    $popupDao->createPopup($userData->id);                     
+                    // insere usuário no sistema de popup de boas vindas
+                    $popupDao->createWelcomePopup($userData->id);
+                    // insere o usuário no sistema de popup de informações
+                    $popupDao->createInfoPopup($userData->id); 
 
                 }else {
                     // envia mensagem de erro, usuário já existe

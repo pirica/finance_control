@@ -818,6 +818,53 @@ img.animated-gif {
     }
 }
 
+
+/* ---------------------------------------------------
+    REMINDERS PAGE
+----------------------------------------------------- */
+.reminder {
+    display: flex;
+    padding: 30px;
+}
+
+.card-reminder {background-color: #FFF2CC;}
+.card-reminder .card-text{
+    color: rgb(108, 108, 108);
+}
+.flex-item {
+    flex: 1;
+    margin-right: 20px;
+}
+.button{flex: 0.5 auto; margin-top: 25px;}
+.titulo {
+    flex: 1 auto;
+}
+.descricao {
+    flex: 3 auto;
+}
+
+#file, #submit {display: none;}
+.fa-camera {color: #999;}
+.fa-square-plus {color: #116D6E}
+.fa-square-plus:hover {
+    color: #0cb006;
+    cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+    .reminder {
+        display: block;
+        text-align: center;
+    }
+    .flex-item{
+        width: 100%;
+        display: block;
+        margin: 10px 0;
+    }
+}
+ /* End Reminders page */
+
+
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */

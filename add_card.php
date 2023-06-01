@@ -159,10 +159,8 @@ $_SESSION['limit_value'] = "";
                 var expired_card = $("#expired_card").val();
                 $("#expired_date").html(expired_card);
             });
-            
 
         });
-
 
         // fomata input numero do cartão
         $('#cc').inputmask({

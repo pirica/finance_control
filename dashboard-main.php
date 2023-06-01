@@ -19,10 +19,10 @@ $highValueIncome = $financialMovimentDao->getHighValueIncome($userData->id);
 // Menor receita
 $lowerValueIncome = $financialMovimentDao->getLowerValueIncome($userData->id);
 
-// Maior despese
+// Maior despesa
 $biggetsExpense = $financialMovimentDao->getBiggestExpense($userData->id);
 
-// Menor desepsa
+// Menor despesa
 $lowerExpense = $financialMovimentDao->getLowerExpense($userData->id);
 
 // Traz as última movimentações do usuário
@@ -94,6 +94,7 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                 </div>
             <?php endif; ?>
         </div>
+
         <div class="card-div mb-3 my-3 text-center">
             <div class="row">
                 <div class="col-md-3">
@@ -223,8 +224,30 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
 
             <div class="col-md-4">
                 <div class="actions mb-5 py-3 bg-light rounded-3 shadow-sm">
-                    <h4 class="text-center my-3">Meus Lembretes</h4>
-                    <p class="text-center">Em breve</p>
+                    <h4 class="text-center my-3">Meus Lembretes 
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Adicionar novo lembrete">
+                        <i class="fa-regular fa-square-plus"></i>
+                        </span>
+                    </h4>
+                    <div class="row px-3">
+                        <div class="col-md-6">
+                        <div class="card card-reminder mb-3 border-0" style="max-width: 18rem;">
+                            <div class="card-header border border-white"><small>Pagar conta de agua 10/12/1986</small></div>
+                            <div class="card-body">
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card card-reminder mb-3 border-0" style="max-width: 18rem;">
+                                <div class="card-header border border-white">Header <small>10/12/1986</small> </div>
+                                <div class="card-body">
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
 
@@ -416,6 +439,12 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
 
 
 <script>
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    
+
     $('.money').mask('000.000.000.000.000,00', {
         reverse: true
     });

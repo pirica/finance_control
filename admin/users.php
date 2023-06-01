@@ -38,7 +38,13 @@ $users = $userDao->findAllUsers();
                     <td class="align-middle"><?= $user->id ?></td>
                     <td class="align-middle"><?= $user->getFullName($user)?></td>
                     <td class="align-middle"><?= $user->email ?></td>
-                    <td class="align-middle"><?= $user->register_date?></td>
+                    <td class="align-middle">
+                        <?php if (!empty($user->register_date)): ?>
+                            <?= date("d-m-Y H:i:s", strtotime($user->register_date))?>
+                        <?php else: ?>
+                                sem informação
+                        <?php endif; ?>
+                    </td>
                 </tr>
                 <?php endforeach; ?>
                

@@ -1,6 +1,7 @@
 <?php
 require_once("templates/header_iframe.php");
 require_once("dao/FinancialMovimentDAO.php");
+require_once("dao/RemindersDAO.php");
 require_once("dao/CategorysDAO.php");
 include_once("utils/hg_finance_api.php");
 
@@ -44,7 +45,6 @@ if ($totalCashInflow != "0,00" && $totalCashOutflow != "0,00") {
     $resultExpensePercent = 0;
 }
 
-
 // Traz o balanço entre entradas e saídas do usuário
 $total_balance = $financialMovimentDao->getTotalBalance($userData->id);
 
@@ -66,16 +66,20 @@ $total_balance > 0 ? $balance_color_text = "text-success" : $balance_color_text 
 
 /*
 O bloco de códigos abaixo confere se todos os meses anteriores ao atual possuem dados de entradas e saídas
-para alimentação do gráfico, caso não tiver é feito um único registro com valor simbólico para entrar no gráffico 
+para alimentação do gráfico, caso não tiver é feito um único registro com valor simbólico para entrar no gráfico 
  */
 $current_month = date("m");
 $countDataRevenueByMonths = count($cashInflowMonthsArray);
 $countDataEpensesByMonths = count($cashOutflowMonthsArray);
 
 if ($current_month != $countDataRevenueByMonths || $current_month != $countDataEpensesByMonths) {
-
     $financialMovimentDao->checkGraphicDataMonths($userData->id);
 }
+
+// traz os últimos 4 lembretes cadastrados pelo usuário 
+$reminderDao = new RemindersDAO($conn, $BASE_URL);
+$latestReminders = $reminderDao->getLatestReminders($userData->id);
+
 
 ?>
 
@@ -160,7 +164,7 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
         <p id="cotation"><span class="text-info">Dolar -></span> R$ <?= $dollar ?> &nbsp;|&nbsp; <span class="text-info">Euro-></span> R$ <?= $euro ?> &nbsp;|&nbsp; <span class="text-info">Bitcoin-></span> R$ <?= $btc ?> &nbsp;|&nbsp; <span class="text-info"> Ibovespa-> </span> <?= $ibovespa ?> </p>
         <div class="actions p-5 mb-4 bg-light rounded-3 shadow-sm">
             <form action="<?= $BASE_URL ?>moviment_process.php" method="post">
-                <input type="hidden" name="type" value="create_finance_moviment">
+                <input type="hidden" name="type" value="create">
                 <div class="row">
                     <div class="col-md-3">
                         <h4 class="font-weight-normal">Descriçao</h4>
@@ -232,23 +236,20 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                         </span>
                     </h4>
                     <div class="row px-3">
-                        <div class="col-md-6">
-                        <div class="card card-reminder mb-3 border-0" style="max-width: 18rem;">
-                            <div class="card-header border border-white"><small> <strong>Pagar conta de agua </strong> 10/12/1986</small></div>
-                            <div class="card-body">
-                                <p class="card-text">Lembrar de pagar se não a sabesp corta e eu fico sem tomar banho.</p>
-                            </div>
-                        </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card card-reminder mb-3 border-0" style="max-width: 18rem;">
-                                <div class="card-header border border-white"><small> <strong> Pagar conta de luz </strong> 10/12/1986</small></div>
-                                <div class="card-body">
-                                    <p class="card-text">Lembrar de pagar se não a ANEEL corta e eu fico sem usar o computador kkkk.</p>
+                        <?php if(count($latestReminders) > 0): ?>
+                            <?php foreach($latestReminders as $reminder): ?>
+                            <div class="col-md-6">
+                                <div class="card card-reminder mb-3 border-0" style="max-width: 18rem;">
+                                    <div class="card-header border border-white"><small> <strong> <?= $reminder->title ?> </strong> <br> <?= $reminder->reminder_date ?></small></div>
+                                    <div class="card-body">
+                                        <p class="card-text"><?= $reminder->description ?></p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <h4>Não há lembretes cadastrados.</h4>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -343,7 +344,7 @@ if ($current_month != $countDataRevenueByMonths || $current_month != $countDataE
                             </div>
                             <div class="modal-body">
                                 <form action="<?= $BASE_URL ?>moviment_process.php?id=<?= $financialMoviment->id ?>" method="post">
-                                    <input type="hidden" name="type" value="edit_finance_moviment">
+                                    <input type="hidden" name="type" value="edit">
                                     <div class="form-group">
                                         <label for="description">Descriçao:</label>
                                         <input type="text" name="description_edit" id="" class="form-control" placeholder="Insira uma nova descrição" value="<?= $financialMoviment->description ?>">

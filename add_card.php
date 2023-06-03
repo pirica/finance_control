@@ -11,6 +11,7 @@
     <h1 class="text-center my-5 text-secondary">Adicionar Cartão de Crédito</h1>
     <div class="actions p-5 mb-4 bg-light rounded-3 shadow-sm">
         <form action="<?= $BASE_URL ?>cards_process.php" method="POST">
+            <input type="hidden" name="type" value="create">
             <!-- <input type="hidden" name="csrf_token" value="<?= $token ?>"> -->
             <div class="row">
                 <div class="col-md-3">

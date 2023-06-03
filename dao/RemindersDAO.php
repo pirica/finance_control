@@ -57,6 +57,31 @@
 
         } 
 
+        public function getLatestReminders($data) {
+
+            $latestReminders = [];
+
+            $stmt = $this->conn->prepare("SELECT 
+            id, title, description, reminder_date, users_id, created, modified 
+            FROM tb_reminders 
+            WHERE users_id = :users_id 
+            ORDER BY reminder_date DESC LIMIT 4");
+            $stmt->bindParam(":users_id", $data);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+
+                $data = $stmt->fetchAll();
+
+                foreach($data as $reminder) {
+                    $latestReminders[] = $this->buildReminder($reminder);
+                }
+                
+            }
+
+            return $latestReminders;
+
+        }
+
         public function createReminder(Reminders $reminder){
 
             $stmt = $this->conn->prepare("INSERT INTO 
@@ -81,12 +106,14 @@
                                         description = :description,
                                         reminder_date = :reminder_date,
                                         modified = NOW()
-                                        WHERE users_id = :users_id
+                                        WHERE users_id = :users_id AND id = :id
             "); 
             $stmt->bindParam(":title", $reminder->title);
             $stmt->bindParam(":description", $reminder->description);
             $stmt->bindParam(":reminder_date", $reminder->reminder_date);
             $stmt->bindParam(":users_id", $reminder->users_id);
+            $stmt->bindParam(":id", $reminder->id);
+            
 
             if ($stmt->execute()) {
                 $this->message->setMessage("Lembrete atualziado com sucesso!", "success", "back");

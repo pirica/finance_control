@@ -17,7 +17,7 @@ $userData = $userDao->verifyToken();
 $type = filter_input(INPUT_POST, "type");
 
 // Criação de movimento financeiro
-if ($type == "create_finance_moviment") {
+if ($type == "create") {
 
     $description = filter_input(INPUT_POST, "description");
     $value = filter_input(INPUT_POST, "value");
@@ -52,7 +52,7 @@ if ($type == "create_finance_moviment") {
     } else {
         $message->setMessage("Preencha os campos descrição, valor e tipo!", "error", "back");
     }
-} else if ($type == "edit_finance_moviment") {
+} else if ($type == "edit") {
     // Edição de movimento financeiro existente
     $description_edit = filter_input(INPUT_POST, "description_edit");
     $obs = filter_input(INPUT_POST, "obs");
@@ -79,11 +79,12 @@ if ($type == "create_finance_moviment") {
     // Pega id de resgitro para deleção
     $id = filter_input(INPUT_POST, "id");
 
-    // Deletar selecionado Registro
-    if ($id != null) {
+    // Deletar Registro Selecionado
+    try {
         $financialMovimentDao->destroy($id);
-        $message->setMessage("Registro excluído com sucesso", "success", "back");
+    } catch (\Throwable $th) {
+        echo "Falha ao cadastrar registro : {$e->getMessage()}";
     }
-
+    
 }
 

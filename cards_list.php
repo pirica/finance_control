@@ -5,7 +5,7 @@ require_once("connection/conn.php");
 require_once("dao/CardsDAO.php");
 
 $cardDao = new CardsDAO($conn, $BASE_URL);
-
+// traz todos os cartões do usuário
 $cards = $cardDao->getAllCards($userData->id);
 
 ?>
@@ -21,9 +21,9 @@ $cards = $cardDao->getAllCards($userData->id);
             <div class="col-md-4  my-3">
                 <div class="card-credit bg-secondary <?= $card->flag_card ?>" id="card-credit-bg">
                     <div class="card_logo">
-                
-                        <div id="flag_icon" class="<?= $card->flag_icon ?>" alt=""></div>
 
+                        <div id="flag_icon" class="<?= $card->flag_icon ?>" alt=""></div>
+                        
                         <div class="card_info">
                             <img src="<?= $BASE_URL ?>assets/home/dashboard-main/chip.png" alt="">
                             <p class="mt-3" id="card_number"><?= $card->card_number ?></p>
@@ -36,7 +36,7 @@ $cards = $cardDao->getAllCards($userData->id);
 
                             <div class="form-group">
                                 <small class="text-light">Expira</small>
-                                <p id="expired_date"><?= $card->dt_expired ?></p>
+                                <p id="expired_date"><?= date("m-Y",strtotime($card->dt_expired)); ?></p>
                             </div>
                         </div>
                     </div>
@@ -46,12 +46,7 @@ $cards = $cardDao->getAllCards($userData->id);
                         <!-- <a href="#" data-toggle="modal" data-target="#exampleModalCenter" title="Editar">
                             <i class="fa-solid fa-file-pen"></i>
                         </a> -->
-                        <!-- <form action="<?= $BASE_URL ?>cards_process.php?id_card=<?= $card->id ?>" method="post"> -->
-                        <a href="<?= $BASE_URL ?>cards_process.php?id_card=<?= $card->id ?>" title="Deletar">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </a>
-                        <!-- </form> -->
-                       
+                        <a href="" data-toggle="modal" data-target="#modal_del_cards<?= $card->id ?>"><i class="fa-solid fa-trash-can"></i></a>
                     </div>
             </div>
             <?php endforeach;?>
@@ -64,4 +59,27 @@ $cards = $cardDao->getAllCards($userData->id);
     </div>
      <!-- Each Card  -->
 </div>
+
+    <!-- Card modal delete -->
+    <?php foreach ($cards as $card) : ?>
+            <div class="modal" tabindex="-1" id="modal_del_cards<?= $card->id ?>">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body text-center">
+                            <p>Tem certeza que deseja excluir o registro?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                            <form action="<?= $BASE_URL ?>cards_process.php" method="POST">
+                                <input type="hidden" name="type" value="delete">
+                                <input type="hidden" name="id" value="<?= $card->id ?>">
+                                <button type="submit" class="btn btn-primary">Sim</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <?php endforeach; ?>
+    <!-- End card modal delete -->
+
 <?php require_once("templates/footer.php"); ?>

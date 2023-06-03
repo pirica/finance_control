@@ -13,7 +13,9 @@ $message = new Message($BASE_URL);
 $userDao = new UserDAO($conn, $BASE_URL);
 $userData = $userDao->verifyToken();
 
-if ($_POST) {
+$type = filter_input(INPUT_POST, "type");
+
+if ($type == "create") {
     
     $card_holder = filter_input(INPUT_POST, "name_card");
     $card_number = filter_input(INPUT_POST, "cc");
@@ -78,18 +80,22 @@ if ($_POST) {
         $message->setMessage("Por favor preencha todos os campos.", "error", "back");
     }
 
+}else if ($type == "delete") {
+    
+    // Pega id de resgitro para deleção
+    $id =  filter_input(INPUT_POST, "id");
+    
+    // Deletar cartão     
+    try {
+        $cardsDao->destroyCard($id);
+    } catch (\PDOException $e) {
+        echo "Falha ao cadastrar o cartao : {$e->getMessage()}";
+    }
+    
+    
 }
 
 
-// Delete cards
-// Pega id de resgitro para deleção
-$id = $_GET["id_card"];
-
-// Deletar cartão 
-if ($id != null) {
-    $cardsDao->destroyCard($id);
-    $message->setMessage("Registro excluído com sucesso", "success", "back");
-}
 
 
 ?>

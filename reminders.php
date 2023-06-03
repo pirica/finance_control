@@ -17,7 +17,7 @@
 
 
 <div class="container">
-    <h1 class="text-center my-5">Meus Lembretes</h1>
+    <h1 class="text-center my-5">Meus Lembretes <i class="fa-solid fa-bell text-warning"></i></h1>
 
     <!-- Reminder register form -->
     <section>
@@ -99,6 +99,7 @@
                         <div class="modal-body">
                             <?php $reminder_date = date("Y-m-d", strtotime($reminder_edit->reminder_date))?>
                             <form action="<?= $BASE_URL ?>reminders_process.php?id=<?= $reminder_edit->id ?>" method="post">
+                                <input type="hidden" name="id" value="<?= $reminder_edit->id ?>">
                                 <input type="hidden" name="type" value="edit">
                                 <div class="form-group">
                                     <label for="description">Titulo:</label>
@@ -149,7 +150,3 @@
     <!-- End Reminder modal delete -->
 
 <?php require_once("templates/footer.php"); ?>
-
-<script>
-   
-</script>

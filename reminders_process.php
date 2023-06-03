@@ -44,7 +44,7 @@
                 $_SESSION['reminder_date'] = "";
 
             } catch (\Throwable $th) {
-                echo "Falha ao cadastrar o cartao : {$e->getMessage()}";
+                echo "Falha ao cadastrar o lembrete : {$e->getMessage()}";
             }
 
         } else {
@@ -52,7 +52,7 @@
         }
 
     } else if($type == "edit"){
-        
+        $id = filter_input(INPUT_POST, "id");
         $title = filter_input(INPUT_POST, "title");
         $description = filter_input(INPUT_POST, "description");
         $reminder_date = filter_input(INPUT_POST, "reminder_date");
@@ -60,7 +60,7 @@
         //echo "$title $description $reminder_date"; exit;
 
         $reminder = new Reminders();
-
+        $reminder->id = $id;
         $reminder->title = $title;
         $reminder->description = $description;
         $reminder->reminder_date = $reminder_date;
@@ -71,7 +71,7 @@
             $reminderDao->updateReminder($reminder);
         
         } catch (\Throwable $th) {
-            echo "Falha ao cadastrar o cartao : {$e->getMessage()}";
+            echo "Falha ao editar o lembrete : {$e->getMessage()}";
         }
 
 

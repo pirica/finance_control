@@ -1,9 +1,10 @@
 <?php
-require_once("templates/header_iframe.php");
-$_SESSION['name_card'] = "";
-$_SESSION['card_number'] = "";
-$_SESSION['expired_card'] = "";
-$_SESSION['limit_value'] = "";
+    require_once("templates/header_iframe.php");
+    
+    isset($_SESSION['name_card']) ? $_SESSION['name_card'] : "";
+    isset($_SESSION['card_number']) ? $_SESSION['card_number'] : "";
+    isset($_SESSION['expired_card']) ? $_SESSION['expired_card'] : "";
+    isset($_SESSION['limit_value']) ? $_SESSION['limit_value'] : "";
 ?>
 
 <div class="container-fluid">

@@ -434,11 +434,11 @@ hr.dashed {
     color: #DF2E38;
 }
 
-
 #latest_moviments .fa-file-pen {
     font-size: 25px;
     color: #DC8449;
 }
+
 
 table {
     text-align: center;
@@ -828,6 +828,7 @@ img.animated-gif {
 }
 
 .card-reminder {background-color: #FFF2CC;}
+
 .card-reminder .card-text{
     color: rgb(108, 108, 108);
 }
@@ -835,7 +836,7 @@ img.animated-gif {
     flex: 1;
     margin-right: 20px;
 }
-.button{flex: 0.5 auto; margin-top: 25px;}
+.button{flex: 0.5 auto; margin-top: 30px;}
 .titulo {
     flex: 1 auto;
 }
@@ -843,12 +844,26 @@ img.animated-gif {
     flex: 3 auto;
 }
 
-#file, #submit {display: none;}
+#submit {display: none;}
 .fa-camera {color: #999;}
-.fa-square-plus {color: #116D6E}
+.fa-square-plus {color: #28a745}
 .fa-square-plus:hover {
-    color: #0cb006;
+    color: #A0D8B3;
     cursor: pointer;
+}
+
+.reminder-card .fa-trash-can {
+    font-size: 25px;
+    color: #DF2E38;
+}
+
+.reminder-card .fa-file-pen {
+    font-size: 25px;
+    color: #DC8449;
+}
+
+.reminder-card .card-body {
+    min-height: 130px;
 }
 
 @media (max-width: 1000px) {

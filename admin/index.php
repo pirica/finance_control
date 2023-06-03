@@ -29,13 +29,12 @@ if (!empty($flashMessage)) {
                     <form action="<?= $BASE_URL ?>auth_admin.php" method="post">
                         <input type="hidden" name="type" value="login">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">E-mail</label>
-                            <input type="email" class="form-control" name="email" id="email" placeholder="e-mail:">
+                            <label for="email" class="text-white">E-mail:</label>
+                            <input type="email" class="form-control" name="email" id="email">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Senha</label>
-                            <input type="password" class="form-control" name="password" id="password"
-                                placeholder="senha">
+                            <label for="password" class="text-white">Senha:</label>
+                            <input type="password" class="form-control" name="password" id="password">
                         </div>
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-success">Entrar</button>

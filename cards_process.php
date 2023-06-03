@@ -25,11 +25,13 @@ if ($_POST) {
     $date = $dt_expired."-10 23:59:59";
     $date = date("Y-m-d H:i:s", strtotime($date));
 
-    $_SESSION['name_card'] = $name_card;
+    // manter dados dos inputs em caso de erro
+    $_SESSION['name_card'] = $card_holder;
     $_SESSION['card_number'] = $card_number;
     $_SESSION['expired_card'] = $expired_card;
     $_SESSION['limit_value'] = $limit_value;
 
+    // Udado para identificar bandeira do cartão
     $flag_identity = substr($card_number, 0 , 2);
     $flag_card = "";
     $flag_icon = "";

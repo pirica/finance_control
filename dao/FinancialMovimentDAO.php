@@ -94,9 +94,15 @@
         public function getHighValueIncome($id) {
 
             $highValueData = [];
+            $day = date('d');
             $mes = date('m');
+            $year = date('Y');
 
-            $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances WHERE MONTH(create_at) = '$mes' AND TYPE= 1 AND users_id = $id GROUP BY value DESC LIMIT 1");
+            $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances 
+                WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day' 
+                AND TYPE= 1 AND users_id = $id 
+                GROUP BY value DESC LIMIT 1"
+            );
             $stmt->execute();
            
             $data = $stmt->fetchAll();
@@ -117,9 +123,16 @@
         public function getLowerValueIncome($id) {
 
             $lowerValueData = [];
+            $day = date('d');
             $mes = date('m');
+            $year = date('Y');
 
-            $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances WHERE MONTH(create_at) = '$mes' AND TYPE = 1 AND users_id = $id GROUP BY value ASC LIMIT 1");
+            $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances 
+                WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day' 
+                AND TYPE = 1 
+                AND users_id = $id 
+                GROUP BY value ASC LIMIT 1"
+            );
             $stmt->execute();
            
             $data = $stmt->fetchAll();
@@ -129,7 +142,7 @@
             }
             
              // Se não dados no BD recebe uma string padrão 
-             if (empty($lowerValueData)) {
+            if (empty($lowerValueData)) {
                 $lowerValueData = "Não há dados registrados";
             }
 
@@ -249,17 +262,20 @@
 
         public function getAllCashInflow($id) {
 
-            // Pega mês atual
+            // Pega dia, mês e ano atual
+            $day = date('d');
             $mes = date('m');
+            $year = date('Y');
 
-            $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = '$mes' AND users_id = $id AND type = 1");
+            $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances
+            WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day'
+            AND users_id = $id 
+            AND type = 1"); 
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch();
-
                 $sum = number_format($row['sum'], 2, ',', '.');
-    
                 return $sum;
             }
 
@@ -267,31 +283,46 @@
 
         public function getAllCashOutflow($id) {
 
-            // Pega mês atual
+            // Pega dia, mês e ano atual
+            $day = date('d');
             $mes = date('m');
+            $year = date('Y');
 
-            $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = '$mes' AND users_id = $id AND type = 2");
+            $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances
+            WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day'
+            AND users_id = $id 
+            AND type = 2");
             $stmt->execute();
-            $row = $stmt->fetch();
 
-            $sum = number_format($row['sum'], 2, ',', '.');
-
-            return $sum;
+            if($stmt->rowCount() > 0) {
+                $row = $stmt->fetch();
+                $sum = number_format($row['sum'], 2, ',', '.');
+                return $sum;
+            }
 
         }
 
         public function getTotalBalance($id) {
 
-            // Pega mês atual
+            // Pega dia, mês e ano atual
+            
+            $day = date('d');
             $mes = date('m');
+            $year = date('Y');
 
-            $stmt = $this->conn->query("SELECT (SELECT SUM(value) FROM tb_finances WHERE MONTH(create_at) = '$mes' AND users_id = $id AND TYPE = 1) - (SELECT SUM(value) FROM tb_finances WHERE MONTH(create_at) = '$mes' AND users_id = $id AND TYPE = 2) AS total_balance");
+            $stmt = $this->conn->query("SELECT (SELECT SUM(value) FROM tb_finances 
+            WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day' AND users_id = $id AND TYPE = 1)
+             - 
+            (SELECT SUM(value) FROM tb_finances 
+            WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day' AND users_id = $id AND TYPE = 2) 
+            AS total_balance");
             $stmt->execute();
-            $row = $stmt->fetch();
 
-            $total_balance = number_format($row['total_balance'], 2, ',', '.');
-
-            return $total_balance;
+            if($stmt->rowCount() > 0) {
+                $row = $stmt->fetch();
+                $total_balance = number_format($row['total_balance'], 2, ',', '.');
+                return $total_balance;
+            }
 
         }
 
@@ -392,7 +423,7 @@
             $stmt = $this->conn->prepare("INSERT INTO tb_finances (
                 id, description, obs, value, type, expense, category, create_at, users_id
             ) VALUES(
-                :id, :description, :obs, :value, :type, :expense, :category, now(), :users_id
+                :id, :description, :obs, :value, :type, :expense, :category, :create_at, :users_id
             )");
 
             $stmt->bindParam(':id', $financialMoviment->id);
@@ -402,6 +433,7 @@
             $stmt->bindParam(':type', $financialMoviment->type);
             $stmt->bindParam(':expense', $financialMoviment->expense);
             $stmt->bindParam(':category', $financialMoviment->category);
+            $stmt->bindParam(':create_at', $financialMoviment->create_at);
             $stmt->bindParam(':users_id', $financialMoviment->users_id);
             
             $stmt->execute();
@@ -458,9 +490,9 @@
     public function checkGraphicDataMonths($id) {
 
         /* 
-        Script para caso o usuário tenha se cadastrado após janeiro
-        As entradas e saídas que antecedem o mês atual do sistema seja
-        Sejam preenchidos com 0 para o perfeito funcionamento do gráfico anual 
+        Script para caso o usuário tenha se cadastrado mesês após janeiro
+        As entradas e saídas que antecedem o mês atual do sistema
+        Serão preenchidos com 0 para o perfeito funcionamento do gráfico anual na dashboard 
         */
 
         $ano = date("Y");
@@ -481,6 +513,7 @@
             
                 // Se o array retornar vazio (null) neste Mês não há registros
                 // Então insere um registro padrão com valor 0
+               
                 if (!$value_entradas == null || !empty($value_entradas)) {
                     //echo "mes $mes possui valor <br>";
                 }else {

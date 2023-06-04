@@ -153,7 +153,7 @@ $data_atual = date('Y-m-d H:i:s');
                                     mensagem novamente.</small></label>
                             <input class="form-control" type="checkbox" name="no_show_popup" id="no_show_popup" value="<?= $popups->id ?>">
                         </div>
-                        <input type="submit" class="btn btn-lg btn-info" id="submit" value="OK"></input>
+                        <input type="submit" class="btn btn-lg btn-info" id="popup_submit" value="OK"></input>
                     </form>
                 </div>
 
@@ -181,7 +181,7 @@ $data_atual = date('Y-m-d H:i:s');
     const popupWindow = document.querySelector("#popup-card");
     const popupClose = document.querySelectorAll(".popup-close");
     const containerClose = document.getElementById("container-popup");
-    const submitButtonPopup = document.getElementById("submit");
+    //const submitButtonPopup = document.getElementById("submit");
 
     window.addEventListener("load", () => {
         popupWindow.classList.add("active");
@@ -194,15 +194,15 @@ $data_atual = date('Y-m-d H:i:s');
     }));
     
     // submit desligado enquanto checkbox de confirmação estiver vazio
-    $('#submit').prop('disabled', true);
-    $('#no_show_popup').click(function () {
-        if ($(this).is(':checked')) {
-            $('#submit').prop('disabled', false);
-        }
+    $(document).ready(function() {
+        $('#popup_submit').prop('disabled', true);
+        $('#no_show_popup').click(function () {
+            if ($(this).is(':checked')) {
+                $('#popup_submit').prop('disabled', false);
+            }
+        });
     });
     // Popup
-   
-
 
 </script>
 

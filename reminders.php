@@ -59,7 +59,7 @@
     <!-- All Reminders container -->
     <div  iv class=" bg-light rounded-3 shadow-sm my-3">
         <div class="row px-3 py-2">
-            <?php if ($allReminders != ""): ?>
+            <?php if (count($allReminders) > 0): ?>
                 <?php foreach ($allReminders as $reminder): ?>
                     <div class="col-md-3 reminder-card pb-3">
                         <div class="card card-reminder mb-3 border-0" style="max-width: 18rem;">
@@ -76,7 +76,7 @@
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="col-md-12">
-                    <h6 class="py-2 text-center text-info">Ainda não há lembretes cadastrados.</h6>
+                    <h5 class="py-2 text-center text-info">Ainda não há lembretes cadastrados.</h5>
                 </div>
             <?php endif; ?>
         </div>

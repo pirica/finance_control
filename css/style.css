@@ -677,7 +677,7 @@ table {
    REPORTS PAGES
 ----------------------------------------------------- */
 .p-date {
-    z-index: 9999;
+    /* z-index: 9999; */
     position: absolute;
     top: 49.5%;
     right: 21px;

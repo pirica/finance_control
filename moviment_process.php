@@ -20,13 +20,19 @@ $type = filter_input(INPUT_POST, "type");
 if ($type == "create") {
 
     $description = filter_input(INPUT_POST, "description");
-    $value = filter_input(INPUT_POST, "value");
     $type_action = filter_input(INPUT_POST, "type_action");
     $expense_type = filter_input(INPUT_POST, "expense_type");
-    
+
+    $value = filter_input(INPUT_POST, "value");
     $value=preg_replace("/[^0-9,]+/i","",$value);
     $value=str_replace(",",".",$value);
+
     $category = filter_input(INPUT_POST, "category");
+
+    // Current date para se for registro sem agendamento e date_scheluded para registros agendados
+    date_default_timezone_set('America/Sao_Paulo');
+    $current_date = date("Y-m-d H:i:s");
+    $date_scheduled = filter_input(INPUT_POST, "date_scheduled");
 
     $financialMoviment = new FinancialMoviment();
 
@@ -46,6 +52,7 @@ if ($type == "create") {
         $financialMoviment->type = $type_action;
         $financialMoviment->expense = $expense_type;
         $financialMoviment->category = $category;
+        $date_scheduled != "" ? $financialMoviment->create_at = $date_scheduled : $financialMoviment->create_at = $current_date;        
         $financialMoviment->users_id = $userData->id;
 
         $financialMovimentDao->create($financialMoviment);

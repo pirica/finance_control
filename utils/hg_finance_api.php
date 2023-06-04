@@ -1,4 +1,6 @@
 <?php 
+ini_set('max_execution_time', 5);
+
 $config_user = $_SERVER["HTTP_USER_AGENT"];
 
 // HG Finance API

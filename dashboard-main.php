@@ -5,6 +5,7 @@ require_once("dao/RemindersDAO.php");
 require_once("dao/CategorysDAO.php");
 include_once("utils/hg_finance_api.php");
 
+
 $financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
 $categorysDao = new CategorysDAO($conn);
 
@@ -86,6 +87,8 @@ $latestReminders = $reminderDao->getLatestReminders($userData->id);
 <body id="iframe-body">
 
     <div class="container-fluid">
+
+        <!-- Balance Warning if expenses user is above 50% -->
         <div class="offset-md-3 col-md-6">
             <?php if ($resultExpensePercent > 50) : ?>
                 <div class="mt-3" style="display: inline-flex">
@@ -98,7 +101,10 @@ $latestReminders = $reminderDao->getLatestReminders($userData->id);
                 </div>
             <?php endif; ?>
         </div>
+        <!-- End Balance Warning if expenses user is above 50% -->
 
+        <!-- Section Revenue, Enpenses , balance and graph -->
+        <section>
         <div class="card-div mb-3 my-3 text-center">
             <div class="row">
                 <div class="col-md-3">
@@ -160,69 +166,76 @@ $latestReminders = $reminderDao->getLatestReminders($userData->id);
             </div>
 
         </div>
-       
-        <p id="cotation"><span class="text-info">Dolar -></span> R$ <?= $dollar ?> &nbsp;|&nbsp; <span class="text-info">Euro-></span> R$ <?= $euro ?> &nbsp;|&nbsp; <span class="text-info">Bitcoin-></span> R$ <?= $btc ?> &nbsp;|&nbsp; <span class="text-info"> Ibovespa-> </span> <?= $ibovespa ?> </p>
-        <div class="actions p-5 mb-4 bg-light rounded-3 shadow-sm">
-            <form action="<?= $BASE_URL ?>moviment_process.php" method="post">
-                <input type="hidden" name="type" value="create">
-                <div class="row">
-                    <div class="col-md-3">
-                        <h4 class="font-weight-normal">Descriçao</h4>
-                        <input type="text" name="description" id="description" class="form-control" placeholder="Ex: Conta de luz">
-                    </div>
-                    <div class="col-md-2">
-                        <h4 class="font-weight-normal">Valor</h4>
-                        <input type="text" name="value" id="value" class="form-control money" placeholder="Ex: 80,00:">
-                    </div>
-                    <div class="col-md-2 text-center">
-                        <h4 class="font-weight-normal">Tipo</h4>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="type_action" id="entry" value="1" onclick="show_expense()">
-                            <label class="form-check-label" for="inlineRadio1">Entrada</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="type_action" id="out" value="2" onclick="show_expense()">
-                            <label class="form-check-label" for="inlineRadio2">Saída</label>
-                        </div>
-                    </div>
-                    <div class="col-md-2 text-center" id="expense">
-                        <h4 class="font-weight-normal">Despesa</h4>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="expense_type" id="fixa" class="expense_type" value="F">
-                            <label class="form-check-label" for="inlineRadio1">Fixa</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="expense_type" id="variavel" class="expense_type" value="V">
-                            <label class="form-check-label" for="inlineRadio2">Variada</label>
-                        </div>
-                    </div>
-                    <div class="col-md-2" id="category_div_entry">
-                        <h4 class="font-weight-normal">Categoria</h4>
-                        <select class="form-control" name="category" id="category_entry">
-                            <option value="">Selecione</option>
-                            <?php foreach ($entry_categorys as $category) : ?>
-                                <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-md-2" id="category_div">
-                        <h4 class="font-weight-normal">Categoria</h4>
-                        <select class="form-control" name="category" id="category_exit">
-                            <option value="">Selecione</option>
-                            <?php foreach ($exit_categorys as $category) : ?>
-                                <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-md-1">
-                        <input type="submit" class="btn btn-lg btn-success" value="Adicionar"></input>
-                    </div>
-                </div>
-                <div class="row">
+        </section>
+        <!-- Section Revenue, Enpenses , balance and graph -->
 
-                </div>
-            </form>
-        </div>
+        <p id="cotation"><span class="text-info">Dolar -></span> R$ <?= $dollar ?> &nbsp;|&nbsp; <span class="text-info">Euro-></span> R$ <?= $euro ?> &nbsp;|&nbsp; <span class="text-info">Bitcoin-></span> R$ <?= $btc ?> &nbsp;|&nbsp; <span class="text-info"> Ibovespa-> </span> <?= $ibovespa ?> </p>
+        
+        <!-- Cash Inflow | Cash outflow form  -->
+        <section>
+            <div class="actions p-5 mb-4 bg-light rounded-3 shadow-sm">
+                <form action="<?= $BASE_URL ?>moviment_process.php" method="post">
+                    <input type="hidden" name="type" value="create">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h4 class="font-weight-normal">Descriçao</h4>
+                            <input type="text" name="description" id="description" class="form-control" placeholder="Ex: Conta de luz">
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="font-weight-normal">Valor</h4>
+                            <input type="text" name="value" id="value" class="form-control money" placeholder="Ex: 80,00:">
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <h4 class="font-weight-normal">Tipo</h4>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="type_action" id="entry" value="1" onclick="show_expense()">
+                                <label class="form-check-label" for="inlineRadio1">Entrada</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="type_action" id="out" value="2" onclick="show_expense()">
+                                <label class="form-check-label" for="inlineRadio2">Saída</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center" id="expense">
+                            <h4 class="font-weight-normal">Despesa</h4>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="expense_type" id="fixa" class="expense_type" value="F">
+                                <label class="form-check-label" for="inlineRadio1">Fixa</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="expense_type" id="variavel" class="expense_type" value="V">
+                                <label class="form-check-label" for="inlineRadio2">Variada</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2" id="category_div_entry">
+                            <h4 class="font-weight-normal">Categoria</h4>
+                            <select class="form-control" name="category" id="category_entry">
+                                <option value="">Selecione</option>
+                                <?php foreach ($entry_categorys as $category) : ?>
+                                    <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-2" id="category_div">
+                            <h4 class="font-weight-normal">Categoria</h4>
+                            <select class="form-control" name="category" id="category_exit">
+                                <option value="">Selecione</option>
+                                <?php foreach ($exit_categorys as $category) : ?>
+                                    <option value="<?= $category->id ?>"> <?= $category->category_name ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <input type="submit" class="btn btn-lg btn-success" value="Adicionar"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                </form>
+            </div>
+        </section>
+        <!-- Cash Inflow | Cash outflow form  -->
 
         <div class="row">
             <!-- My reminders container -->
@@ -455,11 +468,11 @@ $latestReminders = $reminderDao->getLatestReminders($userData->id);
                                     <input type="hidden" name="type" value="register">
                                     <div class="form-group">
                                         <label for="description">Titulo:</label>
-                                        <input type="text" name="title" id="" class="form-control" placeholder="Insira uma nova descrição" value="">
+                                        <input type="text" name="title" id="" class="form-control" placeholder="Insira um titulo para o lembrete" value="">
                                     </div>
                                     <div class="form-group">
                                         <label for="value">Descrição:</label>
-                                        <input type="text" name="description" id="" class="form-control" placeholder="Insira um novo valor" value="">
+                                        <input type="text" name="description" id="" class="form-control" placeholder="Insira uma descrição" value="">
                                     </div>
                                 
                                     <div class="form-group">

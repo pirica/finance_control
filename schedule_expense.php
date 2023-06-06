@@ -3,13 +3,31 @@ require_once("templates/header_iframe.php");
 require_once("globals.php");
 require_once("connection/conn.php");
 require_once("dao/CategorysDAO.php");
+require_once("dao/FinancialMovimentDAO.php");
 
-// Traz todas as categorias disponiceis para entradas
+// Traz todas as categorias disponíveis para entradas
 $categorysDao = new CategorysDAO($conn);
 $exit_categorys = $categorysDao->getAllExitCategorys();
 
+$financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
+
+$exitFinancialScheduled = $financialMovimentDao->getAllCashOutflowScheduled($userData->id);
+
+
 ?>
 <style>
+      table,
+    th,
+    td {
+        border: 1px solid #cecfd5;
+    }
+
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        display: none !important;
+        -webkit-appearance: none !important;
+    }
+    
     @media (max-width: 1024px){
         .actions {text-align: center;}
     }
@@ -21,6 +39,9 @@ $exit_categorys = $categorysDao->getAllExitCategorys();
 
         <!-- Cash Inflow | Cash outflow form  -->
         <section>
+            <div class="text-center">
+                <small class="text-info"> <strong> As despesas são agendadas para as 8hrs da data escolhida! </strong></small>
+            </div>
             <div class="actions p-5 mb-4 bg-light rounded-3 shadow-sm">
                 <form action="<?= $BASE_URL ?>moviment_process.php" method="post">
                     <input type="hidden" name="type" value="create">
@@ -72,6 +93,75 @@ $exit_categorys = $categorysDao->getAllExitCategorys();
             </div>
         </section>
         <!-- Cash Inflow | Cash outflow form  -->
+        
+       <div class="container">
+        <h4 class="font-weight-normal mt-5">Últimas 10 despesas agendadas</h4>
+            <div class="table_report" id="table_report_entry">
+                <table class="table table-hover table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Valor</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Categoria</th>
+                            <th scope="col">Observação</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($exitFinancialScheduled as $exitFinancialMovimentItem) : ?>
+                            <?php $value = str_replace('.', '', $exitFinancialMovimentItem->value);
+                            $total_outflow_value += (float) $value; ?>
+
+                            <tr>
+                                <th scope="row">
+                                    <?= $exitFinancialMovimentItem->id ?>
+                                </th>
+                                <td>
+                                    <?= $exitFinancialMovimentItem->description ?>
+                                </td>
+                                <td>
+                                    <?= $exitFinancialMovimentItem->value ?>
+                                </td>
+                                <td>
+                                    <?= $exitFinancialMovimentItem->create_at ?>
+                                </td>
+                                <td>
+                                    <?= $exitFinancialMovimentItem->category ?>
+                                </td>
+
+                                <td>
+                                    <?php if ($exitFinancialMovimentItem->obs != "") : ?>
+                                        <a href="#!" id="grupos<?= $exitFinancialMovimentItem->id ?>" onclick="openTooltip(<?= $exitFinancialMovimentItem->id ?>)"><img src="<?= $BASE_URL ?>assets/home/dashboard-main/message_alert.gif" alt="message_alert" title="ver observação" width="33" height="30"> </a>
+                                        <div class="tooltip_" id="tooltip_<?= $exitFinancialMovimentItem->id ?>">
+                                            <div id="conteudo">
+                                                <div class="bloco">
+                                                    <h5>Observação</h5>
+                                                    <a href="#!" id="close<?= $exitFinancialMovimentItem->id ?>"><i class="fa-solid fa-xmark"></i></a>
+                                                </div>
+                                                <div class="bloco">
+                                                    <small>
+                                                        <?= $exitFinancialMovimentItem->obs ?>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="8"> <strong> Total: </strong> R$
+                                <?= number_format($total_outflow_value, 2, ",", "."); ?>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+       </div>
     </div>
 </body>
 

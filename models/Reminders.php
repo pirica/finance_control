@@ -6,6 +6,7 @@
         public $title;
         public $description;
         public $reminder_date;
+        public $visualized;
         public $users_id;
         public $created;
         public $modified;

@@ -29,7 +29,7 @@ if ($type == "create") {
 
     $category = filter_input(INPUT_POST, "category");
 
-    // Current date para se for registro sem agendamento e date_scheluded para registros agendados
+    // Current date para registro sem agendamento e date_scheduled para registros agendados
     date_default_timezone_set('America/Sao_Paulo');
     $current_date = date("Y-m-d H:i:s");
     $date_scheduled = filter_input(INPUT_POST, "date_scheduled");
@@ -45,6 +45,7 @@ if ($type == "create") {
                 $message->setMessage("Para o tipo Saída, preencha também o campo despesa e categoria!", "error", "back");
                 exit;
             }
+
         }
 
         $financialMoviment->description = $description;
@@ -52,14 +53,26 @@ if ($type == "create") {
         $financialMoviment->type = $type_action;
         $financialMoviment->expense = $expense_type;
         $financialMoviment->category = $category;
-        $date_scheduled != "" ? $financialMoviment->create_at = $date_scheduled : $financialMoviment->create_at = $current_date;        
+
+        if ($date_scheduled != "") {
+            $date_scheduled = "$date_scheduled 08:00:00";
+            $financialMoviment->create_at = $date_scheduled;
+            $financialMoviment->scheduled = "S";
+        }else {
+            $financialMoviment->create_at = $current_date;
+            //$financialMoviment->scheduled = "";
+        } 
+
         $financialMoviment->users_id = $userData->id;
 
         $financialMovimentDao->create($financialMoviment);
+
     } else {
         $message->setMessage("Preencha os campos descrição, valor e tipo!", "error", "back");
     }
+
 } else if ($type == "edit") {
+
     // Edição de movimento financeiro existente
     $description_edit = filter_input(INPUT_POST, "description_edit");
     $obs = filter_input(INPUT_POST, "obs");

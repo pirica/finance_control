@@ -7,6 +7,7 @@
     require_once("models/Reminders.php");
     require_once("models/Message.php");
 
+
     $message = new Message($BASE_URL);
     $reminderDao = new RemindersDAO($conn, $url);
 
@@ -22,6 +23,7 @@
         $title = filter_input(INPUT_POST, "title");
         $description = filter_input(INPUT_POST, "description");
         $reminder_date = filter_input(INPUT_POST, "reminder_date");
+       
         
         $_SESSION['title'] = $title;
         $_SESSION['description'] = $description;
@@ -43,7 +45,7 @@
                 $_SESSION['description'] = "";
                 $_SESSION['reminder_date'] = "";
 
-            } catch (\Throwable $th) {
+            } catch (\Throwable $e) {
                 echo "Falha ao cadastrar o lembrete : {$e->getMessage()}";
             }
 
@@ -52,10 +54,12 @@
         }
 
     } else if($type == "edit"){
+
         $id = filter_input(INPUT_POST, "id");
         $title = filter_input(INPUT_POST, "title");
         $description = filter_input(INPUT_POST, "description");
         $reminder_date = filter_input(INPUT_POST, "reminder_date");
+        $visualized = filter_input(INPUT_POST, "visualized");
 
         //echo "$title $description $reminder_date"; exit;
 
@@ -64,13 +68,14 @@
         $reminder->title = $title;
         $reminder->description = $description;
         $reminder->reminder_date = $reminder_date;
+        $visualized != "" ? $reminder->visualized = $visualized :  "";
         $reminder->users_id = $userData->id;
 
         try {
 
             $reminderDao->updateReminder($reminder);
         
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             echo "Falha ao editar o lembrete : {$e->getMessage()}";
         }
 

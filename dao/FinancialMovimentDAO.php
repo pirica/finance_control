@@ -3,6 +3,7 @@
     // require_once("models/User.php");
     require_once("models/Message.php");
     require_once("models/Categorys.php");
+    require_once("dao/CategorysDAO.php");
 
 
     Class FinancialMovimentDAO implements FinancialMovimentDAOInterface {
@@ -29,53 +30,25 @@
             $financialMoviment->expense == "V" ? $financialMoviment->expense = "Variada" : $financialMoviment->expense = "Fixa"; 
             $financialMoviment->value = number_format($data['value'], 2, ',', '.');
             $financialMoviment->type = $data['type'];
-
+            $financialMoviment->scheduled = $data['scheduled'];
             $category = $data['category'];
-
-            switch($category):
-                case 1:
-                    $financialMoviment->category = "Educação";
-                    break;
-                case 2:
-                    $financialMoviment->category = "Alimentação";
-                    break;
-                case 3:
-                    $financialMoviment->category = "transporte";
-                    break;
-                case 4:
-                    $financialMoviment->category = "Lazer";
-                    break;
-                case 5:
-                    $financialMoviment->category = "Saúde";
-                    break;
-                case 6:
-                    $financialMoviment->category = "Moradia";
-                    break;
-                case 7:
-                    $financialMoviment->category = "Pessoal";
-                    break;
-                case 8:
-                    $financialMoviment->category = "Outros";
-                    break;
-                case 9:
-                    $financialMoviment->category = "Venda Produto|Serviço";
-                    break;
-                case 10:
-                    $financialMoviment->category = "Salário";
-                    break;
-                case 11:
-                    $financialMoviment->category = "Aluguel";
-                    break;
-                case 12:
-                    $financialMoviment->category = "Devolução de Empréstimo";
-                    break;
-                case 13:
-                    $financialMoviment->category = "Outros";
-                    break;
-            endswitch;
-
             $financialMoviment->users_id = $data["users_id"];
             $financialMoviment->create_at = $data['create_at'];
+
+            // Traz todas as categorias disponíveis
+            $categoryDao = new CategorysDAO($this->conn);
+            $entryCategorysArray = $categoryDao->getAllEntryCategorys();
+            $exitCategorysArray = $categoryDao->getAllExitCategorys();
+
+            // Percorre as categorias de entrada e saída para determinar a qual delas o registro pertence
+            foreach ($exitCategorysArray as $exitCategory):
+                $category == $exitCategory->id ? $financialMoviment->category = $exitCategory->category_name : "";
+            endforeach;
+
+            foreach ($entryCategorysArray as $entryCategory):
+                $category == $entryCategory->id ? $financialMoviment->category = $entryCategory->category_name : "";
+            endforeach;
+            
             // Alteração de formato de data para padrão Brasileiro
             $timestamp = strtotime($financialMoviment->create_at); 
             $newDate = date("d/m/Y H:i:s", $timestamp );
@@ -88,18 +61,19 @@
         
 
         public function findAll() {
-
+            //TODO: para o menu relatórios criar o item todos (para todos as movimentações)
         }
 
         public function getHighValueIncome($id) {
 
             $highValueData = [];
-            $day = date('d');
-            $mes = date('m');
-            $year = date('Y');
+            
+            // defini o período do dia 01 ao dia atual do sistema
+            $initial_date = date("Y-m-01 00:00:00");
+            $current_date = date("Y-m-d H:i:s");
 
             $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances 
-                WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day' 
+                WHERE create_at BETWEEN '$initial_date' AND '$current_date' 
                 AND TYPE= 1 AND users_id = $id 
                 GROUP BY value DESC LIMIT 1"
             );
@@ -123,12 +97,15 @@
         public function getLowerValueIncome($id) {
 
             $lowerValueData = [];
-            $day = date('d');
-            $mes = date('m');
-            $year = date('Y');
+
+            // defini o período do dia 01 ao dia atual do sistema
+            $initial_date = date("Y-m-01 00:00:00");
+            $current_date = date("Y-m-d H:i:s");
+           
+           
 
             $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances 
-                WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day' 
+                WHERE create_at BETWEEN '$initial_date' AND '$current_date' 
                 AND TYPE = 1 
                 AND users_id = $id 
                 GROUP BY value ASC LIMIT 1"
@@ -153,9 +130,15 @@
         public function getBiggestExpense($id) {
 
             $biggestValueData = [];
-            $mes = date('m');
+            
+            // defini o período do dia 01 ao dia atual do sistema
+            $initial_date = date("Y-m-01 00:00:00");
+            $current_date = date("Y-m-d H:i:s");
 
-            $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances WHERE MONTH(create_at) = '$mes' AND TYPE = 2 AND users_id = $id GROUP BY value DESC LIMIT 1");
+            $stmt = $this->conn->query("SELECT MAX(VALUE) AS maior_valor, description FROM tb_finances 
+            WHERE create_at BETWEEN '$initial_date' AND '$current_date' 
+            AND TYPE = 2 AND users_id = $id 
+            GROUP BY value DESC LIMIT 1");
             $stmt->execute();
 
             $data = $stmt->fetchAll();
@@ -176,9 +159,15 @@
         public function getLowerExpense($id) {
 
             $lowerValueData = [];
-            $mes = date('m');
+            
+            // defini o período do dia 01 ao dia atual do sistema
+            $initial_date = date("Y-m-01 00:00:00");
+            $current_date = date("Y-m-d H:i:s");
 
-            $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances WHERE MONTH(create_at) = '$mes' AND TYPE = 2 AND users_id = $id GROUP BY value ASC LIMIT 1");
+            $stmt = $this->conn->query("SELECT MIN(VALUE) AS menor_valor, description FROM tb_finances 
+            WHERE create_at BETWEEN '$initial_date' AND '$current_date' 
+            AND TYPE = 2 AND users_id = $id 
+            GROUP BY value ASC LIMIT 1");
             $stmt->execute();
 
             $data = $stmt->fetchAll();
@@ -262,13 +251,12 @@
 
         public function getAllCashInflow($id) {
 
-            // Pega dia, mês e ano atual
-            $day = date('d');
-            $mes = date('m');
-            $year = date('Y');
+            // defini o período do dia 01 ao dia atual do sistema
+            $initial_date = date("Y-m-01 00:00:00");
+            $current_date = date("Y-m-d H:i:s");
 
             $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances
-            WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day'
+            WHERE create_at BETWEEN '$initial_date' AND '$current_date'
             AND users_id = $id 
             AND type = 1"); 
             $stmt->execute();
@@ -281,15 +269,38 @@
 
         }
 
+        public function getAllCashInflowScheduled($id) {
+            
+            $entryFinancialScheduledMoviments = [];
+
+            $stmt = $this->conn->query("SELECT 
+            id, description, obs, value, expense, type, category, scheduled, create_at, update_at, users_id 
+            FROM tb_finances 
+            WHERE users_id = $id AND type = 1 AND category IS NOT NULL AND scheduled = 'S' ORDER BY id DESC LIMIT 10");
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                
+                $financialMovimentsArray = $stmt->fetchAll();
+
+                foreach ($financialMovimentsArray as $financialMoviment){
+
+                    $entryFinancialScheduledMoviments[] = $this->buildFinancialMoviment($financialMoviment);
+                
+                }
+            }
+            return $entryFinancialScheduledMoviments;
+        }
+
         public function getAllCashOutflow($id) {
 
-            // Pega dia, mês e ano atual
-            $day = date('d');
-            $mes = date('m');
-            $year = date('Y');
+            // defini o período do dia 01 ao dia atual do sistema
+            $initial_date = date("Y-m-01 00:00:00");
+            $current_date = date("Y-m-d H:i:s");
 
             $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances
-            WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day'
+            WHERE create_at BETWEEN '$initial_date' AND '$current_date'
             AND users_id = $id 
             AND type = 2");
             $stmt->execute();
@@ -302,19 +313,41 @@
 
         }
 
+        public function getAllCashOutflowScheduled($id) {
+
+            $entryFinancialScheduledMoviments = [];
+
+            $stmt = $this->conn->query("SELECT 
+            id, description, obs, value, expense, type, category, scheduled, create_at, update_at, users_id 
+            FROM tb_finances 
+            WHERE users_id = $id AND type = 2 AND category IS NOT NULL AND scheduled = 'S' ORDER BY id DESC LIMIT 10");
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                
+                $financialMovimentsArray = $stmt->fetchAll();
+
+                foreach ($financialMovimentsArray as $financialMoviment){
+
+                    $entryFinancialScheduledMoviments[] = $this->buildFinancialMoviment($financialMoviment);
+                
+                }
+            }
+            return $entryFinancialScheduledMoviments;
+        }
+
         public function getTotalBalance($id) {
 
-            // Pega dia, mês e ano atual
-            
-            $day = date('d');
-            $mes = date('m');
-            $year = date('Y');
+            // defini o período do dia 01 ao dia atual do sistema
+            $initial_date = date("Y-m-01 00:00:00");
+            $current_date = date("Y-m-d H:i:s");
 
             $stmt = $this->conn->query("SELECT (SELECT SUM(value) FROM tb_finances 
-            WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day' AND users_id = $id AND TYPE = 1)
+            WHERE create_at BETWEEN '$initial_date' AND '$current_date' AND users_id = $id AND TYPE = 1)
              - 
             (SELECT SUM(value) FROM tb_finances 
-            WHERE create_at BETWEEN '$year-$mes-01' AND '$year-$mes-$day' AND users_id = $id AND TYPE = 2) 
+            WHERE create_at BETWEEN '$initial_date' AND '$current_date' AND users_id = $id AND TYPE = 2) 
             AS total_balance");
             $stmt->execute();
 
@@ -368,20 +401,15 @@
 
         }
 
-        public function getCashOutFlowReport($monthy) {
-
-        }
-
         public function getCashInflowByMonths ($id) {
 
             $cashInflowMonthsArray = [];
 
-            $stmt = $this->conn->query(
-            "SELECT SUM(value)
-            from tb_finances WHERE type = 1
-            AND users_id = $id
-            group by YEAR(create_at),MONTH(create_at)
-            order by YEAR(create_at),MONTH(create_at)");
+            $stmt = $this->conn->query("SELECT SUM(value) from tb_finances 
+                WHERE type = 1
+                AND users_id = $id
+                group by YEAR(create_at),MONTH(create_at)
+                order by YEAR(create_at),MONTH(create_at)");
             $stmt->execute();
             $data = $stmt->fetchAll();
             
@@ -397,12 +425,11 @@
 
             $cashOutflowMonthsArray = [];
 
-            $stmt = $this->conn->query(
-            "SELECT SUM(value)
-            from tb_finances WHERE type = 2
-            AND users_id = $id
-            group by YEAR(create_at),MONTH(create_at)
-            order by YEAR(create_at),MONTH(create_at)");
+            $stmt = $this->conn->query("SELECT SUM(value) from tb_finances 
+                WHERE type = 2
+                AND users_id = $id
+                group by YEAR(create_at),MONTH(create_at)
+                order by YEAR(create_at),MONTH(create_at)");
             $stmt->execute();
             $data = $stmt->fetchAll();
             
@@ -421,9 +448,9 @@
         public function create(FinancialMoviment $financialMoviment) {
 
             $stmt = $this->conn->prepare("INSERT INTO tb_finances (
-                id, description, obs, value, type, expense, category, create_at, users_id
+                id, description, obs, value, type, expense, category, scheduled, create_at, users_id
             ) VALUES(
-                :id, :description, :obs, :value, :type, :expense, :category, :create_at, :users_id
+                :id, :description, :obs, :value, :type, :expense, :category, :scheduled, :create_at, :users_id
             )");
 
             $stmt->bindParam(':id', $financialMoviment->id);
@@ -433,6 +460,7 @@
             $stmt->bindParam(':type', $financialMoviment->type);
             $stmt->bindParam(':expense', $financialMoviment->expense);
             $stmt->bindParam(':category', $financialMoviment->category);
+            $stmt->bindParam(':scheduled', $financialMoviment->scheduled);
             $stmt->bindParam(':create_at', $financialMoviment->create_at);
             $stmt->bindParam(':users_id', $financialMoviment->users_id);
             
@@ -487,92 +515,92 @@
 
         }
 
-    public function checkGraphicDataMonths($id) {
+        public function checkGraphicDataMonths($id) {
 
-        /* 
-        Script para caso o usuário tenha se cadastrado mesês após janeiro
-        As entradas e saídas que antecedem o mês atual do sistema
-        Serão preenchidos com 0 para o perfeito funcionamento do gráfico anual na dashboard 
-        */
+            /* 
+            Script para caso o usuário tenha se cadastrado mesês após janeiro
+            As entradas e saídas que antecedem o mês atual do sistema
+            Serão preenchidos com 0 para o perfeito funcionamento do gráfico anual na dashboard 
+            */
 
-        $ano = date("Y");
-        $m = date("m");
-        $m = intval($m);
+            $ano = date("Y");
+            $m = date("m");
+            $m = intval($m);
 
-        for($mes = $m - 1; $mes > 0; $mes--):
+            for($mes = $m - 1; $mes > 0; $mes--):
 
-            # -------------- Entradas ------------------------- #
-            // Query a partir do mês atual em forma descrente ex: 03, 02, 01
-            $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = $mes AND users_id = $id AND TYPE = 1");
-            $stmt->execute();
-            $entradas = $stmt->fetchAll();
+                # -------------- Entradas ------------------------- #
+                // Query a partir do mês atual em forma descrente ex: 03, 02, 01
+                $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = $mes AND users_id = $id AND TYPE = 1");
+                $stmt->execute();
+                $entradas = $stmt->fetchAll();
 
-            // Itera o array que vem do BD checando a soma de entradas em cada mês
-            foreach ($entradas as $row){
-                $value_entradas = $row["sum"];
-            
-                // Se o array retornar vazio (null) neste Mês não há registros
-                // Então insere um registro padrão com valor 0
-               
-                if (!$value_entradas == null || !empty($value_entradas)) {
-                    //echo "mes $mes possui valor <br>";
-                }else {
-                    // echo "mes $mes não possui valor <br>";
-                    $stmt = $this->conn->prepare("INSERT INTO tb_finances (
-                        description, value, type, create_at, users_id
-                    ) VALUES(
-                        :description, :value, :type, :create_at, :users_id
-                    )");
-                    $description = "Não houve registros nesse mês";
-                    $value = 1;
-                    $type = 1;
-                    $create_at = "$ano-$mes-10 10:00:10";
+                // Itera o array que vem do BD checando a soma de entradas em cada mês
+                foreach ($entradas as $row){
+                    $value_entradas = $row["sum"];
+                
+                    // Se o array retornar vazio (null) neste Mês não há registros
+                    // Então insere um registro padrão com valor 0
+                
+                    if (!$value_entradas == null || !empty($value_entradas)) {
+                        //echo "mes $mes possui valor <br>";
+                    }else {
+                        // echo "mes $mes não possui valor <br>";
+                        $stmt = $this->conn->prepare("INSERT INTO tb_finances (
+                            description, value, type, create_at, users_id
+                        ) VALUES(
+                            :description, :value, :type, :create_at, :users_id
+                        )");
+                        $description = "Não houve registros nesse mês";
+                        $value = 1;
+                        $type = 1;
+                        $create_at = "$ano-$mes-10 10:00:10";
 
-                    $stmt->bindParam(':description', $description);
-                    $stmt->bindParam(':value', $value);
-                    $stmt->bindParam(':type', $type);
-                    $stmt->bindParam(':create_at', $create_at);
-                    $stmt->bindParam(':users_id', $id);
-                    $stmt->execute();
+                        $stmt->bindParam(':description', $description);
+                        $stmt->bindParam(':value', $value);
+                        $stmt->bindParam(':type', $type);
+                        $stmt->bindParam(':create_at', $create_at);
+                        $stmt->bindParam(':users_id', $id);
+                        $stmt->execute();
 
+                    }
                 }
-            }
 
-            #-------------------- Saídas ------------------------------------#
-            $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = $mes AND users_id = $id AND TYPE = 2");
-            $stmt->execute();
-            $saidas = $stmt->fetchAll();
+                #-------------------- Saídas ------------------------------------#
+                $stmt = $this->conn->query("SELECT SUM(value) as sum FROM tb_finances WHERE MONTH(create_at) = $mes AND users_id = $id AND TYPE = 2");
+                $stmt->execute();
+                $saidas = $stmt->fetchAll();
+                
+                foreach ($saidas as $row){
+                    $value_saidas = $row["sum"];
             
-            foreach ($saidas as $row){
-                $value_saidas = $row["sum"];
-        
-                // Se o array retornar vazio (null) neste Mês não há registros
-                // Então insere um registro padrão com valor 0
-                if (!$value_saidas == null || !empty($value_saidas)) {
-                    //echo "mes $mes possui valor <br>";
-                }else {
-                    //echo "mes $mes não possui valor <br>";
-                    $stmt = $this->conn->prepare("INSERT INTO tb_finances (
-                        description, value, type, create_at, users_id
-                    ) VALUES(
-                        :description, :value, :type, :create_at, :users_id
-                    )");
-                    $description = "Não houve registros nesse mês";
-                    $value = 1;
-                    $type = 2;
-                    $create_at = "$ano-$mes-10 10:00:10";
-        
-                    $stmt->bindParam(':description', $description);
-                    $stmt->bindParam(':value', $value);
-                    $stmt->bindParam(':type', $type);
-                    $stmt->bindParam(':create_at', $create_at);
-                    $stmt->bindParam(':users_id', $id);
-                    $stmt->execute();
+                    // Se o array retornar vazio (null) neste Mês não há registros
+                    // Então insere um registro padrão com valor 0
+                    if (!$value_saidas == null || !empty($value_saidas)) {
+                        //echo "mes $mes possui valor <br>";
+                    }else {
+                        //echo "mes $mes não possui valor <br>";
+                        $stmt = $this->conn->prepare("INSERT INTO tb_finances (
+                            description, value, type, create_at, users_id
+                        ) VALUES(
+                            :description, :value, :type, :create_at, :users_id
+                        )");
+                        $description = "Não houve registros nesse mês";
+                        $value = 1;
+                        $type = 2;
+                        $create_at = "$ano-$mes-10 10:00:10";
+            
+                        $stmt->bindParam(':description', $description);
+                        $stmt->bindParam(':value', $value);
+                        $stmt->bindParam(':type', $type);
+                        $stmt->bindParam(':create_at', $create_at);
+                        $stmt->bindParam(':users_id', $id);
+                        $stmt->execute();
+                    }
                 }
-            }
-    
-        endfor;
+        
+            endfor;
 
-    }
+        }
 
 }

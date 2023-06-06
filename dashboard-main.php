@@ -9,11 +9,12 @@ include_once("utils/hg_finance_api.php");
 $financialMovimentDao = new FinancialMovimentDAO($conn, $BASE_URL);
 $categorysDao = new CategorysDAO($conn);
 
-// Traz todas as categorias disponiceis para despesas
+// Traz todas as categorias disponiceis para receitas
 $entry_categorys = $categorysDao->getAllEntryCategorys();
 
 // Traz todas as categorias disponiceis para despesas
 $exit_categorys = $categorysDao->getAllExitCategorys();
+
 
 // Maior receita
 $highValueIncome = $financialMovimentDao->getHighValueIncome($userData->id);
@@ -83,6 +84,7 @@ $latestReminders = $reminderDao->getLatestReminders($userData->id);
 
 
 ?>
+
 
 <body id="iframe-body">
 
@@ -237,6 +239,7 @@ $latestReminders = $reminderDao->getLatestReminders($userData->id);
         </section>
         <!-- Cash Inflow | Cash outflow form  -->
 
+        <!-- Reminders and latest financial moviments -->
         <div class="row">
             <!-- My reminders container -->
             <div class="col-md-4">
@@ -251,14 +254,36 @@ $latestReminders = $reminderDao->getLatestReminders($userData->id);
                     <div class="row px-3">
                         <?php if(count($latestReminders) > 0): ?>
                             <?php foreach($latestReminders as $reminder): ?>
-                            <div class="col-md-6">
-                                <div class="card card-reminder mb-3 border-0" style="max-width: 18rem;">
-                                    <div class="card-header border border-white"><small> <strong> <?= $reminder->title ?> </strong> <br> <?= $reminder->reminder_date ?></small></div>
-                                    <div class="card-body">
-                                        <p class="card-text"><?= $reminder->description ?></p>
+                                <div class="col-md-6">
+                                    <div class="card card-reminder mb-3 border-0" style="max-width: 18rem;">
+                                        <div class="card-header border border-white"><small> <strong> <?= $reminder->title ?> </strong> <br> <?= $reminder->reminder_date ?></small></div>
+                                        <div class="card-body">
+                                            <p class="card-text"><?= $reminder->description ?></p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <?php if($reminder->reminder_date == date("d-m-Y") && $reminder->visualized != "S") : ?>
+                                    <script>
+                                        var msg = "<strong>Nome do lembrete: </strong><?= $reminder->title?> <br> Descrição: <br> <?= $reminder->description ?>";
+                                         var form = "<form action='reminders_process.php' method='post'>"
+                                         + "<input type='hidden' name='type' value='edit'>"
+                                         + "<input type='hidden' name='id' value='<?= $reminder->id ?>'>"
+                                         + "<input type='hidden' name='title' value='<?= $reminder->title ?>'>"
+                                         + "<input type='hidden' name='description' value='<?= $reminder->description ?>'>"
+                                         + "<input type='hidden' name='reminder_date' value='<?= date("Y-m-d",strtotime($reminder->reminder_date)); ?>'>"
+                                         + "<input type='hidden' name='visualized' value='S'>"
+                                         + "<input class='btn btn-lg btn-success' type='submit' value='Ok'>"
+                                         + "</form>";  
+                                         Swal.fire({
+                                            html: msg,
+                                            title: 'Você tem um lembrete hoje!',
+                                            // text: "Lembrete:<?= $reminder->title ?> | não se esqueça dele ok?",
+                                            footer: form,
+                                            showConfirmButton: false
+                                        });
+                                    </script>
+                                <?php endif; ?>
+
                             <?php endforeach; ?>
                         <?php else: ?>
                             <h4>Não há lembretes cadastrados.</h4>
@@ -268,13 +293,14 @@ $latestReminders = $reminderDao->getLatestReminders($userData->id);
             </div>
             <!-- End My reminders container -->
 
+            <!-- latest 5 moviments -->
             <div class="col-md-8">
                 <div class="actions mb-5 py-2 px-3 bg-light rounded-3 shadow-sm">
                     <h4 class="font-weight-normal text-center my-3">Últimas 5 movimentações</h4>
                     <!-- <hr class="dashed"> -->
                     <div class="row" id="latest_moviments">
 
-                        <table class="table">
+                        <table class="table table-hover">
                             <thead>
                                 <!-- <th>id</th> -->
                                 <th>Descrição</th>
@@ -313,7 +339,6 @@ $latestReminders = $reminderDao->getLatestReminders($userData->id);
                                             <a href="#" data-toggle="modal" data-target="#modal_del_finance_moviment<?= $financialMoviment->id ?>" title="Deletar"><i class="fa-solid fa-trash-can"></i></a>
                                         </td>
                                     </tr>
-
                                 <?php endforeach; ?>
                             </tbody>
                         </table>

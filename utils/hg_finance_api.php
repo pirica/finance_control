@@ -1,5 +1,5 @@
 <?php 
-ini_set('max_execution_time', 5);
+ini_set('max_execution_time', 3);
 
 $config_user = $_SERVER["HTTP_USER_AGENT"];
 

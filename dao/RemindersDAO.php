@@ -24,6 +24,7 @@
             $reminder->title = $data['title'];
             $reminder->description = $data['description'];
             $reminder->reminder_date = date("d-m-Y", strtotime($data['reminder_date']));
+            $reminder->visualized = $data['visualized'];
             $reminder->users_id = $data['users_id'];
             $reminder->created = $data['created'];
             $reminder->modified = $data['modified'];
@@ -62,7 +63,7 @@
             $latestReminders = [];
 
             $stmt = $this->conn->prepare("SELECT 
-            id, title, description, reminder_date, users_id, created, modified 
+            id, title, description, reminder_date, visualized, users_id, created, modified 
             FROM tb_reminders 
             WHERE users_id = :users_id 
             ORDER BY reminder_date DESC LIMIT 4");
@@ -85,8 +86,8 @@
         public function createReminder(Reminders $reminder){
 
             $stmt = $this->conn->prepare("INSERT INTO 
-                tb_reminders (title, description, reminder_date, users_id, created) 
-                VALUES (:title, :description, :reminder_date, :users_id, NOW())"
+                tb_reminders (title, description, reminder_date, visualized, users_id, created) 
+                VALUES (:title, :description, :reminder_date, 'N', :users_id, NOW())"
             );
             $stmt->bindParam(":title", $reminder->title);
             $stmt->bindParam(":description", $reminder->description);
@@ -105,12 +106,14 @@
                                         title = :title, 
                                         description = :description,
                                         reminder_date = :reminder_date,
+                                        visualized = :visualized,
                                         modified = NOW()
                                         WHERE users_id = :users_id AND id = :id
             "); 
             $stmt->bindParam(":title", $reminder->title);
             $stmt->bindParam(":description", $reminder->description);
             $stmt->bindParam(":reminder_date", $reminder->reminder_date);
+            $stmt->bindParam(":visualized", $reminder->visualized);
             $stmt->bindParam(":users_id", $reminder->users_id);
             $stmt->bindParam(":id", $reminder->id);
             
